@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+  <script src="../build/Chart.Geo.js"></script>
+</head>
+
+<body>
+  <div style="width: 75%;">
+    <canvas id="canvas"></canvas>
+  </div>
+  <script>
+    fetch('https://unpkg.com/us-atlas/states-albers-10m.json').then((r) => r.json()).then((us) => {
+      const states = ChartGeo.topojson.feature(us, us.objects.states).features;
+
+      const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
+        type: 'bar',
+        data: {
+          labels: states.map((d) => d.properties.name),
+          datasets: [{
+            data: states.map(() => Math.random()),
+          }]
+        },
+        options: {
+          legend: {
+            display: false
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

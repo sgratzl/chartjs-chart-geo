@@ -1,6 +1,6 @@
 {
   "name": "chartjs-chart-geo",
-  "description": "Chart.js module for charting error bars",
+  "description": "Chart.js module for charting maps",
   "version": "2.1.0",
   "author": {
     "name": "Samuel Gratzl",
@@ -12,9 +12,9 @@
     "type": "git",
     "url": "https://github.com/sgratzl/chartjs-chart-geo.git"
   },
-  "main": "build/Chart.Graphs.js",
-  "unpkg": "build/Chart.Graphs.min.js",
-  "module": "build/Chart.Graphs.esm.js",
+  "main": "build/Chart.Geo.js",
+  "unpkg": "build/Chart.Geo.min.js",
+  "module": "build/Chart.Geo.esm.js",
   "files": [
     "build",
     "src/**/*.js"
@@ -22,7 +22,8 @@
   "dependencies": {
     "chart.js": "^2.8.0",
     "d3-force": "^2.0.1",
-    "d3-hierarchy": "^1.1.8"
+    "d3-hierarchy": "^1.1.8",
+    "topojson-client": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.6.0",
@@ -48,7 +49,7 @@
     "test:watch": "jest --watch",
     "posttest": "npm run lint",
     "build:dev": "rollup -c -i src/index.js",
-    "build:prod": "npm run build:dev && uglifyjs build/Chart.Graphs.js -c -m -o build/Chart.Graphs.min.js",
+    "build:prod": "npm run build:dev && uglifyjs build/Chart.Geo.js -c -m -o build/Chart.Geo.min.js",
     "prebuild": "npm run clean && npm test",
     "build": "npm run build:prod",
     "preversion": "npm run test",

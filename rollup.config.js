@@ -5,8 +5,8 @@ import babel from 'rollup-plugin-babel';
 
 export default [{
   output: {
-    file: 'build/Chart.Graphs.js',
-    name: 'ChartGraphs',
+    file: 'build/Chart.Geo.js',
+    name: 'ChartGeo',
     format: 'umd',
     globals: {
       'chart.js': 'Chart'
@@ -20,8 +20,8 @@ export default [{
   ]
 }, {
   output: {
-    file: 'build/Chart.Graphs.esm.js',
-    name: 'ChartGraphs',
+    file: 'build/Chart.Geo.esm.js',
+    name: 'ChartGeo',
     format: 'esm',
     globals: {
       'chart.js': 'Chart'

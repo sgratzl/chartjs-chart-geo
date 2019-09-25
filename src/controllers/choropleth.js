@@ -15,12 +15,8 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
     const ds = this.getDataset();
     const value = ds.data[index];
 
-    elem._model = {
-      borderColor: 'black',
-      backgroundColor: `rgb(${Math.round(value.value * 255)}, 0, 0)`,
-      borderWidth: 1
-    };
-
-    elem.pivot();
+    if (!reset) {
+      elem._model.backgroundColor = `rgb(${Math.round(value.value * 255)}, 0, 0)`;
+    }
   },
 });

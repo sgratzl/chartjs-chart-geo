@@ -14,12 +14,14 @@ const superClass = Chart.Element.prototype;
 export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
   inRange(mouseX, mouseY) {
     const bb = this.getBounds();
-    return (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
+    const r = (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
+
+    return r;
 	},
 
-  inLabelRange(mouseX) {
-    return this.inRange(mouseX, NaN);
+  inLabelRange(mouseX, mouseY) {
+    return this.inRange(mouseX, mouseY);
   },
 	inXRange(mouseX) {
     return this.inRange(mouseX, NaN);
@@ -29,16 +31,22 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
   },
 
   getCenterPoint() {
+    if (this.c) {
+      return this.c;
+    }
     const centroid = this.geoPath.centroid(this.feature);
-    return {
+    return this.c = {
       x: centroid[0],
       y: centroid[1]
     };
   },
 
   getBounds() {
+    if (this.b) {
+      return this.b;
+    }
     const [[x0, y0], [x1, y1]] = this.geoPath.bounds(this.feature);
-    return {
+    this.b = {
       x: x0,
       x2: x1,
       y: y0,
@@ -46,10 +54,14 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       width: x1 - x0,
       height: y1 - y0
     };
+    return this.b;
   },
 
   getArea() {
-    return this.geoPath.area(this.feature);
+    if (this.a) {
+      return this.a;
+    }
+    return this.a = this.geoPath.area(this.feature);
 	},
 
 	tooltipPosition() {

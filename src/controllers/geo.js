@@ -4,8 +4,9 @@ import * as Chart from 'chart.js';
 import {geoPath, geoAlbersUsa} from 'd3-geo';
 
 const defaults = {
+  animation: false,
   hover: {
-		mode: 'label'
+		mode: 'single'
 	},
   scales: {
     xAxes: [{
@@ -16,7 +17,17 @@ const defaults = {
       type: 'albers',
       display: false
     }]
-  }
+  },
+
+	tooltips: {
+		callbacks: {
+			label: function(item, data) {
+				const datasetLabel = data.datasets[item.datasetIndex].label || '';
+				const dataPoint = data.datasets[item.datasetIndex].data[item.index];
+				return datasetLabel + ': ' + dataPoint.value;
+			}
+		}
+	}
 };
 
 export const geoDefaults = Chart.helpers.configMerge(Chart.defaults.global, defaults);
@@ -72,6 +83,9 @@ export const Geo = Chart.DatasetController.extend({
     const x = (chartWidth - viewWidth) * 0.5;
     const y = (chartHeight - viewHeight) * 0.5;
 
+    // this.mapScale = scale;
+    // this.mapTranslate = {x, y};
+
     this.projection
       .scale(bb.refScale * scale)
       .translate([scale * (bb.refX + x), scale * (bb.refY + y)]);
@@ -88,8 +102,47 @@ export const Geo = Chart.DatasetController.extend({
 		elem._xScale = this.getScaleForId(meta.xAxisID);
 		elem._yScale = this.getScaleForId(meta.yAxisID);
 		elem._datasetIndex = this.index;
-		elem._index = index;
+    elem._index = index;
+    elem._model = this._resolveElementOptions(elem, index, reset);
+
+    elem.pivot();
   },
+
+  _resolveElementOptions(elem, index, reset) {
+		const chart = this.chart;
+		const dataset = this.getDataset();
+		const custom = elem.custom || {};
+		const options = chart.options.elements.point;
+
+		// Scriptable options
+		const context = {
+			chart: chart,
+			dataIndex: index,
+			dataset: dataset,
+			datasetIndex: this.index
+		};
+
+		const keys = [
+			'backgroundColor',
+			'borderColor',
+			'borderWidth',
+			'hoverBackgroundColor',
+			'hoverBorderColor',
+			'hoverBorderWidth'
+		];
+
+    const values = {};
+
+    keys.forEach((key) => {
+      values[key] = Chart.helpers.options.resolve([
+				custom[key],
+				dataset[key],
+				options[key]
+			], context, index);
+    });
+
+		return values;
+	},
 
   transition(easingValue) {
     superClass.transition.call(this, easingValue);
@@ -100,7 +153,11 @@ export const Geo = Chart.DatasetController.extend({
     const chart = this.chart;
 
     Chart.helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+    chart.ctx.save();
+    // chart.ctx.scale(this.mapScale);
+    // chart.ctx.translate(this.mapTranslate.x, this.mapTranslate.y);
     this.getMeta().data.forEach((elem) => elem.draw());
+    chart.ctx.restore();
     Chart.helpers.canvas.unclipArea(chart.ctx);
   },
 });

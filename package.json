@@ -21,8 +21,7 @@
   ],
   "dependencies": {
     "chart.js": "^2.8.0",
-    "d3-force": "^2.0.1",
-    "d3-hierarchy": "^1.1.8",
+    "d3-geo": "^1.11.6",
     "topojson-client": "^3.0.1"
   },
   "devDependencies": {

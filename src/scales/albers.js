@@ -1,10 +1,15 @@
 'use strict';
 
 import * as Chart from 'chart.js';
+import {} from 'd3-geo';
 
-const albersOptions = Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('linear')]);
+const defaults = {
 
-export const AlbersScale = Chart.scaleService.getScaleConstructor('linear').extend({
+};
+const albersOptions = Chart.helpers.merge({}, [defaults]);
+
+export const AlbersScale = Chart.Scale.extend({
+  ticks: [],
   // determineDataLimits() {
   //   commonDataLimits.call(this, this.isHorizontal());
   //   // Common base implementation to handle ticks.min, ticks.max, ticks.beginAtZero

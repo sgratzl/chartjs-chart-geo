@@ -9,8 +9,12 @@ const defaults = {
   },
   tooltips: {
     callbacks: {
+      title() {
+        // Title doesn't make sense for scatter since we format the data as a point
+        return '';
+      },
       label(item, data) {
-        return data.datasets.labels[item.index];
+        return data.labels[item.index];
       }
     }
   }

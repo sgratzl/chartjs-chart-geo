@@ -82,6 +82,9 @@ export const Geo = Chart.DatasetController.extend({
     elem._datasetIndex = this.index;
     elem._index = index;
     elem._model = this.resolveGeoFeatureOptions(elem, index, reset);
+    const center = elem.getCenterPoint();
+    elem._model.x = center.x;
+    elem._model.y = center.y;
 
     elem.pivot();
   },

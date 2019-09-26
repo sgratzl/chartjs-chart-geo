@@ -25,6 +25,7 @@
         data: {
           labels: states.map((d) => d.properties.name),
           datasets: [{
+            label: 'States',
             outline: nation,
             backgroundColor: (context) => {
               const value = context.dataset.data[context.dataIndex];

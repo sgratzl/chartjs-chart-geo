@@ -1,9 +1,14 @@
 # Chart.js Graphs
 [![NPM Package][npm-image]][npm-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-Chart.js module for charting maps. Adding new chart types: ``
+Chart.js module for charting maps. Adding new chart types: `choropleth` and `bubbleMap`l
 
 **Works only with Chart.js >= 2.8.0**
+
+![Choropleth](https://user-images.githubusercontent.com/4129778/65654910-4c7a4900-dfe8-11e9-8712-e56557452907.png)
+
+![Bubble Map](https://user-images.githubusercontent.com/4129778/65654909-4c7a4900-dfe8-11e9-8e0e-1825c2414c75.png)
+
 
 [CodePen]()
 

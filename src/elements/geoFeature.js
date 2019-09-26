@@ -10,7 +10,7 @@ Chart.defaults.global.elements.geoFeature = {
   ...defaults
 };
 
-const superClass = Chart.Element.prototype;
+// const superClass = Chart.Element.prototype;
 export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
   inRange(mouseX, mouseY) {
     const bb = this.getBounds();
@@ -18,35 +18,40 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
 
     return r;
-	},
+  },
 
   inLabelRange(mouseX, mouseY) {
     return this.inRange(mouseX, mouseY);
   },
-	inXRange(mouseX) {
+  inXRange(mouseX) {
     return this.inRange(mouseX, NaN);
   },
-	inYRange(mouseY) {
+  inYRange(mouseY) {
     return this.inRange(NaN, mouseY);
   },
 
   getCenterPoint() {
-    if (this.c) {
-      return this.c;
+    if (this.cache && this.cache.center) {
+      return this.cache.center;
     }
     const centroid = this._xScale.geoPath.centroid(this.feature);
-    return this.c = {
+    const center = {
       x: centroid[0],
       y: centroid[1]
     };
+    this.cache = {
+      ...(this.cache || {}),
+      center
+    };
+    return center;
   },
 
   getBounds() {
-    if (this.b) {
-      return this.b;
+    if (this.cache && this.cache.bounds) {
+      return this.cache.bounds;
     }
     const [[x0, y0], [x1, y1]] = this._xScale.geoPath.bounds(this.feature);
-    this.b = {
+    const bounds = {
       x: x0,
       x2: x1,
       y: y0,
@@ -54,19 +59,29 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       width: x1 - x0,
       height: y1 - y0
     };
-    return this.b;
+    this.cache = {
+      ...(this.cache || {}),
+      bounds
+    };
+    return bounds;
   },
 
   getArea() {
-    if (this.a) {
-      return this.a;
+    if (this.cache && this.cache.area) {
+      return this.cache.area;
     }
-    return this.a = this._xScale.geoPath.area(this.feature);
-	},
+    const area = this._xScale.geoPath.area(this.feature);
 
-	tooltipPosition() {
-		return this.getCenterPoint();
-	},
+    this.cache = {
+      ...(this.cache || {}),
+      area
+    };
+    return area;
+  },
+
+  tooltipPosition() {
+    return this.getCenterPoint();
+  },
 
   draw() {
     if (!this.feature) {

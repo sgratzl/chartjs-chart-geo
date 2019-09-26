@@ -37,14 +37,21 @@ export const Geo = Chart.DatasetController.extend({
   update(reset) {
     superClass.update.call(this, reset);
 
-    this.getProjectionScale().updateBounds();
+    const dirtyCache = this.getProjectionScale().updateBounds();
 
     if (this.showOutline()) {
-      this.updateGeoFeatureElement(this.getMeta().dataset, -1, reset);
+      const elem = this.getMeta().dataset;
+      this.updateGeoFeatureElement(elem, -1, reset);
+      if (dirtyCache) {
+        delete elem.cache;
+      }
     }
 
     this.getMeta().data.forEach((elem, i) => {
       this.updateElement(elem, i, reset);
+      if (dirtyCache) {
+        delete elem.cache;
+      }
     });
   },
 
@@ -55,12 +62,12 @@ export const Geo = Chart.DatasetController.extend({
       return {
         type: 'FeatureCollection',
         features: outline
-      }
+      };
     }
     return outline;
   },
 
-  updateElement(_elem, _index, _reset) {
+  updateElement() {
     // no op
   },
 
@@ -70,9 +77,9 @@ export const Geo = Chart.DatasetController.extend({
 
     elem.feature = index < 0 ? this.resolveOutline() : ds.data[index].feature;
 
-		elem._xScale = this.getScaleForId(meta.xAxisID);
-		elem._yScale = this.getScaleForId(meta.yAxisID);
-		elem._datasetIndex = this.index;
+    elem._xScale = this.getScaleForId(meta.xAxisID);
+    elem._yScale = this.getScaleForId(meta.yAxisID);
+    elem._datasetIndex = this.index;
     elem._index = index;
     elem._model = this.resolveGeoFeatureOptions(elem, index, reset);
 
@@ -80,32 +87,32 @@ export const Geo = Chart.DatasetController.extend({
   },
 
   resolveGeoFeatureOptions(elem, index, reset) {
-		const chart = this.chart;
-		const dataset = this.getDataset();
-		const custom = elem.custom || {};
-		const options = chart.options.elements.geoFeature;
+    const chart = this.chart;
+    const dataset = this.getDataset();
+    const custom = elem.custom || {};
+    const options = chart.options.elements.geoFeature;
 
-		// Scriptable options
-		const context = {
-			chart: chart,
-			dataIndex: index,
-			dataset: dataset,
+    // Scriptable options
+    const context = {
+      chart: chart,
+      dataIndex: index,
+      dataset: dataset,
       datasetIndex: this.index,
       reset
-		};
+    };
 
-		const keys = [
-			'backgroundColor',
-			'borderColor',
-			'borderWidth',
-			'hoverBackgroundColor',
-			'hoverBorderColor',
-			'hoverBorderWidth'
-		];
+    const keys = [
+      'backgroundColor',
+      'borderColor',
+      'borderWidth',
+      'hoverBackgroundColor',
+      'hoverBorderColor',
+      'hoverBorderWidth'
+    ];
 
     const values = {};
 
-    keys.forEach((key, i) => {
+    keys.forEach((key) => {
       const arr = [
         custom[key],
         dataset[key],
@@ -122,8 +129,8 @@ export const Geo = Chart.DatasetController.extend({
       values[key] = Chart.helpers.options.resolve(arr, context, index);
     });
 
-		return values;
-	},
+    return values;
+  },
 
   transition(easingValue) {
     superClass.transition.call(this, easingValue);

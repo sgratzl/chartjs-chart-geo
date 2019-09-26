@@ -28,7 +28,7 @@
             outline: nation,
             backgroundColor: (context) => {
               const value = context.dataset.data[context.dataIndex];
-              return `rgb(${Math.round(value.value * 255)}, 0, 0)`;
+              return `rgb(0, 0, ${Math.round(value.value * 255)})`;
             },
             data: states.map((d) => ({feature: d, value: Math.random()})),
           }]

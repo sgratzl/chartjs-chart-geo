@@ -5,17 +5,15 @@ import {geoDefaults, Geo} from './geo';
 
 const defaults = {
   hover: {
-		mode: 'single'
+    mode: 'single'
   },
-	tooltips: {
-		callbacks: {
-			label: function(item, data) {
-				const datasetLabel = data.datasets[item.datasetIndex].label || '';
-				const dataPoint = data.datasets[item.datasetIndex].data[item.index];
-				return datasetLabel + ': ' + dataPoint.value;
-			}
-		}
-	}
+  tooltips: {
+    callbacks: {
+      label(item, data) {
+        return data.datasets.labels[item.index];
+      }
+    }
+  }
 };
 
 Chart.defaults.choropleth = Chart.helpers.configMerge(geoDefaults, defaults);

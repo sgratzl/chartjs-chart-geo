@@ -34,7 +34,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     if (this.c) {
       return this.c;
     }
-    const centroid = this.geoPath.centroid(this.feature);
+    const centroid = this._xScale.geoPath.centroid(this.feature);
     return this.c = {
       x: centroid[0],
       y: centroid[1]
@@ -45,7 +45,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     if (this.b) {
       return this.b;
     }
-    const [[x0, y0], [x1, y1]] = this.geoPath.bounds(this.feature);
+    const [[x0, y0], [x1, y1]] = this._xScale.geoPath.bounds(this.feature);
     this.b = {
       x: x0,
       x2: x1,
@@ -61,7 +61,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     if (this.a) {
       return this.a;
     }
-    return this.a = this.geoPath.area(this.feature);
+    return this.a = this._xScale.geoPath.area(this.feature);
 	},
 
 	tooltipPosition() {
@@ -76,7 +76,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     ctx.lineWidth = vm.borderWidth;
     ctx.fillStyle = vm.backgroundColor;
     ctx.beginPath();
-    this.geoPath.context(ctx)(this.feature);
+    this._xScale.geoPath.context(ctx)(this.feature);
     ctx.fill();
     ctx.stroke();
     ctx.restore();

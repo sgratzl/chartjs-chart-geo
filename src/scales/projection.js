@@ -79,9 +79,3 @@ export const ProjectionScale = Chart.Scale.extend({
   }
 });
 Chart.scaleService.registerScaleType('projection', ProjectionScale, defaults);
-
-Object.keys(lookup).forEach((key) => {
-  Chart.scaleService.registerScaleType(key, ProjectionScale, {
-    projection: lookup[key]
-  });
-});

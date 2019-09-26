@@ -28,9 +28,13 @@ CodePens
 
 ## Styling
 
+TODO
+
 
 
 ## Data Structure
+
+TODO
 
 
 

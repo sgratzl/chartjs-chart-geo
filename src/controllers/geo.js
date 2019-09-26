@@ -4,26 +4,12 @@ import * as Chart from 'chart.js';
 
 const defaults = {
   showOutline: false,
-
   animation: false,
-  hover: {
-		mode: 'single'
-  },
   scale: {
     type: 'projection',
     id: 'scale',
     display: false
   },
-
-	tooltips: {
-		callbacks: {
-			label: function(item, data) {
-				const datasetLabel = data.datasets[item.datasetIndex].label || '';
-				const dataPoint = data.datasets[item.datasetIndex].data[item.index];
-				return datasetLabel + ': ' + dataPoint.value;
-			}
-		}
-	}
 };
 
 export const geoDefaults = Chart.helpers.configMerge(Chart.defaults.global, defaults);
@@ -32,7 +18,7 @@ const superClass = Chart.DatasetController.prototype;
 export const Geo = Chart.DatasetController.extend({
   datasetElementType: Chart.elements.GeoFeature,
 
-  _scale() {
+  getProjectionScale() {
     return this.getScaleForId('scale');
   },
 
@@ -41,8 +27,7 @@ export const Geo = Chart.DatasetController.extend({
     meta.xAxisID = 'scale';
     meta.yAxisID = 'scale';
 
-    const ds = this.getDataset();
-    this._scale().computeBounds(this.resolveOutline());
+    this.getProjectionScale().computeBounds(this.resolveOutline());
   },
 
   showOutline() {
@@ -52,7 +37,7 @@ export const Geo = Chart.DatasetController.extend({
   update(reset) {
     superClass.update.call(this, reset);
 
-    this._scale().updateBounds();
+    this.getProjectionScale().updateBounds();
 
     if (this.showOutline()) {
       this.updateGeoFeatureElement(this.getMeta().dataset, -1, reset);
@@ -127,7 +112,7 @@ export const Geo = Chart.DatasetController.extend({
         options[key]
       ];
       if (index < 0) { // outline
-        const outlineKey = `outline${key.charAt(0).toUpperCase()}${key.slice(0)}`;
+        const outlineKey = `outline${key.charAt(0).toUpperCase()}${key.slice(1)}`;
         arr.unshift(
           custom[outlineKey],
           dataset[outlineKey],

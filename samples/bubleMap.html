@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+
+<head>
+  <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+  <script src="../build/Chart.Geo.js"></script>
+  <script src="https://unpkg.com/papaparse"></script>
+  <style>
+    canvas {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+  <div style="width: 75%;">
+    <canvas id="canvas"></canvas>
+  </div>
+  <script>
+    Promise.all([
+      fetch('https://unpkg.com/us-atlas/states-10m.json')
+        .then((r) => r.json()),
+      fetch('https://gist.githubusercontent.com/mbostock/9535021/raw/928a5f81f170b767162f8f52dbad05985eae9cac/us-state-capitals.csv')
+        .then((r) => r.text()).then((d) => Papa.parse(d, { dynamicTyping: true, header: true}).data)
+    ]).then(([us, data]) => {
+      const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
+
+      const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
+        type: 'bubbleMap',
+        data: {
+          labels: data.map((d) => d.description),
+          datasets: [{
+            outline: nation,
+            outlineBackgroundColor: null,
+            backgroundColor: 'red',
+            data: data.map((d) => Object.assign(d, {r: 3})),
+          }]
+        },
+        options: {
+          legend: {
+            display: false
+          }
+        },
+        scale: {
+          type: 'albersUsa'
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

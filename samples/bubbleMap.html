@@ -5,11 +5,6 @@
   <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
   <script src="../build/Chart.Geo.js"></script>
   <script src="https://unpkg.com/papaparse"></script>
-  <style>
-    canvas {
-      border: 1px solid red;
-    }
-  </style>
 </head>
 
 <body>
@@ -32,7 +27,7 @@
           datasets: [{
             outline: nation,
             outlineBackgroundColor: null,
-            backgroundColor: 'red',
+            backgroundColor: 'steelblue',
             data: data.map((d) => Object.assign(d, {r: 3})),
           }]
         },

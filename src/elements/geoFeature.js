@@ -69,17 +69,24 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
 	},
 
   draw() {
+    if (!this.feature) {
+      return;
+    }
+
     const vm = this._view;
     const ctx = this._chart.ctx;
     ctx.save();
-    ctx.strokeStyle = vm.borderColor;
-    ctx.lineWidth = vm.borderWidth;
-    ctx.fillStyle = vm.backgroundColor;
     ctx.beginPath();
     this._xScale.geoPath.context(ctx)(this.feature);
-    ctx.fill();
-    ctx.stroke();
+    if (vm.backgroundColor) {
+      ctx.fillStyle = vm.backgroundColor;
+      ctx.fill();
+    }
+    if (vm.borderColor) {
+      ctx.strokeStyle = vm.borderColor;
+      ctx.lineWidth = vm.borderWidth;
+      ctx.stroke();
+    }
     ctx.restore();
-    // superClass.draw.call(this);
   }
 });

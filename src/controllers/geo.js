@@ -30,7 +30,6 @@ export const geoDefaults = Chart.helpers.configMerge(Chart.defaults.global, defa
 
 const superClass = Chart.DatasetController.prototype;
 export const Geo = Chart.DatasetController.extend({
-  dataElementType: Chart.elements.GeoFeature,
   datasetElementType: Chart.elements.GeoFeature,
 
   _scale() {
@@ -43,8 +42,7 @@ export const Geo = Chart.DatasetController.extend({
     meta.yAxisID = 'scale';
 
     const ds = this.getDataset();
-    const outline = ds.outline || {type: 'Sphere'};
-    this._scale().computeBounds(outline);
+    this._scale().computeBounds(this.resolveOutline());
   },
 
   showOutline() {
@@ -57,7 +55,7 @@ export const Geo = Chart.DatasetController.extend({
     this._scale().updateBounds();
 
     if (this.showOutline()) {
-      this.updateElement(this.getMeta().dataset, -1, reset);
+      this.updateGeoFeatureElement(this.getMeta().dataset, -1, reset);
     }
 
     this.getMeta().data.forEach((elem, i) => {
@@ -65,22 +63,38 @@ export const Geo = Chart.DatasetController.extend({
     });
   },
 
-  updateElement(elem, index, reset) {
+  resolveOutline() {
+    const ds = this.getDataset();
+    const outline = ds.outline || {type: 'Sphere'};
+    if (Array.isArray(outline)) {
+      return {
+        type: 'FeatureCollection',
+        features: outline
+      }
+    }
+    return outline;
+  },
+
+  updateElement(_elem, _index, _reset) {
+    // no op
+  },
+
+  updateGeoFeatureElement(elem, index, reset) {
     const ds = this.getDataset();
     const meta = this.getMeta();
 
-    elem.feature = index < 0 ? (ds.outline || {type: 'Sphere'}) : ds.data[index].feature;
+    elem.feature = index < 0 ? this.resolveOutline() : ds.data[index].feature;
 
 		elem._xScale = this.getScaleForId(meta.xAxisID);
 		elem._yScale = this.getScaleForId(meta.yAxisID);
 		elem._datasetIndex = this.index;
     elem._index = index;
-    elem._model = this._resolveElementOptions(elem, index, reset);
+    elem._model = this.resolveGeoFeatureOptions(elem, index, reset);
 
     elem.pivot();
   },
 
-  _resolveElementOptions(elem, index, reset) {
+  resolveGeoFeatureOptions(elem, index, reset) {
 		const chart = this.chart;
 		const dataset = this.getDataset();
 		const custom = elem.custom || {};

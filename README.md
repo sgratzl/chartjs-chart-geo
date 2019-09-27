@@ -7,15 +7,15 @@ Chart.js module for charting maps. Adding new chart types: `choropleth` and `bub
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/65654910-4c7a4900-dfe8-11e9-8712-e56557452907.png)
 
-[CodePen]()
+[CodePen](https://codepen.io/sgratzl/pen/GRKLQBw)
 
 ![Earth Choropleth](https://user-images.githubusercontent.com/4129778/65734104-73478680-e09f-11e9-86dd-22e80918bce5.png)
 
-[CodePen]()
+[CodePen](https://codepen.io/sgratzl/pen/qBWwxKP)
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/65734563-84919280-e0a1-11e9-87ea-1692b22b1fae.png)
 
-[CodePen]()
+[CodePen](https://codepen.io/sgratzl/pen/wvwZyxb)
 
 works great with https://github.com/chartjs/chartjs-plugin-datalabels
 
@@ -29,9 +29,9 @@ npm install --save chart.js chartjs-chart-geo
 see [Samples](https://github.com/sgratzl/chartjs-chart-geo/tree/master/samples) on Github
 
 CodePens
- * [Choropleth]()
- * [Earth Choropleth]()
- * [Bubble Map]()
+ * [Choropleth](https://codepen.io/sgratzl/pen/GRKLQBw)
+ * [Earth Choropleth](https://codepen.io/sgratzl/pen/qBWwxKP)
+ * [Bubble Map](https://codepen.io/sgratzl/pen/wvwZyxb)
 
 ## Options
 
@@ -68,11 +68,11 @@ A Choropleth (chart type: `choropleth`) is used to render maps with the area fil
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/65654910-4c7a4900-dfe8-11e9-8712-e56557452907.png)
 
-[CodePen]()
+[CodePen](https://codepen.io/sgratzl/pen/GRKLQBw)
 
 ![Earth Choropleth](https://user-images.githubusercontent.com/4129778/65734104-73478680-e09f-11e9-86dd-22e80918bce5.png)
 
-[CodePen]()
+[CodePen](https://codepen.io/sgratzl/pen/qBWwxKP)
 
 ### Data Structure
 
@@ -167,7 +167,7 @@ A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/65734563-84919280-e0a1-11e9-87ea-1692b22b1fae.png)
 
-[CodePen]()
+[CodePen](https://codepen.io/sgratzl/pen/wvwZyxb)
 
 ### Data Structure
 

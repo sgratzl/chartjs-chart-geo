@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Chart from 'chart.js';
-import { geoGraticule, geoGraticule10 } from 'd3-geo';
+import {geoGraticule, geoGraticule10} from 'd3-geo';
 
 const defaults = {
   showOutline: false,

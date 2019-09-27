@@ -12,9 +12,6 @@ const defaults = {
     id: 'scale',
     display: false
   },
-
-  outlineBackgroundColor: null,
-  outlineBorderColor: 'black'
 };
 
 export const geoDefaults = Chart.helpers.configMerge(Chart.defaults.global, defaults);
@@ -54,6 +51,10 @@ export const Geo = Chart.DatasetController.extend({
       if (dirtyCache) {
         delete elem.cache;
       }
+    }
+
+    if (this.getGraticule()) {
+      this.getMeta().graticule = this.resolveGeoFeatureOptions({}, -1, reset);
     }
 
     this.getMeta().data.forEach((elem, i) => {
@@ -161,10 +162,9 @@ export const Geo = Chart.DatasetController.extend({
     ctx.save();
     ctx.beginPath();
 
+
     if (g === true) {
       path(geoGraticule10());
-      ctx.strokeStyle = '#ccc';
-      ctx.lineWidth = 1;
     } else {
       const geo = geoGraticule();
       if (g.stepMajor) {
@@ -174,10 +174,11 @@ export const Geo = Chart.DatasetController.extend({
         geo.stepMinor(g.stepMinor);
       }
       path(geo);
-      ctx.strokeStyle = g.borderColor || '#ccc';
-      ctx.lineWidth = g.borderWidth || 1;
     }
 
+    const vm = this.getMeta().graticule;
+    ctx.strokeStyle = vm.borderColor;
+    ctx.lineWidth = vm.borderWidth;
     ctx.stroke();
     ctx.restore();
   },

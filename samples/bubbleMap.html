@@ -3,6 +3,7 @@
 
 <head>
   <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+  <script src="https://unpkg.com/chartjs-plugin-datalabels"></script>
   <script src="../build/Chart.Geo.js"></script>
   <script src="https://unpkg.com/papaparse"></script>
 </head>
@@ -18,22 +19,30 @@
       fetch('https://gist.githubusercontent.com/mbostock/9535021/raw/928a5f81f170b767162f8f52dbad05985eae9cac/us-state-capitals.csv')
         .then((r) => r.text()).then((d) => Papa.parse(d, { dynamicTyping: true, header: true}).data)
     ]).then(([us, data]) => {
-      const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
+      const states = ChartGeo.topojson.feature(us, us.objects.states).features;
 
       const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
         type: 'bubbleMap',
         data: {
           labels: data.map((d) => d.description),
           datasets: [{
-            outline: nation,
-            outlineBackgroundColor: null,
+            outline: states,
+            showOutline: true,
             backgroundColor: 'steelblue',
-            data: data.map((d) => Object.assign(d, {r: 3})),
+            data: data.map((d) => Object.assign(d, {r: Math.round(Math.random() * 10)})),
           }]
         },
         options: {
           legend: {
             display: false
+          },
+          plugins: {
+            datalabels: {
+              align: 'top',
+              formatter: (v) => {
+                return v.description;
+              }
+            }
           },
           scale: {
             projection: 'albersUsa'

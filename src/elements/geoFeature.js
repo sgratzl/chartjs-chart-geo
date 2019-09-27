@@ -1,9 +1,15 @@
 'use strict';
 
 import * as Chart from 'chart.js';
-import {} from 'd3-geo';
 
-const defaults = {};
+const defaults = {
+  outlineBackgroundColor: null,
+  outlineBorderColor: Chart.defaults.global.defaultColor,
+  outlineBorderWidth: 0,
+
+  graticuleBorderColor: '#CCCCCC',
+  graticuleBorderWidth: 0,
+};
 
 Chart.defaults.global.elements.geoFeature = {
   ...Chart.defaults.global.elements.rectangle,

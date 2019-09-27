@@ -1,18 +1,49 @@
 'use strict';
 
 import * as Chart from 'chart.js';
-import {geoPath, geoAlbers, geoAlbersUsa, geoAzimuthalEqualArea, geoEqualEarth} from 'd3-geo';
+import {
+  geoPath,
+  geoAzimuthalEqualArea,
+  geoAzimuthalEquidistant,
+  geoGnomonic,
+  geoOrthographic,
+  geoStereographic,
+  geoEqualEarth,
+  geoAlbers,
+  geoAlbersUsa,
+  geoConicConformal,
+  geoConicEqualArea,
+  geoConicEquidistant,
+  geoEquirectangular,
+  geoMercator,
+  geoTransverseMercator,
+  geoNaturalEarth1
+} from 'd3-geo';
 
 const defaults = {
   projection: 'albersUsa'
 };
 
 const lookup = {
-  albers: geoAlbers,
-  albersUsa: geoAlbersUsa,
-  equalEarth: geoEqualEarth,
-  azimuthalEqualArea: geoAzimuthalEqualArea
+  geoAzimuthalEqualArea,
+  geoAzimuthalEquidistant,
+  geoGnomonic,
+  geoOrthographic,
+  geoStereographic,
+  geoEqualEarth,
+  geoAlbers,
+  geoAlbersUsa,
+  geoConicConformal,
+  geoConicEqualArea,
+  geoConicEquidistant,
+  geoEquirectangular,
+  geoMercator,
+  geoTransverseMercator,
+  geoNaturalEarth1,
 };
+Object.keys(lookup).forEach((key) => {
+  lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
+});
 
 const superClass = Chart.Scale.prototype;
 export const ProjectionScale = Chart.Scale.extend({
@@ -20,12 +51,10 @@ export const ProjectionScale = Chart.Scale.extend({
   initialize() {
     superClass.initialize.call(this);
     this.geoPath = geoPath();
-    if (typeof this.options.projection === 'function') {
-      this.projection = this.options.projection();
-    } else if (this.options.projection && typeof lookup[this.options.projection] === 'function') {
+    if (typeof this.options.projection === 'string' && typeof lookup[this.options.projection] === 'function') {
       this.projection = lookup[this.options.projection]();
     } else {
-      this.projection = null;
+      this.projection = this.options.projection;
     }
     this.geoPath.projection(this.projection);
   },

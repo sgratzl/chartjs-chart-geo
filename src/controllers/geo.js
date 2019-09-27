@@ -1,15 +1,20 @@
 'use strict';
 
 import * as Chart from 'chart.js';
+import { geoGraticule, geoGraticule10 } from 'd3-geo';
 
 const defaults = {
   showOutline: false,
+  showGraticule: false,
   animation: false,
   scale: {
     type: 'projection',
     id: 'scale',
     display: false
   },
+
+  outlineBackgroundColor: null,
+  outlineBorderColor: 'black'
 };
 
 export const geoDefaults = Chart.helpers.configMerge(Chart.defaults.global, defaults);
@@ -32,6 +37,10 @@ export const Geo = Chart.DatasetController.extend({
 
   showOutline() {
     return Chart.helpers.valueOrDefault(this.getDataset().showOutline, this.chart.options.showOutline);
+  },
+
+  getGraticule() {
+    return Chart.helpers.valueOrDefault(this.getDataset().showGraticule, this.chart.options.showGraticule);
   },
 
   update(reset) {
@@ -116,18 +125,20 @@ export const Geo = Chart.DatasetController.extend({
     const values = {};
 
     keys.forEach((key) => {
-      const arr = [
-        custom[key],
-        dataset[key],
-        options[key]
-      ];
+      let arr;
       if (index < 0) { // outline
         const outlineKey = `outline${key.charAt(0).toUpperCase()}${key.slice(1)}`;
-        arr.unshift(
+        arr = [
           custom[outlineKey],
           dataset[outlineKey],
           options[outlineKey]
-        );
+        ];
+      } else {
+        arr = [
+          custom[key],
+          dataset[key],
+          options[key]
+        ];
       }
       values[key] = Chart.helpers.options.resolve(arr, context, index);
     });
@@ -139,6 +150,38 @@ export const Geo = Chart.DatasetController.extend({
     superClass.transition.call(this, easingValue);
   },
 
+  showGraticule() {
+    const g = this.getGraticule();
+    if (!g) {
+      return;
+    }
+    const ctx = this.chart.ctx;
+    const path = this.getProjectionScale().geoPath.context(ctx);
+
+    ctx.save();
+    ctx.beginPath();
+
+    if (g === true) {
+      path(geoGraticule10());
+      ctx.strokeStyle = '#ccc';
+      ctx.lineWidth = 1;
+    } else {
+      const geo = geoGraticule();
+      if (g.stepMajor) {
+        geo.stepMajor(g.stepMajor);
+      }
+      if (g.stepMinor) {
+        geo.stepMinor(g.stepMinor);
+      }
+      path(geo);
+      ctx.strokeStyle = g.borderColor || '#ccc';
+      ctx.lineWidth = g.borderWidth || 1;
+    }
+
+    ctx.stroke();
+    ctx.restore();
+  },
+
   draw() {
     const chart = this.chart;
 
@@ -147,6 +190,8 @@ export const Geo = Chart.DatasetController.extend({
     if (this.showOutline()) {
       this.getMeta().dataset.draw();
     }
+
+    this.showGraticule();
 
     this.getMeta().data.forEach((elem) => elem.draw());
 

@@ -41,7 +41,7 @@
     "uglify-es": "^3.3.9"
   },
   "scripts": {
-    "clean": "rimraf build",
+    "clean": "rimraf build *.tgz",
     "watch": "rollup -c -w -i src/index.js",
     "lint": "eslint src",
     "test": "jest --passWithNoTests",

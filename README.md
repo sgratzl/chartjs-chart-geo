@@ -1,7 +1,7 @@
 # Chart.js Graphs
 [![NPM Package][npm-image]][npm-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-Chart.js module for charting maps. Adding new chart types: `choropleth` and `bubbleMap`l
+Chart.js module for charting maps. Adding new chart types: `choropleth` and `bubbleMap`
 
 **Works only with Chart.js >= 2.8.0**
 
@@ -35,7 +35,7 @@ CodePens
 
 ## Options
 
-The option can be sent globally or per dataset
+The option can be set globally or per dataset
 
 ```ts
 interface IGeoChartOptions {

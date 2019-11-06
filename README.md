@@ -100,6 +100,9 @@ const config = {
       outline: nation, // ... outline to compute bounds
       showOutline: true,
       backgroundColor: (context) => {
+        if (context.dataIndex == null) {
+          return null;
+        }
         const value = context.dataset.data[context.dataIndex];
         return new Color('steelblue').lightness(value.value * 100).rgbString();
       },

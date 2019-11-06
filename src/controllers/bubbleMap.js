@@ -27,11 +27,12 @@ const defaults = {
 Chart.defaults.bubbleMap = Chart.helpers.configMerge(geoDefaults, defaults);
 
 const superClass = Geo.prototype;
+const bubbleClass = Chart.controllers.bubble.prototype;
 export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
   dataElementType: Chart.elements.Point,
 
-  updateElement(point, index, reset) {
-    superClass.updateElement.call(this, point, index, reset);
+  updateElement(point, index, reset, ...args) {
+    superClass.updateElement.call(this, point, index, reset, ...args);
 
     const meta = this.getMeta();
     const custom = point.custom || {};
@@ -49,7 +50,8 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
     point._datasetIndex = this.index;
     point._index = index;
 
-    const options = Chart.controllers.bubble.prototype._resolveElementOptions.call(this, point, index);
+    const method = bubbleClass._resolveElementOptions || bubbleClass._resolveDataElementOptions;
+    const options = method.call(this, point, index);
     point._options = options;
     point._model = {
       backgroundColor: options.backgroundColor,
@@ -71,6 +73,6 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
 	 * @protected
 	 */
   setHoverStyle(point) {
-    Chart.controllers.bubble.prototype.setHoverStyle.call(this, point);
+    bubbleClass.setHoverStyle.call(this, point);
   },
 });

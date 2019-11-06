@@ -23,6 +23,9 @@
             label: 'States',
             outline: nation,
             backgroundColor: (context) => {
+              if (context.dataIndex == null) {
+                return null;
+              }
               const value = context.dataset.data[context.dataIndex];
               return new Color('steelblue').lightness(value.value * 100).rgbString();
             },

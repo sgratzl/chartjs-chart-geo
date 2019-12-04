@@ -1,7 +1,7 @@
 'use strict';
 
 import * as Chart from 'chart.js';
-import { geoContains } from 'd3-geo';
+import {geoContains} from 'd3-geo';
 
 const defaults = {
   outlineBackgroundColor: null,

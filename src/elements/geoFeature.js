@@ -1,6 +1,7 @@
 'use strict';
 
 import * as Chart from 'chart.js';
+import { geoContains } from 'd3-geo';
 
 const defaults = {
   outlineBackgroundColor: null,
@@ -22,6 +23,14 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     const bb = this.getBounds();
     const r = (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
+
+
+    const projection = this._xScale.geoPath.projection();
+    if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
+      // test for real if within the bounds
+      const longlat = projection.invert([mouseX, mouseY]);
+      return longlat && geoContains(this.feature, longlat);
+    }
 
     return r;
   },

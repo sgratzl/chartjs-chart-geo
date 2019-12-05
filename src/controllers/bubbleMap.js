@@ -5,6 +5,7 @@ import {geoDefaults, Geo} from './geo';
 
 const defaults = {
   showOutline: true,
+  clipMap: 'outline+graticule',
   hover: {
     mode: 'single'
   },
@@ -31,8 +32,8 @@ const bubbleClass = Chart.controllers.bubble.prototype;
 export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
   dataElementType: Chart.elements.Point,
 
-  updateElement(point, index, reset, ...args) {
-    superClass.updateElement.call(this, point, index, reset, ...args);
+  updateElement(point, index, reset) {
+    superClass.updateElement.apply(this, arguments);
 
     const meta = this.getMeta();
     const custom = point.custom || {};

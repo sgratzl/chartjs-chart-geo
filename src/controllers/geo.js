@@ -6,6 +6,7 @@ import {geoGraticule, geoGraticule10} from 'd3-geo';
 const defaults = {
   showOutline: false,
   showGraticule: false,
+  clipMap: true,
   animation: false,
   scale: {
     type: 'projection',
@@ -34,6 +35,10 @@ export const Geo = Chart.DatasetController.extend({
 
   showOutline() {
     return Chart.helpers.valueOrDefault(this.getDataset().showOutline, this.chart.options.showOutline);
+  },
+
+  clipMap() {
+    return Chart.helpers.valueOrDefault(this.getDataset().clipMap, this.chart.options.clipMap);
   },
 
   getGraticule() {
@@ -186,16 +191,44 @@ export const Geo = Chart.DatasetController.extend({
   draw() {
     const chart = this.chart;
 
-    Chart.helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+    const clipMap = this.clipMap();
+
+    // enable clipping based on the option
+    let enabled = false;
+    if (clipMap === true || clipMap === 'outline' || clipMap === 'outline+graticule') {
+      enabled = true;
+      Chart.helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+    }
 
     if (this.showOutline()) {
       this.getMeta().dataset.draw();
     }
 
+    if (clipMap === true || clipMap === 'graticule' || clipMap === 'outline+graticule') {
+      if (!enabled) {
+        Chart.helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+      }
+    } else if (enabled) {
+      enabled = false;
+      Chart.helpers.canvas.unclipArea(chart.ctx);
+    }
+
     this.showGraticule();
+
+    if (clipMap === true || clipMap === 'items') {
+      if (!enabled) {
+        Chart.helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+      }
+    } else if (enabled) {
+      enabled = false;
+      Chart.helpers.canvas.unclipArea(chart.ctx);
+    }
 
     this.getMeta().data.forEach((elem) => elem.draw());
 
-    Chart.helpers.canvas.unclipArea(chart.ctx);
+    if (enabled) {
+      enabled = false;
+      Chart.helpers.canvas.unclipArea(chart.ctx);
+    }
   },
 });

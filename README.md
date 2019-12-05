@@ -55,10 +55,16 @@ interface IGeoChartOptions {
    * option to render a graticule in the background, see also the outline... styling option
    * @default false
    */
-  graticule: boolean | {
+  showGraticule: boolean | {
     stepMajor: [number, number],
     stepMinor: [number, number]
   };
+
+  /**
+   * option whether to clip the rendering to the chartArea of the graph
+   * @default choropleth: true bubbleMap: 'outline+graticule'
+   */
+  clipMap: boolean | 'outline' | 'graticule' | 'outline+graticule' | 'items';
 }
 ```
 

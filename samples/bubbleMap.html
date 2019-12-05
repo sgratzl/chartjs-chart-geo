@@ -10,7 +10,7 @@
 
 <body>
   <div style="width: 75%;">
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" style="border: 1px solid black"></canvas>
   </div>
   <script>
     Promise.all([
@@ -29,7 +29,7 @@
             outline: states,
             showOutline: true,
             backgroundColor: 'steelblue',
-            data: data.map((d) => Object.assign(d, {r: Math.round(Math.random() * 10)})),
+            data: data.map((d) => Object.assign(d, {r: Math.round(Math.random() * 100)})),
           }]
         },
         options: {
@@ -46,6 +46,9 @@
           },
           scale: {
             projection: 'albersUsa'
+          },
+          layout: {
+            padding: 20
           }
         }
       });

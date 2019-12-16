@@ -119,7 +119,7 @@ const config = {
         },
         {
           value: 0.3,
-          feaure: california
+          feature: california
         }
       ]
     }]

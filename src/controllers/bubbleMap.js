@@ -32,6 +32,8 @@ const bubbleClass = Chart.controllers.bubble.prototype;
 export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
   dataElementType: Chart.elements.Point,
 
+  _dataElementOptions: bubbleClass._dataElementOptions,
+
   updateElement(point, index, reset) {
     superClass.updateElement.apply(this, arguments);
 

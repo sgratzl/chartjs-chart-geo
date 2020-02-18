@@ -29,7 +29,7 @@
             outline: states,
             showOutline: true,
             backgroundColor: 'steelblue',
-            data: data.map((d) => Object.assign(d, {r: Math.round(Math.random() * 100)})),
+            data: data.map((d) => Object.assign(d, {r: Math.round(Math.random() * 10)})),
           }]
         },
         options: {
@@ -48,7 +48,7 @@
             projection: 'albersUsa'
           },
           layout: {
-            padding: 20
+            // padding: 20
           }
         }
       });

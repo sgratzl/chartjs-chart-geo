@@ -11,15 +11,30 @@
     <canvas id="canvas" style="border: 1px solid black"></canvas>
   </div>
   <script>
-    fetch('https://unpkg.com/world-atlas/countries-50m.json').then((r) => r.json()).then((data) => {
-      const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
+    const country = fetch(
+      "https://raw.githubusercontent.com/deldersveld/topojson/master/continents/europe.json"
+    ).then(r => r.json());
+    const states = fetch(
+      "https://raw.githubusercontent.com/deldersveld/topojson/master/countries/germany/dach-states.json"
+    ).then(r => r.json());
+
+    Promise.all([states, country]).then((data) => {
+      const regions = ChartGeo.topojson
+        .feature(data[0], data[0].objects.layer)
+        .features.filter(item => item.properties.NAME_0 === "Germany");
+      const countries = ChartGeo.topojson.feature(
+        data[1],
+        data[1].objects.continent_Europe_subunits
+      ).features;
+      const Germany = countries.find(d => d.properties.geounit === "Germany");
 
       const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
         type: 'choropleth',
         data: {
-          labels: countries.map((d) => d.properties.name),
+          labels: regions.map((d) => d.properties.NAME_0),
           datasets: [{
             label: 'Countries',
+            outline: Germany,
             backgroundColor: (context) => {
               if (context.dataIndex == null) {
                 return null;
@@ -27,12 +42,12 @@
               const value = context.dataset.data[context.dataIndex];
               return new Color('steelblue').lightness(value.value * 100).rgbString();
             },
-            data: countries.map((d) => ({feature: d, value: Math.random()})),
+            data: regions.map((d) => ({feature: d, value: Math.random()})),
           }]
         },
         options: {
-          showOutline: true,
-          showGraticule: true,
+          showOutline: false,
+          showGraticule: false,
           legend: {
             display: false
           },

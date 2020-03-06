@@ -100,7 +100,7 @@ export const ProjectionScale = Chart.Scale.extend({
 
     this.projection
       .scale(bb.refScale * scale)
-      .translate([scale * (bb.refX + x), scale * (bb.refY + y)]);
+      .translate([scale * bb.refX + x, scale * bb.refY + y]);
 
     return !bak
       || bak.chartWidth !== this.oldChartBounds.chartWidth

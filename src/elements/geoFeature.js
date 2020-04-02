@@ -59,14 +59,14 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     if (this.cache && this.cache.bounds) {
       return this.cache.bounds;
     }
-    const [[x0, y0], [x1, y1]] = this._xScale.geoPath.bounds(this.feature);
+    const bb = this._xScale.geoPath.bounds(this.feature);
     const bounds = {
-      x: x0,
-      x2: x1,
-      y: y0,
-      y2: y1,
-      width: x1 - x0,
-      height: y1 - y0
+      x: bb[0][0],
+      x2: bb[1][0],
+      y: bb[0][1],
+      y2: bb[1][1],
+      width: bb[1][0] - bb[0][0],
+      height: bb[1][1] - bb[0][1]
     };
     this.cache = Object.assign({}, this.cache || {}, bounds);
     return bounds;

@@ -12,10 +12,7 @@ const defaults = {
   graticuleBorderWidth: 0,
 };
 
-Chart.defaults.global.elements.geoFeature = {
-  ...Chart.defaults.global.elements.rectangle,
-  ...defaults
-};
+Chart.defaults.global.elements.geoFeature = Object.assign({}, Chart.defaults.global.elements.rectangle, defaults);
 
 // const superClass = Chart.Element.prototype;
 export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
@@ -54,10 +51,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       x: centroid[0],
       y: centroid[1]
     };
-    this.cache = {
-      ...(this.cache || {}),
-      center
-    };
+    this.cache = Object.assign({}, this.cache || {}, center);
     return center;
   },
 
@@ -74,10 +68,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       width: x1 - x0,
       height: y1 - y0
     };
-    this.cache = {
-      ...(this.cache || {}),
-      bounds
-    };
+    this.cache = Object.assign({}, this.cache || {}, bounds);
     return bounds;
   },
 
@@ -87,10 +78,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     }
     const area = this._xScale.geoPath.area(this.feature);
 
-    this.cache = {
-      ...(this.cache || {}),
-      area
-    };
+    this.cache = Object.assign({}, this.cache || {}, area);
     return area;
   },
 

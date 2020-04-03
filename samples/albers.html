@@ -25,13 +25,6 @@
           datasets: [{
             label: 'States',
             outline: nation,
-            // backgroundColor: (context) => {
-            //   if (context.dataIndex == null) {
-            //     return null;
-            //   }
-            //   const value = context.dataset.data[context.dataIndex];
-            //   return scale(value);
-            // },
             data: states.map((d) => ({feature: d, value: Math.random()})),
           }]
         },
@@ -43,7 +36,12 @@
             projection: 'albersUsa'
           },
           geo: {
+            colorScale: {
+              quantize: 3
+            },
             legend: {
+              position: 'bottom-right',
+              layout: 'vertical',
             }
           }
         }

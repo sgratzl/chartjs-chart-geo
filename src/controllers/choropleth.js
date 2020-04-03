@@ -27,6 +27,12 @@ const defaults = {
       id: 'color',
       type: 'color',
       property: 'value'
+    },
+    legend: { // false
+      title: '',
+      position: 'top', // top, top-left, top-right, right, bottom-right, bottom, bottom-left, left, {x: number, y: number}
+      width: 200, //
+      layout: 'horizontal' // vertical
     }
   },
   elements: {
@@ -67,19 +73,25 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
     if (!scaleClass) {
       return null;
     }
-    return new scaleClass({
+    const s = new scaleClass({
       id: scaleOptions.id,
       type: scaleOptions.type,
       options: Object.assign({}, Chart.scaleService.getScaleDefaults(scaleOptions.type), scaleOptions),
       ctx: this.chart.ctx,
       chart: this.chart
     });
+    s.mergeTicksOptions();
+
+    s.fullWidth = s.options.fullWidth;
+    s.position = s.options.position;
+    s.weight = s.options.weight;
+    s._configure();
+
+    Chart.layouts.addBox(this.chart, s);
+    return s;
   },
 
   update(reset) {
-    if (this._colorScale) {
-      this._colorScale.updateDomain(this.getDataset().data);
-    }
     superClass.update.call(this, reset);
   },
 
@@ -88,7 +100,21 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
     this.updateGeoFeatureElement(elem, index, reset);
   },
 
+  draw() {
+    superClass.draw.call(this);
+
+    this._drawLegend();
+  },
+
+  _drawLegend() {
+    const o = this.chart.options.geo.legend;
+    if (!o || !this._colorScale) {
+      return;
+    }
+
+  },
+
   valueToColor(value) {
-    return this._colorScale ? this._colorScale.scale(value) : 'blue';
+    return this._colorScale ? this._colorScale.getColorForValue(value) : 'blue';
   }
 });

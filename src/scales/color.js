@@ -109,13 +109,22 @@ function quantize(v, steps) {
 const defaults = {
   interpolate: 'blues',
   missing: 'transparent',
+  property: 'value',
   quantize: 0,
-  domain: [0, 1]
+  position: 'right',
+  // scaleLabel: {
+  //   display: true,
+  //   labelString: 'Test'
+  // },
+  // gridLines: {
+  //   display: true,
+  //   drawOnChartArea: false,
+  // }
 };
 
-const superClass = Chart.Scale.prototype;
-export const ColorScale = Chart.Scale.extend({
-  ticks: [],
+const superClassC = Chart.scaleService.getScaleConstructor('linear');
+const superClass = superClassC.prototype;
+export const ColorScale = superClassC.extend({
   initialize() {
     superClass.initialize.call(this);
     if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
@@ -123,43 +132,55 @@ export const ColorScale = Chart.Scale.extend({
     } else {
       this.interpolate = this.options.interpolate;
     }
-    this._domain = this.options.domain;
   },
-  updateDomain(data) {
-    const domain = this.options.domain;
-    if (typeof domain === 'function' || (domain !== 'auto' && !Number.isNaN(domain[0]) && !Number.isNaN(domain[1]))) {
-      return; // static
-    }
-    const p = this.options.property;
-    const min = data.reduce((acc, v) => Math.min(acc, v[p]), Number.POSITIVE_INFINITY);
-    const max = data.reduce((acc, v) => Math.max(acc, v[p]), Number.NEGATIVE_INFINITY);
+  getRightValue(value) {
+    return value[this.options.property];
+  },
+  determineDataLimits2() {
+    const chart = this.chart;
+    // First Calculate the range
+    this.min = null;
+    this.max = null;
 
-    if (domain === 'auto') {
-      this._domain = [min, max];
-    } else {
-      this._domain = [Number.isNaN(domain[0]) ? min : domain[0], Number.isNaN(domain[1]) ? min : domain[1]];
+    // Regular charts use x, y values
+    // For the boxplot chart we have rawValue.min and rawValue.max for each point
+    chart.data.datasets.forEach((d, i) => {
+      const meta = chart.getDatasetMeta(i);
+      if (!chart.isDatasetVisible(i)) {
+        return;
+      }
+      d.data.forEach((rawValue, j) => {
+        const value = this.getRightValue(rawValue);
+        if (Number.isNaN(value) || meta.data[j].hidden) {
+          return;
+        }
+        if (this.min === null || value < this.min) {
+          this.min = value;
+        }
+        if (this.max === null || value > this.max) {
+          this.max = value;
+        }
+      });
+    });
+
+    if (this.min == null) {
+      this.min = 0;
     }
-  },
-  _normalize(v) {
-    if (typeof this._domain === 'function') {
-      return this._domain(v);
+    if (this.max == null) {
+      this.max = 0;
     }
-    const d = this._domain;
-    return (v - d[0]) / (d[1] - d[0]);
+    // Common base implementation to handle ticks.min, ticks.max, ticks.beginAtZero
+    this.handleTickRangeOptions();
   },
-  scale(value) {
-    const v = value ? value[this.options.property] : null;
+  getColorForValue(value) {
+    let v = value ? (+this.getRightValue(value) - this._startValue) / this._valueRange : null;
     if (v == null || Number.isNaN(v)) {
       return this.options.missing;
     }
-    let n = this._normalize(v);
-    if (n == null || Number.isNaN(n)) {
-      return this.options.missing;
-    }
     if (this.options.quantize > 0) {
-      n = quantize(n, this.options.quantize);
+      v = quantize(v, this.options.quantize);
     }
-    return this.interpolate(n);
-  }
+    return this.interpolate(v);
+  },
 });
 Chart.scaleService.registerScaleType('color', ColorScale, defaults);

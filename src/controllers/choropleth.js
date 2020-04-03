@@ -2,6 +2,7 @@
 
 import * as Chart from 'chart.js';
 import {geoDefaults, Geo} from './geo';
+import {wrapProjectionScale} from '../scales';
 
 const defaults = {
   hover: {
@@ -14,7 +15,10 @@ const defaults = {
         return '';
       },
       label(item, data) {
-        return data.labels[item.index];
+        if (item.value == null) {
+          return data.labels[item.index];
+        }
+        return `${data.labels[item.index]}: ${item.value}`;
       }
     }
   },
@@ -49,6 +53,14 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
     this._colorScale = this._resolveColorScale();
   },
 
+  _getValueScale() {
+    const base = superClass._getValueScale.call(this);
+    if (!this._colorScale) {
+      return base;
+    }
+    return wrapProjectionScale(base, this._colorScale.options.property);
+  },
+
   _resolveColorScale() {
     const scaleOptions = this.chart.options.geo.colorScale;
     const scaleClass = Chart.scaleService.getScaleConstructor(scaleOptions.type);
@@ -62,6 +74,13 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
       ctx: this.chart.ctx,
       chart: this.chart
     });
+  },
+
+  update(reset) {
+    if (this._colorScale) {
+      this._colorScale.updateDomain(this.getDataset().data);
+    }
+    superClass.update.call(this, reset);
   },
 
   updateElement(elem, index, reset) {

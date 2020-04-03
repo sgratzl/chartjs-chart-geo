@@ -108,3 +108,17 @@ export const ProjectionScale = Chart.Scale.extend({
   }
 });
 Chart.scaleService.registerScaleType('projection', ProjectionScale, defaults);
+
+export function wrapProjectionScale(scale, attr) {
+  if (!(scale instanceof ProjectionScale)) {
+    return scale;
+  }
+  const helper = {
+    getLabelForIndex(index, datasetIndex) {
+      const data = this.chart.data.datasets[datasetIndex].data[index];
+      return data[attr];
+    }
+  };
+  Object.setPrototypeOf(helper, scale);
+  return helper;
+}

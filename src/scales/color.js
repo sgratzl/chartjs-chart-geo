@@ -106,25 +106,22 @@ function quantize(v, steps) {
 }
 
 
-const defaults = {
+export const defaults = {
+  position: 'chartArea',
+
   interpolate: 'blues',
   missing: 'transparent',
   property: 'value',
   quantize: 0,
-  position: 'right',
-  // scaleLabel: {
-  //   display: true,
-  //   labelString: 'Test'
-  // },
-  // gridLines: {
-  //   display: true,
-  //   drawOnChartArea: false,
-  // }
+  legend: {
+    position: 'right',
+    width: 40,
+    height: 200,
+  },
 };
 
-const superClassC = Chart.scaleService.getScaleConstructor('linear');
-const superClass = superClassC.prototype;
-export const ColorScale = superClassC.extend({
+const superClass = Chart.Element.prototype;
+export const ColorScale = Chart.Element.extend({
   initialize() {
     superClass.initialize.call(this);
     if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
@@ -136,7 +133,7 @@ export const ColorScale = superClassC.extend({
   getRightValue(value) {
     return value[this.options.property];
   },
-  determineDataLimits2() {
+  determineDataLimits() {
     const chart = this.chart;
     // First Calculate the range
     this.min = null;
@@ -169,8 +166,6 @@ export const ColorScale = superClassC.extend({
     if (this.max == null) {
       this.max = 0;
     }
-    // Common base implementation to handle ticks.min, ticks.max, ticks.beginAtZero
-    this.handleTickRangeOptions();
   },
   getColorForValue(value) {
     let v = value ? (+this.getRightValue(value) - this._startValue) / this._valueRange : null;
@@ -182,5 +177,24 @@ export const ColorScale = superClassC.extend({
     }
     return this.interpolate(v);
   },
+  update(maxWidth, maxHeight) {
+    const l = this.options.legend;
+
+    this.determineDataLimits();
+    this._startValue = this.min;
+    this._valueRange = this.max - this.min;
+
+    const ch = Math.min(maxHeight, this.bottom);
+    const cw = Math.min(maxWidth, this.right);
+    const w = Math.min(cw, l.width < 1 ? cw * l.width : l.width);
+    const h = Math.min(ch, l.height < 1 ? ch * l.height : l.height);
+    this.minSize = {
+      width: w,
+      height: h
+    };
+    return this.minSize;
+  },
+  draw(chartArea) {
+    // TODO
+  }
 });
-Chart.scaleService.registerScaleType('color', ColorScale, defaults);

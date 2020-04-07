@@ -25,15 +25,9 @@ const defaults = {
   geo: {
     colorScale: {
       id: 'color',
-      type: 'color',
+      type: 'linearColor',
       property: 'value'
     },
-    legend: { // false
-      title: '',
-      position: 'top', // top, top-left, top-right, right, bottom-right, bottom, bottom-left, left, {x: number, y: number}
-      width: 200, //
-      layout: 'horizontal' // vertical
-    }
   },
   elements: {
     geoFeature: {
@@ -56,6 +50,9 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
 
   linkScales() {
     superClass.linkScales.call(this);
+    if (this._colorScale) {
+      Chart.layouts.removeBox(this.chart, this._colorScale);
+    }
     this._colorScale = this._resolveColorScale();
   },
 

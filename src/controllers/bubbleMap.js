@@ -2,6 +2,8 @@
 
 import * as Chart from 'chart.js';
 import {geoDefaults, Geo} from './geo';
+import {wrapProjectionScale} from '../scales';
+import {resolveScale} from './utils';
 
 const defaults = {
   showOutline: true,
@@ -17,10 +19,29 @@ const defaults = {
         return '';
       },
       label(item, data) {
-        const datasetLabel = data.labels[item.index] || '';
-        const dataPoint = data.datasets[item.datasetIndex].data[item.index];
-        return `${datasetLabel}: ${dataPoint.r}`;
+        if (item.value == null) {
+          return data.labels[item.index];
+        }
+        return `${data.labels[item.index]}: ${item.value}`;
       }
+    }
+  },
+  geo: {
+    radiusScale: {
+      id: 'radius',
+      type: 'size'
+    },
+  },
+  elements: {
+    point: {
+      radius(context) {
+        if (context.dataIndex == null) {
+          return null;
+        }
+        const value = context.dataset.data[context.dataIndex];
+        const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+        return controller.valueToRadius(value);
+      },
     }
   }
 };
@@ -34,6 +55,22 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
 
   _dataElementOptions: bubbleClass._dataElementOptions,
 
+  linkScales() {
+    superClass.linkScales.call(this);
+    if (this._radiusScale) {
+      Chart.layouts.removeBox(this.chart, this._radiusScale);
+    }
+    this._radiusScale = resolveScale(this.chart, this.chart.options.geo.radiusScale);
+  },
+
+  _getValueScale() {
+    const base = superClass._getValueScale.call(this);
+    if (!this._radiusScale) {
+      return base;
+    }
+    return wrapProjectionScale(base, this._radiusScale.options.property);
+  },
+
   updateElement(point, index, reset) {
     superClass.updateElement.apply(this, arguments);
 
@@ -41,7 +78,6 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
     const custom = point.custom || {};
     const data = this.getDataset().data[index];
 
-    // TOOD
     const scale = this.getProjectionScale();
     const [x, y] = scale.projection([
       data.longitude == null ? data.x : data.longitude,
@@ -69,13 +105,14 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
       y,
     };
 
+    if (this._radiusScale) {
+      this._radiusScale._model = options;
+    }
+
     point.pivot();
   },
 
-  /**
-	 * @protected
-	 */
-  setHoverStyle(point) {
-    bubbleClass.setHoverStyle.call(this, point);
-  },
+  valueToRadius(value) {
+    return this._radiusScale ? this._radiusScale.getSizeForValue(value) : 5;
+  }
 });

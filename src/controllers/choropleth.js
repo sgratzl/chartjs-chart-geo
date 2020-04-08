@@ -36,7 +36,8 @@ const defaults = {
           return null;
         }
         const value = context.dataset.data[context.dataIndex];
-        return context.controller.valueToColor(value);
+        const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+        return controller.valueToColor(value);
       },
     }
   }

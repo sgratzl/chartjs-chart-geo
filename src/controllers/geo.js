@@ -112,7 +112,6 @@ export const Geo = Chart.DatasetController.extend({
 
     // Scriptable options
     const context = {
-      controller: this,
       chart: chart,
       dataIndex: index,
       dataset: dataset,

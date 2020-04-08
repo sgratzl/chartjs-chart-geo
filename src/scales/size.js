@@ -4,37 +4,93 @@ import * as Chart from 'chart.js';
 import {createBase, baseDefaults} from './base';
 
 const defaults = {
+  position: 'bottom',
+  missing: 1,
+  size: [1, 20],
   legend: {
-    indicatorSize: 20,
+    length: 90,
+    width: 70,
+    indicatorWidth: 42,
   },
 };
 
 function createScale(superClassConstructor) {
   const superClass = superClassConstructor.prototype;
   return superClassConstructor.extend(Object.assign(createBase(superClass), {
-    getRadiusForValue(value) {
+    getSizeForValue(value) {
       let v = value ? (+this.getRightValue(value) - this._startValue) / this._valueRange : null;
       if (v == null || Number.isNaN(v)) {
         return this.options.missing;
       }
-      return this.getRadius(v);
+      return this.getSizeImpl(v);
     },
-    getRadius(_normalized) {
-      return 0; // TODO
+    getSizeImpl(normalized) {
+      const range = this.options.size[1] - this.options.size[0];
+      return normalized * range + this.options.size[0];
     },
     _drawIndicator() {
       /** @type {CanvasRenderingContext2D} */
-      // const ctx = this.ctx;
-      // const w = this.width;
-      // const h = this.height;
-      // const indicatorSize = this.options.legend.indicatorWidth;
-      // const reverse = this._reversePixels;
+      const ctx = this.ctx;
+      const shift = this.options.legend.indicatorWidth / 2;
 
-      if (this.isHorizontal()) {
-        // TODO
+      const values = this._ticks.map((t) => t.value);
+      const positions = this._labelItems;
+      const isHor = this.isHorizontal();
+      const tickShift = (this.options.position === 'bottom' || this.options.position === 'right') ? -1 : 1;
+
+      this._gridLineItems.forEach((item) => {
+        ctx.save();
+        ctx.strokeStyle = item.color;
+        ctx.lineWidth = item.width;
+
+        if (ctx.setLineDash) {
+          ctx.setLineDash(item.borderDash);
+          ctx.lineDashOffset = item.borderDashOffset;
+        }
+
+        ctx.beginPath();
+
+        if (this.options.gridLines.drawTicks) {
+          switch (this.options.position) {
+          case 'left':
+            ctx.moveTo(0, item.ty1);
+            ctx.lineTo(shift, item.ty2);
+            break;
+          case 'top':
+            ctx.moveTo(item.tx1, 0);
+            ctx.lineTo(item.tx2, shift);
+            break;
+          case 'bottom':
+            ctx.moveTo(item.tx1, shift);
+            ctx.lineTo(item.tx2, shift * 2);
+            break;
+          default: // right
+            ctx.moveTo(shift, item.ty1);
+            ctx.lineTo(shift * 2, item.ty2);
+            break;
+          }
+        }
+        ctx.stroke();
+        ctx.restore();
+      });
+
+
+      if (this._model) {
+        const vm = this._model;
+        ctx.strokeStyle = vm.borderColor || Chart.defaults.global.defaultColor;
+        ctx.lineWidth = vm.borderWidth == null ? Chart.elements.point.borderWidth : vm.borderWidth;
+        ctx.fillStyle = vm.backgroundColor || Chart.defaults.global.defaultColor;
       } else {
-        // TODO
+        ctx.fillStyle = 'blue';
       }
+
+      values.forEach((v, i) => {
+        const pos = positions[i];
+        const radius = this.getSizeForValue(v);
+        const x = isHor ? pos.x : shift;
+        const y = isHor ? shift : pos.y;
+        Chart.helpers.canvas.drawPoint(ctx, this._model ? this._model.pointStyle : null, radius, x, y, 0);
+      });
     }
   }));
 }

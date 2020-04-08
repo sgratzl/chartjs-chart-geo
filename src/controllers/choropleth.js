@@ -25,6 +25,7 @@ const defaults = {
   },
   geo: {
     colorScale: {
+      display: false,
       id: 'color',
       type: 'color'
     },

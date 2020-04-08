@@ -28,6 +28,7 @@ const defaults = {
   },
   geo: {
     radiusScale: {
+      display: false,
       id: 'radius',
       type: 'size'
     },

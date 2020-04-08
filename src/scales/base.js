@@ -91,6 +91,9 @@ export function createBase(superClass) {
       return [pos.x, pos.y];
     },
     draw(chartArea) {
+      if (!this.options.display) {
+        return;
+      }
       const pos = this._getLegendPosition(chartArea);
       /** @type {CanvasRenderingContext2D} */
       const ctx = this.ctx;

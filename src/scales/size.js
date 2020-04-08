@@ -36,7 +36,6 @@ function createScale(superClassConstructor) {
       const values = this._ticks.map((t) => t.value);
       const positions = this._labelItems;
       const isHor = this.isHorizontal();
-      const tickShift = (this.options.position === 'bottom' || this.options.position === 'right') ? -1 : 1;
 
       this._gridLineItems.forEach((item) => {
         ctx.save();

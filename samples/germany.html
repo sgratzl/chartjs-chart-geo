@@ -35,13 +35,6 @@
           datasets: [{
             label: 'Countries',
             outline: Germany,
-            backgroundColor: (context) => {
-              if (context.dataIndex == null) {
-                return null;
-              }
-              const value = context.dataset.data[context.dataIndex];
-              return new Color('steelblue').lightness(value.value * 100).rgbString();
-            },
             data: regions.map((d) => ({feature: d, value: Math.random()})),
           }]
         },
@@ -53,6 +46,11 @@
           },
           scale: {
             projection: 'equalEarth'
+          },
+          geo: {
+            colorScale: {
+              display: true
+            }
           }
         }
       });

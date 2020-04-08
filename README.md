@@ -1,19 +1,19 @@
 # Chart.js Graphs
 [![NPM Package][npm-image]][npm-url] [![Github Actions][github-actions-image]][github-actions-url]
 
-Chart.js module for charting maps. Adding new chart types: `choropleth` and `bubbleMap`
+Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
 
 **Works only with Chart.js >= 2.8.0**
 
-![Choropleth](https://user-images.githubusercontent.com/4129778/65654910-4c7a4900-dfe8-11e9-8712-e56557452907.png)
+![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
 [CodePen](https://codepen.io/sgratzl/pen/GRKLQBw)
 
-![Earth Choropleth](https://user-images.githubusercontent.com/4129778/65734104-73478680-e09f-11e9-86dd-22e80918bce5.png)
+![Earth Choropleth](https://user-images.githubusercontent.com/4129778/78821946-8d610a80-79da-11ea-9ebb-23baca9db670.png)
 
 [CodePen](https://codepen.io/sgratzl/pen/qBWwxKP)
 
-![Bubble Map](https://user-images.githubusercontent.com/4129778/65734563-84919280-e0a1-11e9-87ea-1692b22b1fae.png)
+![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
 [CodePen](https://codepen.io/sgratzl/pen/wvwZyxb)
 
@@ -68,21 +68,22 @@ interface IGeoChartOptions {
 }
 ```
 
+
 ## Choropleth
 
 A Choropleth (chart type: `choropleth`) is used to render maps with the area filled according to some numerical value.
 
-![Choropleth](https://user-images.githubusercontent.com/4129778/65654910-4c7a4900-dfe8-11e9-8712-e56557452907.png)
+![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
 [CodePen](https://codepen.io/sgratzl/pen/GRKLQBw)
 
-![Earth Choropleth](https://user-images.githubusercontent.com/4129778/65734104-73478680-e09f-11e9-86dd-22e80918bce5.png)
+![Earth Choropleth](https://user-images.githubusercontent.com/4129778/78821946-8d610a80-79da-11ea-9ebb-23baca9db670.png)
 
 [CodePen](https://codepen.io/sgratzl/pen/qBWwxKP)
 
 ### Data Structure
 
-A data point has to have a `.feature` property containing the feature to render.
+A data point has to have a `.feature` property containing the feature to render and a `.value` property containing the value for the coloring.
 
 [TopoJson](https://github.com/topojson) is packaged with this plugin to convert data, it is exposed as `ChartGeo.topojson` in the global context.
 
@@ -105,13 +106,6 @@ const config = {
       label: 'States',
       outline: nation, // ... outline to compute bounds
       showOutline: true,
-      backgroundColor: (context) => {
-        if (context.dataIndex == null) {
-          return null;
-        }
-        const value = context.dataset.data[context.dataIndex];
-        return new Color('steelblue').lightness(value.value * 100).rgbString();
-      },
       data: [
         {
           value: 0.4,
@@ -128,6 +122,11 @@ const config = {
     // ! Only one scale is supported via the options.scale option
     scale: {
       projection: 'albersUsa' // ... projection method
+    },
+    geo: {
+      colorScale: {
+        display: true
+      }
     }
   }
 };
@@ -170,11 +169,101 @@ interface IGeoFeatureOptions {
 }
 ```
 
+### Legend and Color Scale
+
+The coloring of the nodes will be done with a special color scale. The scale itself is based on a linear scale.
+
+```ts
+interface IGeoChartOptions {
+  // can just be specified as a global option
+  colorScale: IColorScaleOptions;
+}
+
+interface IColorScaleOptions {
+  // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
+  // e.g. for tick manipulation, ...
+
+  /**
+   * whether to render a color legend
+   * @default false (for compatibility reasons)
+   */
+  display: boolean;
+
+  /**
+   * color interpolation method which is either a function
+   * converting a normalized value to string or a
+   * well defined string of all the interpolation scales
+   * from https://github.com/d3/d3-scale-chromatic.
+   * e.g. interpolateBlues -> blues
+   *
+   * @default blues
+   */
+  interpolate: string | (normalizedValue: number) => string;
+
+  /**
+   * color value to render for missing values
+   * @default transparent
+   */
+  missing: string;
+
+  /**
+   * allows to split the colorscale in N quantized equal bins.
+   * @default 0
+   */
+  quantize: number;
+
+  /**
+   * orientation of the scale, e.g., `right` means that it is a vertical scale
+   * with the ticks on the right side
+   * @default right
+   */
+  position: 'left' | 'right' | 'top' | 'bottom';
+
+  /**
+   * the property name that stores the value in the data elements
+   * @default value
+   */
+  property: string;
+
+  legend: {
+    /**
+     * location of the legend on the chart area
+     * @default bottom-right
+     */
+    position: 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'top-right' | 'bottom-right';
+    /**
+     * length of the legend, i.e., for a horizontal scale the width
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 100
+     */
+    length: number;
+    /**
+     * how wide the scale is, i.e., for a horizontal scale the height
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 50
+     */
+    width: number;
+    /**
+     * how many pixels should be used for the color bar
+     * @default 10
+     */
+    indicatorWidth: number;
+    /**
+     * margin pixels such that it doesn't stick to the edge of the chart
+     * @default 8
+     */
+    margin: number;
+  }
+}
+```
+
 ## Bubble Map
 
-A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render maps with dots that are scaled according to some numerical value. It is based on a regular `bubble` chart where the positioning is done using latitude and longtitude.
+A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render maps with dots that are scaled according to some numerical value. It is based on a regular `bubble` chart where the positioning is done using latitude and longtitude with an additional `radiusScale` to create a legend for the different radi.
 
-![Bubble Map](https://user-images.githubusercontent.com/4129778/65734563-84919280-e0a1-11e9-87ea-1692b22b1fae.png)
+![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
 [CodePen](https://codepen.io/sgratzl/pen/wvwZyxb)
 
@@ -186,14 +275,99 @@ see [Bubble Chart](https://www.chartjs.org/docs/latest/charts/bubble.html#data-s
 interface IBubbleMapPoint {
   longitude: number;
   latitude: number;
-  r: number;
+  value: number;
 }
 
 ```
 
+**Note**: instead of using the `r` attribute as in a regular bubble chart, the `value` attribute is used, which is picked up by the `radiusScale` to convert it to an actual pixel radius value.
+
 ### Styling
 
 A regular point is used and thus supports the [Point Element](https://www.chartjs.org/docs/latest/configuration/elements.html#point-configuration) styling options. In addition, the `outline*` and `graticule*` are supported.
+
+### Legend
+
+Similiar to the choropleth chart a new `radiusScale` is used to map the values to symbol radius size. The scale itself is based on a linear scale.
+
+```ts
+interface IGeoChartOptions {
+  // can just be specified as a global option
+  radiusScale: ISizeScaleOptions;
+}
+
+interface ISizeScaleOptions {
+  // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
+  // e.g. for tick manipulation, ...
+
+  /**
+   * whether to render a color legend
+   * @default false (for compatibility reasons)
+   */
+  display: boolean;
+
+  /**
+   * radius range in pixel, the minimal data value will be mapped to the
+   * first entry,  the maximal one to the second and a linear interpolation
+   * for all values in between.
+   *
+   * @default [1, 20]
+   */
+  range: [number, number];
+
+  /**
+   * radius to render for missing values
+   * @default 1
+   */
+  missing: number;
+
+  /**
+   * orientation of the scale, e.g., `right` means that it is a vertical scale
+   * with the ticks on the right side
+   * @default bottom
+   */
+  position: 'left' | 'right' | 'top' | 'bottom';
+
+  /**
+   * the property name that stores the value in the data elements
+   * @default value
+   */
+  property: string;
+
+  legend: {
+    /**
+     * location of the legend on the chart area
+     * @default bottom-right
+     */
+    position: 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'top-right' | 'bottom-right';
+    /**
+     * length of the legend, i.e., for a horizontal scale the width
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 90
+     */
+    length: number;
+    /**
+     * how wide the scale is, i.e., for a horizontal scale the height
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 70
+     */
+    width: number;
+    /**
+     * how many pixels should be used for the color bar
+     * @default 42
+     */
+    indicatorWidth: number;
+    /**
+     * margin pixels such that it doesn't stick to the edge of the chart
+     * @default 8
+     */
+    margin: number;
+  }
+}
+```
+
 
 ## Scales
 

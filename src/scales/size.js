@@ -6,7 +6,7 @@ import {createBase, baseDefaults} from './base';
 const defaults = {
   position: 'bottom',
   missing: 1,
-  size: [1, 20],
+  range: [1, 20],
   legend: {
     length: 90,
     width: 70,
@@ -25,8 +25,8 @@ function createScale(superClassConstructor) {
       return this.getSizeImpl(v);
     },
     getSizeImpl(normalized) {
-      const range = this.options.size[1] - this.options.size[0];
-      return normalized * range + this.options.size[0];
+      const range = this.options.range[1] - this.options.range[0];
+      return normalized * range + this.options.range[0];
     },
     _drawIndicator() {
       /** @type {CanvasRenderingContext2D} */

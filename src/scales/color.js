@@ -167,8 +167,9 @@ export const ColorScale = Chart.scaleService.getScaleConstructor('linear').exten
     const l = this.options.legend;
     const isHor = this.isHorizontal();
     const factor = (v, full) => v < 1 ? full * v : v;
-    const w = Math.min(cw, factor(isHor ? l.length : l.wide, cw)) - (isHor ? l.colorSize : 0);
-    const h = Math.min(ch, factor(!isHor ? l.length : l.wide, ch)) - (!isHor ? l.colorSize : 0);
+    const w = Math.min(cw, factor(isHor ? l.length : l.wide, cw)) - (!isHor ? l.colorSize : 0);
+    const h = Math.min(ch, factor(!isHor ? l.length : l.wide, ch)) - (isHor ? l.colorSize : 0);
+    this.legendSize = { w, h };
     this.bottom = this.height = h;
     this.right = this.width = w;
 
@@ -183,16 +184,17 @@ export const ColorScale = Chart.scaleService.getScaleConstructor('linear').exten
     const margin = this.options.legend.margin;
 
     const left = (typeof margin === 'number' ? margin : margin.left) + (pos === 'right' ? colorSize : 0);
-    const top = typeof margin === 'number' ? margin : margin.top + (pos === 'bottom' ? colorSize : 0);
-    const right = typeof margin === 'number' ? margin : margin.right + (pos === 'left' ? colorSize : 0);
-    const bottom = typeof margin === 'number' ? margin : margin.bottom + (pos === 'top' ? colorSize : 0);
+    const top = (typeof margin === 'number' ? margin : margin.top) + (pos === 'bottom' ? colorSize : 0);
+    const right = (typeof margin === 'number' ? margin : margin.right) + (pos === 'left' ? colorSize : 0);
+    const bottom = (typeof margin === 'number' ? margin : margin.bottom) + (pos === 'top' ? colorSize : 0);
     return {left, top, right, bottom};
   },
   _getPosition(chartArea) {
     const isHor = this.isHorizontal();
+    const axisPos = this.options.position;
     const colorSize = this.options.legend.colorSize;
-    const w = this.minSize.width + (isHor ? colorSize : 0);
-    const h = this.minSize.height + (!isHor ? colorSize : 0);
+    const w = (axisPos === 'left' ? this.legendSize.w : this.width) + (isHor ? colorSize : 0);
+    const h = (axisPos === 'top' ? this.legendSize.h : this.height) + (!isHor ? colorSize : 0);
     const margin = this._getColorMargin();
     const pos = this.options.legend.position;
 
@@ -219,11 +221,11 @@ export const ColorScale = Chart.scaleService.getScaleConstructor('linear').exten
     return [pos.x, pos.y];
   },
   draw(chartArea) {
-    const [x, y] = this._getPosition(chartArea);
+    const pos = this._getPosition(chartArea);
     /** @type {CanvasRenderingContext2D} */
     const ctx = this.ctx;
     ctx.save();
-    ctx.translate(x, y);
+    ctx.translate(pos[0], pos[1]);
 
     superClass.draw.call(this, Object.assign({}, chartArea, {
       bottom: this.height,
@@ -233,10 +235,10 @@ export const ColorScale = Chart.scaleService.getScaleConstructor('linear').exten
     const colorSize = this.options.legend.colorSize;
     switch (this.options.position) {
     case 'left':
-      ctx.translate(this.width, 0);
+      ctx.translate(this.legendSize.w, 0);
       break;
     case 'top':
-      ctx.translate(0, this.height);
+      ctx.translate(0, this.legendSize.h);
       break;
     case 'bottom':
       ctx.translate(0, -colorSize);

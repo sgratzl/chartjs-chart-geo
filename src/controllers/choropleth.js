@@ -73,14 +73,14 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
     const s = new scaleClass({
       id: scaleOptions.id,
       type: scaleOptions.type,
-      options: Object.assign({}, Chart.scaleService.getScaleDefaults(scaleOptions.type), scaleOptions),
+      options: Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults(scaleOptions.type), scaleOptions]),
       ctx: this.chart.ctx,
       chart: this.chart
     });
     s.mergeTicksOptions();
 
     s.fullWidth = s.options.fullWidth;
-    s.position = s.options.position;
+    s.position = 'chartArea';
     s.weight = s.options.weight;
 
     Chart.layouts.addBox(this.chart, s);

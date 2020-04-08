@@ -107,23 +107,25 @@ function quantize(v, steps) {
 
 
 const defaults = {
-  position: 'chartArea',
-
+  position: 'right',
   interpolate: 'blues',
   missing: 'transparent',
   property: 'value',
   quantize: 0,
+  gridLines: {
+    drawOnChartArea: false,
+  },
   legend: {
     position: 'bottom-right',
-    orientation: 'vertical',
-    width: 40,
-    height: 200,
-    margin: 5,
+    length: 200,
+    wide: 50,
+    margin: 8,
+    colorSize: 10,
   },
 };
 
-const superClass = Chart.LinearScaleBase.prototype;
-export const ColorScale = Chart.LinearScaleBase.extend({
+const superClass = Chart.scaleService.getScaleConstructor('linear').prototype;
+export const ColorScale = Chart.scaleService.getScaleConstructor('linear').extend({
   initialize() {
     superClass.initialize.call(this);
     if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
@@ -133,44 +135,16 @@ export const ColorScale = Chart.LinearScaleBase.extend({
     }
   },
   getRightValue(value) {
-    if (typeof value === 'string') {
-      return superClass.getRightValue.call(this, value);
+    if (value && typeof value[this.options.property] === 'number') {
+      return value[this.options.property];
     }
-    return value[this.options.property];
+    return superClass.getRightValue.call(this, value);
   },
   determineDataLimits() {
-    const chart = this.chart;
-    // First Calculate the range
-    this.min = null;
-    this.max = null;
-
-    // Regular charts use x, y values
-    // For the boxplot chart we have rawValue.min and rawValue.max for each point
-    chart.data.datasets.forEach((d, i) => {
-      const meta = chart.getDatasetMeta(i);
-      if (!chart.isDatasetVisible(i)) {
-        return;
-      }
-      d.data.forEach((rawValue, j) => {
-        const value = this.getRightValue(rawValue);
-        if (Number.isNaN(value) || meta.data[j].hidden) {
-          return;
-        }
-        if (this.min === null || value < this.min) {
-          this.min = value;
-        }
-        if (this.max === null || value > this.max) {
-          this.max = value;
-        }
-      });
-    });
-
-    if (this.min == null) {
-      this.min = 0;
-    }
-    if (this.max == null) {
-      this.max = 0;
-    }
+    const id = this.id;
+    this.id = 'scale';
+    superClass.determineDataLimits.call(this);
+    this.id = id;
   },
   getColorForValue(value) {
     let v = value ? (+this.getRightValue(value) - this._startValue) / this._valueRange : null;
@@ -186,129 +160,135 @@ export const ColorScale = Chart.LinearScaleBase.extend({
     }
     return this.interpolate(v);
   },
-  update(maxWidth, maxHeight) {
-    const l = this.options.legend;
-
-    this.determineDataLimits();
-    this.handleTickRangeOptions();
-    this._configure();
-    this.buildTicks();
-    const ticks = this.ticks;
-    const labels = this.convertTicksToLabels(this.ticks) || this.ticks;
-    this.ticks = ticks.map((value, i) => ({value, label: labels[i]}));
-
+  update(maxWidth, maxHeight, margins) {
     const ch = Math.min(maxHeight, this.bottom);
     const cw = Math.min(maxWidth, this.right);
-    const w = Math.min(cw, l.width < 1 ? cw * l.width : l.width);
-    const h = Math.min(ch, l.height < 1 ? ch * l.height : l.height);
-    this.minSize = {
-      width: w,
-      height: h
-    };
-    return this.minSize;
+
+    const l = this.options.legend;
+    const isHor = this.isHorizontal();
+    const factor = (v, full) => v < 1 ? full * v : v;
+    const w = Math.min(cw, factor(isHor ? l.length : l.wide, cw)) - (isHor ? l.colorSize : 0);
+    const h = Math.min(ch, factor(!isHor ? l.length : l.wide, ch)) - (!isHor ? l.colorSize : 0);
+    this.bottom = this.height = h;
+    this.right = this.width = w;
+
+    const r = superClass.update.call(this, w, h, margins);
+    this.height = Math.min(h, this.height);
+    this.width = Math.min(w, this.width);
+    return r;
   },
-  isHorizontal() {
-    return superClass.isHorizontal.call(this) || this.options.legend.orientation === 'horizontal';
+  _getColorMargin() {
+    const colorSize = this.options.legend.colorSize;
+    const pos = this.options.position;
+    const margin = this.options.legend.margin;
+
+    const left = (typeof margin === 'number' ? margin : margin.left) + (pos === 'right' ? colorSize : 0);
+    const top = typeof margin === 'number' ? margin : margin.top + (pos === 'bottom' ? colorSize : 0);
+    const right = typeof margin === 'number' ? margin : margin.right + (pos === 'left' ? colorSize : 0);
+    const bottom = typeof margin === 'number' ? margin : margin.bottom + (pos === 'top' ? colorSize : 0);
+    return {left, top, right, bottom};
   },
   _getPosition(chartArea) {
-    const w = this.minSize.width;
-    const h = this.minSize.height;
-    const margin = this.options.legend.margin;
-    const marginLeft = typeof margin === 'number' ? margin : margin.left;
-    const marginTop = typeof margin === 'number' ? margin : margin.top;
-    const marginRight = typeof margin === 'number' ? margin : margin.right;
-    const marginBottom = typeof margin === 'number' ? margin : margin.bottom;
+    const isHor = this.isHorizontal();
+    const colorSize = this.options.legend.colorSize;
+    const w = this.minSize.width + (isHor ? colorSize : 0);
+    const h = this.minSize.height + (!isHor ? colorSize : 0);
+    const margin = this._getColorMargin();
     const pos = this.options.legend.position;
+
     if (typeof pos === 'string') {
-      switch (this.options.legend.position) {
+      switch (pos) {
       case 'top-left':
-        return [marginLeft, marginTop];
+        return [margin.left, margin.top];
       case 'top':
-        return [(chartArea.right - w) / 2, marginTop];
+        return [(chartArea.right - w) / 2, margin.top];
       case 'left':
-        return [marginLeft, (chartArea.bottom - h) / 2];
+        return [margin.left, (chartArea.bottom - h) / 2];
       case 'top-right':
-        return [chartArea.right - w - marginRight, marginTop];
+        return [chartArea.right - w - margin.right, margin.top];
       case 'bottom-right':
-        return [chartArea.right - w - marginRight, chartArea.bottom - h - marginBottom];
+        return [chartArea.right - w - margin.right, chartArea.bottom - h - margin.bottom];
       case 'bottom':
-        return [(chartArea.right - w) / 2, chartArea.bottom - h - marginBottom];
+        return [(chartArea.right - w) / 2, chartArea.bottom - h - margin.bottom];
       case 'bottom-left':
-        return [marginLeft, chartArea.bottom - h - marginBottom];
+        return [margin.left, chartArea.bottom - h - margin.bottom];
       default: // right
-        return [chartArea.right - w - marginRight, (chartArea.bottom - h) / 2];
+        return [chartArea.right - w - margin.right, (chartArea.bottom - h) / 2];
       }
     }
     return [pos.x, pos.y];
   },
   draw(chartArea) {
     const [x, y] = this._getPosition(chartArea);
-    const w = this.minSize.width;
-    const h = this.minSize.height;
     /** @type {CanvasRenderingContext2D} */
     const ctx = this.ctx;
     ctx.save();
     ctx.translate(x, y);
 
-    const wm = w / 3;
-    const hm = h / 3;
+    superClass.draw.call(this, Object.assign({}, chartArea, {
+      bottom: this.height,
+      right: this.width,
+    }));
 
-    this._drawColors(w, h, wm, hm, ctx);
-    this._drawColorTicks(w, h, wm, hm, ctx);
+    const colorSize = this.options.legend.colorSize;
+    switch (this.options.position) {
+    case 'left':
+      ctx.translate(this.width, 0);
+      break;
+    case 'top':
+      ctx.translate(0, this.height);
+      break;
+    case 'bottom':
+      ctx.translate(0, -colorSize);
+      break;
+    default:
+      ctx.translate(-colorSize, 0);
+      break;
+    }
+    this._drawColors();
+
     ctx.restore();
   },
-  /**
-   * @param {number} w
-   * @param {number} h
-   * @param {number} wm
-   * @param {number} hm
-   * @param {CanvasRenderingContext2D} ctx
-   */
-  _drawColors(w, h, wm, hm, ctx) {
+  _drawColors() {
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = this.ctx;
+    const w = this.width;
+    const h = this.height;
+    const colorSize = this.options.legend.colorSize;
+    const reverse = this._reversePixels;
+
     if (this.isHorizontal()) {
       if (this.options.quantize > 0) {
         const stepWidth = w / this.options.quantize;
+        const offset = !reverse ? (i) => i : (i) => w - stepWidth - i;
         for (let i = 0; i < w; i += stepWidth) {
           const v = (i + stepWidth / 2) / w;
           ctx.fillStyle = this.getColor(v);
-          ctx.fillRect(i, 0, stepWidth, hm);
+          ctx.fillRect(offset(i), 0, stepWidth, colorSize);
         }
       } else {
+        const offset = !reverse ? (i) => i : (i) => w - 1 - i;
         for (let i = 0; i < w; ++i) {
           ctx.fillStyle = this.getColor((i + 0.5) / w);
-          ctx.fillRect(i, 0, 1, hm);
+          ctx.fillRect(offset(i), 0, 1, colorSize);
         }
       }
     } else if (this.options.quantize > 0) {
       const stepWidth = h / this.options.quantize;
+      const offset = !reverse ? (i) => i : (i) => h - stepWidth - i;
       for (let i = 0; i < h; i += stepWidth) {
         const v = (i + stepWidth / 2) / h;
         ctx.fillStyle = this.getColor(v);
-        ctx.fillRect(0, i, wm, stepWidth);
+        ctx.fillRect(0, offset(i), colorSize, stepWidth);
       }
     } else {
+      const offset = !reverse ? (i) => i : (i) => h - 1 - i;
       for (let i = 0; i < h; ++i) {
         ctx.fillStyle = this.getColor((i + 0.5) / h);
-        ctx.fillRect(0, i, wm, 1);
+        ctx.fillRect(0, offset(i), colorSize, 1);
       }
     }
   },
-  // _computeColorTicks(w, h) {
-  //   const ticks = [];
-  //   const quantize = this.options.quantize;
-  //   const isHor = this.isHorizontal();
-  //   if (quantize > 0) {
-  //     for (let i = 0; i <= this.options.quantize; ++i) {
-  //       const normalized = i / quantize;
-  //       const value = normalized * this._valueRange + this._startValue;
-  //       const pixel = normalized * (isHor ? w : h);
-  //       ticks.push({ value, pixel });
-  //     }
-  //   } else {
-
-  //   }
-  // return ticks;
-  // }
   /**
    * @param {number} w
    * @param {number} h
@@ -331,8 +311,7 @@ export const ColorScale = Chart.LinearScaleBase.extend({
 
     ctx.strokeStyle = 'black';
     ctx.stroke();
-
   }
 });
 
-Chart.scaleService.registerScaleType('color', ColorScale, defaults);
+Chart.scaleService.registerScaleType('color', ColorScale, Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('linear'), defaults]));

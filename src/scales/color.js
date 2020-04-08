@@ -125,7 +125,7 @@ function createScale(superClassConstructor) {
       }
     },
     getColorForValue(value) {
-      let v = value ? (+this.getRightValue(value) - this._startValue) / this._valueRange : null;
+      const v = this._getNormalizedValue(value);
       if (v == null || Number.isNaN(v)) {
         return this.options.missing;
       }
@@ -144,7 +144,7 @@ function createScale(superClassConstructor) {
       const w = this.width;
       const h = this.height;
       const indicatorSize = this.options.legend.indicatorWidth;
-      const reverse = this._reversePixels;
+      const reverse = this._reversePixels || (this.ticksAsNumbers[0] > this.ticksAsNumbers[this.ticksAsNumbers.length - 1]);
 
       if (this.isHorizontal()) {
         if (this.options.quantize > 0) {

@@ -29,6 +29,19 @@ export function createBase(superClass) {
       superClass.determineDataLimits.call(this);
       this.id = id;
     },
+    _getNormalizedValue(value) {
+      if (value == null) {
+        return null;
+      }
+      const v = +this.getRightValue(value);
+      if (v == null || Number.isNaN(v)) {
+        return null;
+      }
+      if (typeof this._startValue === 'number') {
+        return (v - this._startValue) / this._valueRange;
+      }
+      return (v - this.start) / (this.end - this.start);
+    },
     update(maxWidth, maxHeight, margins) {
       const ch = Math.min(maxHeight, this.bottom);
       const cw = Math.min(maxWidth, this.right);

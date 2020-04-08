@@ -18,7 +18,7 @@ function createScale(superClassConstructor) {
   const superClass = superClassConstructor.prototype;
   return superClassConstructor.extend(Object.assign(createBase(superClass), {
     getSizeForValue(value) {
-      let v = value ? (+this.getRightValue(value) - this._startValue) / this._valueRange : null;
+      const v = this._getNormalizedValue(value);
       if (v == null || Number.isNaN(v)) {
         return this.options.missing;
       }
@@ -33,11 +33,11 @@ function createScale(superClassConstructor) {
       const ctx = this.ctx;
       const shift = this.options.legend.indicatorWidth / 2;
 
-      const values = this._ticks.map((t) => t.value);
-      const positions = this._labelItems;
       const isHor = this.isHorizontal();
+      const values = this.ticksAsNumbers;
+      const positions = this._labelItems || values.map((_, i) => ({[isHor ? 'x' : 'y']: this.getPixelForTick(i)}));
 
-      this._gridLineItems.forEach((item) => {
+      (this._gridLineItems || []).forEach((item) => {
         ctx.save();
         ctx.strokeStyle = item.color;
         ctx.lineWidth = item.width;

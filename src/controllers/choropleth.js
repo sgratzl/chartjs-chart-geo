@@ -25,7 +25,7 @@ const defaults = {
   geo: {
     colorScale: {
       id: 'color',
-      type: 'linearColor',
+      type: 'color',
       property: 'value'
     },
   },
@@ -82,7 +82,6 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
     s.fullWidth = s.options.fullWidth;
     s.position = s.options.position;
     s.weight = s.options.weight;
-    s._configure();
 
     Chart.layouts.addBox(this.chart, s);
     return s;

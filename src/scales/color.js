@@ -169,7 +169,7 @@ export const ColorScale = Chart.scaleService.getScaleConstructor('linear').exten
     const factor = (v, full) => v < 1 ? full * v : v;
     const w = Math.min(cw, factor(isHor ? l.length : l.wide, cw)) - (!isHor ? l.colorSize : 0);
     const h = Math.min(ch, factor(!isHor ? l.length : l.wide, ch)) - (isHor ? l.colorSize : 0);
-    this.legendSize = { w, h };
+    this.legendSize = {w, h};
     this.bottom = this.height = h;
     this.right = this.width = w;
 

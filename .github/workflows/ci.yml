@@ -1,4 +1,4 @@
-name: nodeci
+name: ci
 
 on: [push]
 

@@ -5,13 +5,16 @@
     "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
   },
   "git": {
-    "tagName": "v%s"
+    "tagName": "v${version}"
   },
   "npm": {
     "publish": true
   },
   "github": {
     "release": true,
-    "assets": ["build/*.js", "*.tgz"]
+    "assets": [
+      "build/*.js",
+      "*.tgz"
+    ]
   }
 }

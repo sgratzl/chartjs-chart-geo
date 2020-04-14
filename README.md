@@ -392,5 +392,6 @@ npm run build
 
 [npm-image]: https://badge.fury.io/js/chartjs-chart-geo.svg
 [npm-url]: https://npmjs.org/package/chartjs-chart-geo
-[github-actions-image]: https://github.com/sgratzl/chartjs-chart-geo/workflows/nodeci/badge.svg
+[github-actions-image]: https://github.com/sgratzl/chartjs-chart-geo/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/sgratzl/chartjs-chart-geo/actions
+[codepen]: https://img.shields.io/badge/CodePen-open-blue?logo=codepen

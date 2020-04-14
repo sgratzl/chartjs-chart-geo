@@ -1,15 +1,13 @@
-'use strict';
-
 import * as Chart from 'chart.js';
-import {geoDefaults, Geo} from './geo';
-import {wrapProjectionScale} from '../scales';
-import {resolveScale} from './utils';
+import { geoDefaults, Geo } from './geo';
+import { wrapProjectionScale } from '../scales';
+import { resolveScale } from './utils';
 
 const defaults = {
   showOutline: true,
   clipMap: 'outline+graticule',
   hover: {
-    mode: 'single'
+    mode: 'single',
   },
 
   tooltips: {
@@ -23,14 +21,14 @@ const defaults = {
           return data.labels[item.index];
         }
         return `${data.labels[item.index]}: ${item.value}`;
-      }
-    }
+      },
+    },
   },
   geo: {
     radiusScale: {
       display: false,
       id: 'radius',
-      type: 'size'
+      type: 'size',
     },
   },
   elements: {
@@ -43,15 +41,15 @@ const defaults = {
         const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
         return controller.valueToRadius(value);
       },
-    }
-  }
+    },
+  },
 };
 
 Chart.defaults.bubbleMap = Chart.helpers.configMerge(geoDefaults, defaults);
 
 const superClass = Geo.prototype;
 const bubbleClass = Chart.controllers.bubble.prototype;
-export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
+export const BubbleMap = (Chart.controllers.bubbleMap = Geo.extend({
   dataElementType: Chart.elements.Point,
 
   _dataElementOptions: bubbleClass._dataElementOptions,
@@ -82,7 +80,7 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
     const scale = this.getProjectionScale();
     const [x, y] = scale.projection([
       data.longitude == null ? data.x : data.longitude,
-      data.latitude == null ? data.y : data.latitude
+      data.latitude == null ? data.y : data.latitude,
     ]);
 
     point._xScale = this.getScaleForId(meta.xAxisID);
@@ -115,5 +113,5 @@ export const BubbleMap = Chart.controllers.bubbleMap = Geo.extend({
 
   valueToRadius(value) {
     return this._radiusScale ? this._radiusScale.getSizeForValue(value) : 5;
-  }
-});
+  },
+}));

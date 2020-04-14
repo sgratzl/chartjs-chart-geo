@@ -10,7 +10,7 @@ export function resolveScale(chart, scaleOptions) {
     type: scaleOptions.type,
     options: Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults(scaleOptions.type), scaleOptions]),
     ctx: chart.ctx,
-    chart: chart
+    chart: chart,
   });
   s.mergeTicksOptions();
 

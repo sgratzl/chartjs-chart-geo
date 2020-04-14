@@ -1,4 +1,5 @@
 # Chart.js Graphs
+
 [![NPM Package][npm-image]][npm-url] [![Github Actions][github-actions-image]][github-actions-url]
 
 Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
@@ -7,15 +8,15 @@ Chart.js module for charting maps with legends. Adding new chart types: `choropl
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
-[CodePen](https://codepen.io/sgratzl/pen/GRKLQBw)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/GRKLQBw)
 
 ![Earth Choropleth](https://user-images.githubusercontent.com/4129778/78821946-8d610a80-79da-11ea-9ebb-23baca9db670.png)
 
-[CodePen](https://codepen.io/sgratzl/pen/qBWwxKP)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/qBWwxKP)
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
-[CodePen](https://codepen.io/sgratzl/pen/wvwZyxb)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/wvwZyxb)
 
 works great with https://github.com/chartjs/chartjs-plugin-datalabels
 
@@ -26,12 +27,14 @@ npm install --save chart.js chartjs-chart-geo
 ```
 
 ## Usage
+
 see [Samples](https://github.com/sgratzl/chartjs-chart-geo/tree/master/samples) on Github
 
 CodePens
- * [Choropleth](https://codepen.io/sgratzl/pen/GRKLQBw)
- * [Earth Choropleth](https://codepen.io/sgratzl/pen/qBWwxKP)
- * [Bubble Map](https://codepen.io/sgratzl/pen/wvwZyxb)
+
+- [Choropleth](https://codepen.io/sgratzl/pen/GRKLQBw)
+- [Earth Choropleth](https://codepen.io/sgratzl/pen/qBWwxKP)
+- [Bubble Map](https://codepen.io/sgratzl/pen/wvwZyxb)
 
 ## Options
 
@@ -55,10 +58,12 @@ interface IGeoChartOptions {
    * option to render a graticule in the background, see also the outline... styling option
    * @default false
    */
-  showGraticule: boolean | {
-    stepMajor: [number, number],
-    stepMinor: [number, number]
-  };
+  showGraticule:
+    | boolean
+    | {
+        stepMajor: [number, number];
+        stepMinor: [number, number];
+      };
 
   /**
    * option whether to clip the rendering to the chartArea of the graph
@@ -68,18 +73,17 @@ interface IGeoChartOptions {
 }
 ```
 
-
 ## Choropleth
 
 A Choropleth (chart type: `choropleth`) is used to render maps with the area filled according to some numerical value.
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
-[CodePen](https://codepen.io/sgratzl/pen/GRKLQBw)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/GRKLQBw)
 
 ![Earth Choropleth](https://user-images.githubusercontent.com/4129778/78821946-8d610a80-79da-11ea-9ebb-23baca9db670.png)
 
-[CodePen](https://codepen.io/sgratzl/pen/qBWwxKP)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/qBWwxKP)
 
 ### Data Structure
 
@@ -132,6 +136,7 @@ const config = {
 };
 
 ```
+
 ### Styling
 
 The styling of the new element `GeoFeature` is based on [Rectangle Element](https://www.chartjs.org/docs/latest/configuration/elements.html#rectangle-configuration) with some additional options for the outline and graticule.
@@ -265,7 +270,7 @@ A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
-[CodePen](https://codepen.io/sgratzl/pen/wvwZyxb)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/wvwZyxb)
 
 ### Data Structure
 
@@ -277,7 +282,6 @@ interface IBubbleMapPoint {
   latitude: number;
   value: number;
 }
-
 ```
 
 **Note**: instead of using the `r` attribute as in a regular bubble chart, the `value` attribute is used, which is picked up by the `radiusScale` to convert it to an actual pixel radius value.
@@ -364,10 +368,9 @@ interface ISizeScaleOptions {
      * @default 8
      */
     margin: number;
-  }
+  };
 }
 ```
-
 
 ## Scales
 

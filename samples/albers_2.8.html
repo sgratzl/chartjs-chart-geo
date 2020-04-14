@@ -1,55 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <!-- <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script> -->
+    <script src="https://unpkg.com/chart.js@2.8/dist/Chart.bundle.js"></script>
+    <script src="../build/Chart.Geo.js"></script>
+  </head>
 
-<head>
-  <!-- <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script> -->
-  <script src="https://unpkg.com/chart.js@2.8/dist/Chart.bundle.js"></script>
-  <script src="../build/Chart.Geo.js"></script>
-</head>
+  <body>
+    <div style="width: 75%;">
+      <canvas id="canvas" style="border: 1px solid black;"></canvas>
+    </div>
+    <script>
+      fetch('https://unpkg.com/us-atlas/states-10m.json')
+        .then((r) => r.json())
+        .then((us) => {
+          const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
+          const states = ChartGeo.topojson.feature(us, us.objects.states).features;
 
-<body>
-  <div style="width: 75%;">
-    <canvas id="canvas" style="border: 1px solid black"></canvas>
-  </div>
-  <script>
-    fetch('https://unpkg.com/us-atlas/states-10m.json').then((r) => r.json()).then((us) => {
-      const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
-      const states = ChartGeo.topojson.feature(us, us.objects.states).features;
+          const scale = (v) => new Color('steelblue').lightness(value.value).rgbString();
 
-      const scale = (v) => new Color('steelblue').lightness(value.value).rgbString();
-
-
-      const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
-        type: 'choropleth',
-        data: {
-          labels: states.map((d) => d.properties.name),
-          datasets: [{
-            label: 'States',
-            outline: nation,
-            data: states.map((d) => ({feature: d, value: Math.random() * 10})),
-          }]
-        },
-        options: {
-          legend: {
-            display: false
-          },
-          scale: {
-            projection: 'albersUsa'
-          },
-          geo: {
-            colorScale: {
-              display: true,
-              position: 'bottom',
-              quantize: 5,
+          const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
+            type: 'choropleth',
+            data: {
+              labels: states.map((d) => d.properties.name),
+              datasets: [
+                {
+                  label: 'States',
+                  outline: nation,
+                  data: states.map((d) => ({
+                    feature: d,
+                    value: Math.random() * 10,
+                  })),
+                },
+              ],
+            },
+            options: {
               legend: {
-                position: 'bottom-right'
-              }
-            }
-          }
-        }
-      });
-    });
-  </script>
-</body>
-
+                display: false,
+              },
+              scale: {
+                projection: 'albersUsa',
+              },
+              geo: {
+                colorScale: {
+                  display: true,
+                  position: 'bottom',
+                  quantize: 5,
+                  legend: {
+                    position: 'bottom-right',
+                  },
+                },
+              },
+            },
+          });
+        });
+    </script>
+  </body>
 </html>

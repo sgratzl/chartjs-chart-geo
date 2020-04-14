@@ -1,46 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+    <script src="../build/Chart.Geo.js"></script>
+  </head>
 
-<head>
-  <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
-  <script src="../build/Chart.Geo.js"></script>
-</head>
+  <body>
+    <div style="width: 75%;">
+      <canvas id="canvas" style="border: 1px solid black;"></canvas>
+    </div>
+    <script>
+      fetch('https://unpkg.com/world-atlas/countries-50m.json')
+        .then((r) => r.json())
+        .then((data) => {
+          const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
 
-<body>
-  <div style="width: 75%;">
-    <canvas id="canvas" style="border: 1px solid black"></canvas>
-  </div>
-  <script>
-    fetch('https://unpkg.com/world-atlas/countries-50m.json').then((r) => r.json()).then((data) => {
-      const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
-
-      const chart = new Chart(document.getElementById("canvas").getContext("2d"), {
-        type: 'choropleth',
-        data: {
-          labels: countries.map((d) => d.properties.name),
-          datasets: [{
-            label: 'Countries',
-            data: countries.map((d) => ({feature: d, value: Math.random()})),
-          }]
-        },
-        options: {
-          showOutline: true,
-          showGraticule: true,
-          legend: {
-            display: false
-          },
-          scale: {
-            projection: 'equalEarth'
-          },
-          geo: {
-            colorScale: {
-              display: true
-            }
-          }
-        }
-      });
-    });
-  </script>
-</body>
-
+          const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
+            type: 'choropleth',
+            data: {
+              labels: countries.map((d) => d.properties.name),
+              datasets: [
+                {
+                  label: 'Countries',
+                  data: countries.map((d) => ({
+                    feature: d,
+                    value: Math.random(),
+                  })),
+                },
+              ],
+            },
+            options: {
+              showOutline: true,
+              showGraticule: true,
+              legend: {
+                display: false,
+              },
+              scale: {
+                projection: 'equalEarth',
+              },
+              geo: {
+                colorScale: {
+                  display: true,
+                },
+              },
+            },
+          });
+        });
+    </script>
+  </body>
 </html>

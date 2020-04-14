@@ -1,7 +1,5 @@
-'use strict';
-
 import * as Chart from 'chart.js';
-import {geoGraticule, geoGraticule10} from 'd3-geo';
+import { geoGraticule, geoGraticule10 } from 'd3-geo';
 
 const defaults = {
   showOutline: false,
@@ -11,7 +9,7 @@ const defaults = {
   scale: {
     type: 'projection',
     id: 'scale',
-    display: false
+    display: false,
   },
 };
 
@@ -72,11 +70,11 @@ export const Geo = Chart.DatasetController.extend({
 
   resolveOutline() {
     const ds = this.getDataset();
-    const outline = ds.outline || {type: 'Sphere'};
+    const outline = ds.outline || { type: 'Sphere' };
     if (Array.isArray(outline)) {
       return {
         type: 'FeatureCollection',
-        features: outline
+        features: outline,
       };
     }
     return outline;
@@ -116,7 +114,7 @@ export const Geo = Chart.DatasetController.extend({
       dataIndex: index,
       dataset: dataset,
       datasetIndex: this.index,
-      reset
+      reset,
     };
 
     const keys = [
@@ -125,26 +123,19 @@ export const Geo = Chart.DatasetController.extend({
       'borderWidth',
       'hoverBackgroundColor',
       'hoverBorderColor',
-      'hoverBorderWidth'
+      'hoverBorderWidth',
     ];
 
     const values = {};
 
     keys.forEach((key) => {
       let arr;
-      if (index < 0) { // outline
+      if (index < 0) {
+        // outline
         const outlineKey = `outline${key.charAt(0).toUpperCase()}${key.slice(1)}`;
-        arr = [
-          custom[outlineKey],
-          dataset[outlineKey],
-          options[outlineKey]
-        ];
+        arr = [custom[outlineKey], dataset[outlineKey], options[outlineKey]];
       } else {
-        arr = [
-          custom[key],
-          dataset[key],
-          options[key]
-        ];
+        arr = [custom[key], dataset[key], options[key]];
       }
       values[key] = Chart.helpers.options.resolve(arr, context, index);
     });
@@ -166,7 +157,6 @@ export const Geo = Chart.DatasetController.extend({
 
     ctx.save();
     ctx.beginPath();
-
 
     if (g === true) {
       path(geoGraticule10());

@@ -1,5 +1,3 @@
-'use strict';
-
 import * as Chart from 'chart.js';
 import {
   geoPath,
@@ -17,11 +15,11 @@ import {
   geoEquirectangular,
   geoMercator,
   geoTransverseMercator,
-  geoNaturalEarth1
+  geoNaturalEarth1,
 } from 'd3-geo';
 
 const defaults = {
-  projection: 'albersUsa'
+  projection: 'albersUsa',
 };
 
 const lookup = {
@@ -71,7 +69,7 @@ export const ProjectionScale = Chart.Scale.extend({
       aspectRatio: bWidth / bHeight,
       refScale: this.projection.scale(),
       refX: t[0],
-      refY: t[1]
+      refY: t[1],
     };
   },
 
@@ -85,7 +83,7 @@ export const ProjectionScale = Chart.Scale.extend({
     const bak = this.oldChartBounds;
     this.oldChartBounds = {
       chartWidth,
-      chartHeight
+      chartHeight,
     };
 
     const scale = Math.min(chartWidth / bb.width, chartHeight / bb.height);
@@ -98,14 +96,12 @@ export const ProjectionScale = Chart.Scale.extend({
     // this.mapScale = scale;
     // this.mapTranslate = {x, y};
 
-    this.projection
-      .scale(bb.refScale * scale)
-      .translate([scale * bb.refX + x, scale * bb.refY + y]);
+    this.projection.scale(bb.refScale * scale).translate([scale * bb.refX + x, scale * bb.refY + y]);
 
-    return !bak
-      || bak.chartWidth !== this.oldChartBounds.chartWidth
-      || bak.chartHeight !== this.oldChartBounds.chartHeight;
-  }
+    return (
+      !bak || bak.chartWidth !== this.oldChartBounds.chartWidth || bak.chartHeight !== this.oldChartBounds.chartHeight
+    );
+  },
 });
 Chart.scaleService.registerScaleType('projection', ProjectionScale, defaults);
 
@@ -117,7 +113,7 @@ export function wrapProjectionScale(scale, attr) {
     getLabelForIndex(index, datasetIndex) {
       const data = this.chart.data.datasets[datasetIndex].data[index];
       return data[attr];
-    }
+    },
   };
   Object.setPrototypeOf(helper, scale);
   return helper;

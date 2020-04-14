@@ -1,13 +1,11 @@
-'use strict';
-
 import * as Chart from 'chart.js';
-import {geoDefaults, Geo} from './geo';
-import {wrapProjectionScale} from '../scales';
-import {resolveScale} from './utils';
+import { geoDefaults, Geo } from './geo';
+import { wrapProjectionScale } from '../scales';
+import { resolveScale } from './utils';
 
 const defaults = {
   hover: {
-    mode: 'single'
+    mode: 'single',
   },
   tooltips: {
     callbacks: {
@@ -20,14 +18,14 @@ const defaults = {
           return data.labels[item.index];
         }
         return `${data.labels[item.index]}: ${item.value}`;
-      }
-    }
+      },
+    },
   },
   geo: {
     colorScale: {
       display: false,
       id: 'color',
-      type: 'color'
+      type: 'color',
     },
   },
   elements: {
@@ -40,14 +38,14 @@ const defaults = {
         const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
         return controller.valueToColor(value);
       },
-    }
-  }
+    },
+  },
 };
 
 Chart.defaults.choropleth = Chart.helpers.configMerge(geoDefaults, defaults);
 
 const superClass = Geo.prototype;
-export const Choropleth = Chart.controllers.choropleth = Geo.extend({
+export const Choropleth = (Chart.controllers.choropleth = Geo.extend({
   dataElementType: Chart.elements.GeoFeature,
 
   linkScales() {
@@ -73,5 +71,5 @@ export const Choropleth = Chart.controllers.choropleth = Geo.extend({
 
   valueToColor(value) {
     return this._colorScale ? this._colorScale.getColorForValue(value) : 'blue';
-  }
-});
+  },
+}));

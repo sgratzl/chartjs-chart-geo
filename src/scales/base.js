@@ -1,5 +1,3 @@
-'use strict';
-
 export const baseDefaults = {
   position: 'right',
   property: 'value',
@@ -48,10 +46,10 @@ export function createBase(superClass) {
 
       const l = this.options.legend;
       const isHor = this.isHorizontal();
-      const factor = (v, full) => v < 1 ? full * v : v;
+      const factor = (v, full) => (v < 1 ? full * v : v);
       const w = Math.min(cw, factor(isHor ? l.length : l.width, cw)) - (!isHor ? l.indicatorWidth : 0);
       const h = Math.min(ch, factor(!isHor ? l.length : l.width, ch)) - (isHor ? l.indicatorWidth : 0);
-      this.legendSize = {w, h};
+      this.legendSize = { w, h };
       this.bottom = this.height = h;
       this.right = this.width = w;
 
@@ -70,7 +68,7 @@ export function createBase(superClass) {
       const top = (typeof margin === 'number' ? margin : margin.top) + (pos === 'bottom' ? indicatorWidth : 0);
       const right = (typeof margin === 'number' ? margin : margin.right) + (pos === 'left' ? indicatorWidth : 0);
       const bottom = (typeof margin === 'number' ? margin : margin.bottom) + (pos === 'top' ? indicatorWidth : 0);
-      return {left, top, right, bottom};
+      return { left, top, right, bottom };
     },
     _getLegendPosition(chartArea) {
       const indicatorWidth = this.options.legend.indicatorWidth;
@@ -83,22 +81,23 @@ export function createBase(superClass) {
 
       if (typeof pos === 'string') {
         switch (pos) {
-        case 'top-left':
-          return [margin.left, margin.top];
-        case 'top':
-          return [(chartArea.right - w) / 2, margin.top];
-        case 'left':
-          return [margin.left, (chartArea.bottom - h) / 2];
-        case 'top-right':
-          return [chartArea.right - w - margin.right, margin.top];
-        case 'bottom-right':
-          return [chartArea.right - w - margin.right, chartArea.bottom - h - margin.bottom];
-        case 'bottom':
-          return [(chartArea.right - w) / 2, chartArea.bottom - h - margin.bottom];
-        case 'bottom-left':
-          return [margin.left, chartArea.bottom - h - margin.bottom];
-        default: // right
-          return [chartArea.right - w - margin.right, (chartArea.bottom - h) / 2];
+          case 'top-left':
+            return [margin.left, margin.top];
+          case 'top':
+            return [(chartArea.right - w) / 2, margin.top];
+          case 'left':
+            return [margin.left, (chartArea.bottom - h) / 2];
+          case 'top-right':
+            return [chartArea.right - w - margin.right, margin.top];
+          case 'bottom-right':
+            return [chartArea.right - w - margin.right, chartArea.bottom - h - margin.bottom];
+          case 'bottom':
+            return [(chartArea.right - w) / 2, chartArea.bottom - h - margin.bottom];
+          case 'bottom-left':
+            return [margin.left, chartArea.bottom - h - margin.bottom];
+          default:
+            // right
+            return [chartArea.right - w - margin.right, (chartArea.bottom - h) / 2];
         }
       }
       return [pos.x, pos.y];
@@ -113,29 +112,32 @@ export function createBase(superClass) {
       ctx.save();
       ctx.translate(pos[0], pos[1]);
 
-      superClass.draw.call(this, Object.assign({}, chartArea, {
-        bottom: this.height,
-        right: this.width,
-      }));
+      superClass.draw.call(
+        this,
+        Object.assign({}, chartArea, {
+          bottom: this.height,
+          right: this.width,
+        })
+      );
 
       const indicatorWidth = this.options.legend.indicatorWidth;
       switch (this.options.position) {
-      case 'left':
-        ctx.translate(this.legendSize.w, 0);
-        break;
-      case 'top':
-        ctx.translate(0, this.legendSize.h);
-        break;
-      case 'bottom':
-        ctx.translate(0, -indicatorWidth);
-        break;
-      default:
-        ctx.translate(-indicatorWidth, 0);
-        break;
+        case 'left':
+          ctx.translate(this.legendSize.w, 0);
+          break;
+        case 'top':
+          ctx.translate(0, this.legendSize.h);
+          break;
+        case 'bottom':
+          ctx.translate(0, -indicatorWidth);
+          break;
+        default:
+          ctx.translate(-indicatorWidth, 0);
+          break;
       }
       this._drawIndicator();
 
       ctx.restore();
-    }
+    },
   };
 }

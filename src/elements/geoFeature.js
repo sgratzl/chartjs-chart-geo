@@ -1,7 +1,5 @@
-'use strict';
-
 import * as Chart from 'chart.js';
-import {geoContains} from 'd3-geo';
+import { geoContains } from 'd3-geo';
 
 const defaults = {
   outlineBackgroundColor: null,
@@ -15,12 +13,12 @@ const defaults = {
 Chart.defaults.global.elements.geoFeature = Object.assign({}, Chart.defaults.global.elements.rectangle, defaults);
 
 // const superClass = Chart.Element.prototype;
-export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
+export const GeoFeature = (Chart.elements.GeoFeature = Chart.Element.extend({
   inRange(mouseX, mouseY) {
     const bb = this.getBounds();
-    const r = (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
+    const r =
+      (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
-
 
     const projection = this._xScale.geoPath.projection();
     if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
@@ -49,7 +47,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
     const centroid = this._xScale.geoPath.centroid(this.feature);
     const center = {
       x: centroid[0],
-      y: centroid[1]
+      y: centroid[1],
     };
     this.cache = Object.assign({}, this.cache || {}, center);
     return center;
@@ -66,7 +64,7 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       y: bb[0][1],
       y2: bb[1][1],
       width: bb[1][0] - bb[0][0],
-      height: bb[1][1] - bb[0][1]
+      height: bb[1][1] - bb[0][1],
     };
     this.cache = Object.assign({}, this.cache || {}, bounds);
     return bounds;
@@ -106,5 +104,5 @@ export const GeoFeature = Chart.elements.GeoFeature = Chart.Element.extend({
       ctx.stroke();
     }
     ctx.restore();
-  }
-});
+  },
+}));

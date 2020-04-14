@@ -12,9 +12,6 @@
   },
   "github": {
     "release": true,
-    "assets": [
-      "build/*.js",
-      "*.tgz"
-    ]
+    "assets": ["build/*.js", "*.tgz"]
   }
 }

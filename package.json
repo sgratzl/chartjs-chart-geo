@@ -1,7 +1,7 @@
 {
   "name": "chartjs-chart-geo",
   "description": "Chart.js module for charting maps",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0",
   "author": {
     "name": "Samuel Gratzl",
     "email": "samu@sgratzl.com",

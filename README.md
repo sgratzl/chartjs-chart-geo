@@ -380,7 +380,7 @@ A new scale `projection` is registered and used by default by Choropleth and Bub
 interface IProjectionScaleOptions {
   /**
    * projection method used
-   * @default albertUsa
+   * @default albersUsa
    */
   projection: string | Function;
 }

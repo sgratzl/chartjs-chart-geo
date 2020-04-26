@@ -89,7 +89,12 @@ A Choropleth (chart type: `choropleth`) is used to render maps with the area fil
 
 A data point has to have a `.feature` property containing the feature to render and a `.value` property containing the value for the coloring.
 
-[TopoJson](https://github.com/topojson) is packaged with this plugin to convert data, it is exposed as `ChartGeo.topojson` in the global context.
+[TopoJson](https://github.com/topojson) is packaged with this plugin to convert data, it is exposed as `ChartGeo.topojson` in the global context. However, this plugin doesn't include any topojson files itself. Some useful resources I found so far:
+
+- US map: https://www.npmjs.com/package/us-atlas
+- World map: https://www.npmjs.com/package/world-atlas
+- individual countries: https://github.com/markmarkoh/datamaps/tree/master/src/js/data (untested)
+
 
 ```js
 const us = await fetch('https://unpkg.com/us-atlas/states-10m.json').then((r) => r.json());

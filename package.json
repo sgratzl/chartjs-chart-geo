@@ -64,10 +64,8 @@
     "preversion": "npm run test",
     "prepare": "npm run build:dev",
     "prepublishOnly": "npm run build:prod",
-    "release:major": "release-it major",
-    "release:minor": "release-it minor",
-    "release:patch": "release-it patch",
-    "release:pre": "release-it --preRelease=alpha --npm.tag=next"
+    "release": "release-it --disable-metrics --npm.skipChecks",
+    "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
   },
   "dependenciesMeta": {
     "chart.js": {

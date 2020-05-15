@@ -88,11 +88,12 @@ export class GeoFeature extends Element {
     if (!Number.isFinite(bounds.x)) {
       return;
     }
-    const canvas = doc.createElement('canvas');
+    const canvas = this.cache && this.cache.canvas ? this.cache.canvas : doc.createElement('canvas');
     canvas.width = Math.max(Math.ceil(bounds.width), 1);
     canvas.height = Math.max(Math.ceil(bounds.height), 1);
 
     const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.translate(-bounds.x, -bounds.y);
     this._drawImpl(ctx);

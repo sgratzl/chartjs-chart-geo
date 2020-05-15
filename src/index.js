@@ -6,7 +6,16 @@ import * as t from 'topojson-client';
 
 export const topojson = t;
 
-import { Choropleth } from './controllers';
-import { controllers } from 'chart.js';
+import { Choropleth, BubbleMap } from './controllers';
+import { ColorScale, ProjectionScale, SizeScale } from './scales';
+import { controllers, defaults, scaleService } from 'chart.js';
 
-controllers.choropleth = Choropleth;
+Object.assign(controllers, {
+  [Choropleth.id]: Choropleth,
+  [BubbleMap.id]: BubbleMap,
+});
+defaults.set(Choropleth.id, Choropleth.defaults);
+defaults.set(BubbleMap.id, BubbleMap.defaults);
+scaleService.registerScale(ProjectionScale);
+scaleService.registerScale(ColorScale);
+scaleService.registerScale(SizeScale);

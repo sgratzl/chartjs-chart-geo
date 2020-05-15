@@ -1,7 +1,110 @@
-import * as Chart from 'chart.js';
-import { createBase, baseDefaults } from './base';
+import { scaleService, defaults, elements, helpers } from 'chart.js';
+import { baseDefaults, baseMixin, patchOptions } from './base';
 
-const defaults = {
+export class SizeScale extends Chart.scaleService.getScaleConstructor('linear') {
+  constructor(cfg) {
+    super(patchOptions(cfg));
+  }
+
+  parse(raw, index) {
+    if (raw && typeof raw[this.options.property] === 'number') {
+      return raw[this.options.property];
+    }
+    return super.parse(raw, index);
+  }
+
+  getSizeForValue(value) {
+    const v = this._getNormalizedValue(value);
+    if (v == null || Number.isNaN(v)) {
+      return this.options.missing;
+    }
+    return this.getSizeImpl(v);
+  }
+
+  getSizeImpl(normalized) {
+    const range = this.options.range[1] - this.options.range[0];
+    return normalized * range + this.options.range[0];
+  }
+
+  update(maxWidth, maxHeight, margins) {
+    this.updateImpl(maxWidth, maxHeight, margins, (w, h, m) => super.update(w, h, m));
+  }
+
+  draw(chartArea) {
+    this.drawImpl(chartArea, (chartArea) => super.draw(chartArea));
+  }
+
+  _drawIndicator() {
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = this.ctx;
+    const shift = this.options.legend.indicatorWidth / 2;
+
+    const isHor = this.isHorizontal();
+    const values = this.ticks;
+    const positions = this._labelItems || values.map((_, i) => ({ [isHor ? 'x' : 'y']: this.getPixelForTick(i) }));
+
+    (this._gridLineItems || []).forEach((item) => {
+      ctx.save();
+      ctx.strokeStyle = item.color;
+      ctx.lineWidth = item.width;
+
+      if (ctx.setLineDash) {
+        ctx.setLineDash(item.borderDash);
+        ctx.lineDashOffset = item.borderDashOffset;
+      }
+
+      ctx.beginPath();
+
+      if (this.options.gridLines.drawTicks) {
+        switch (this.options.legend.align) {
+          case 'left':
+            ctx.moveTo(0, item.ty1);
+            ctx.lineTo(shift, item.ty2);
+            break;
+          case 'top':
+            ctx.moveTo(item.tx1, 0);
+            ctx.lineTo(item.tx2, shift);
+            break;
+          case 'bottom':
+            ctx.moveTo(item.tx1, shift);
+            ctx.lineTo(item.tx2, shift * 2);
+            break;
+          default:
+            // right
+            ctx.moveTo(shift, item.ty1);
+            ctx.lineTo(shift * 2, item.ty2);
+            break;
+        }
+      }
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    if (this._model) {
+      const vm = this._model;
+      ctx.strokeStyle = vm.borderColor || defaults.color;
+      ctx.lineWidth = vm.borderWidth == null ? elements.point.borderWidth : vm.borderWidth;
+      ctx.fillStyle = vm.backgroundColor || defaults.color;
+    } else {
+      ctx.fillStyle = 'blue';
+    }
+
+    values.forEach((v, i) => {
+      const pos = positions[i];
+      const radius = this.getSizeForValue(v.value);
+      const x = isHor ? pos.x : shift;
+      const y = isHor ? shift : pos.y;
+      const renderOptions = Object.assign({}, this._model || {}, {
+        radius,
+      });
+      helpers.canvas.drawPoint(ctx, renderOptions, x, y);
+    });
+  }
+}
+
+Object.assign(SizeScale.prototype, baseMixin);
+
+const scaleDefaults = {
   position: 'bottom',
   missing: 1,
   range: [1, 20],
@@ -12,98 +115,5 @@ const defaults = {
   },
 };
 
-function createScale(superClassConstructor) {
-  const superClass = superClassConstructor.prototype;
-  return superClassConstructor.extend(
-    Object.assign(createBase(superClass), {
-      getSizeForValue(value) {
-        const v = this._getNormalizedValue(value);
-        if (v == null || Number.isNaN(v)) {
-          return this.options.missing;
-        }
-        return this.getSizeImpl(v);
-      },
-      getSizeImpl(normalized) {
-        const range = this.options.range[1] - this.options.range[0];
-        return normalized * range + this.options.range[0];
-      },
-      _drawIndicator() {
-        /** @type {CanvasRenderingContext2D} */
-        const ctx = this.ctx;
-        const shift = this.options.legend.indicatorWidth / 2;
-
-        const isHor = this.isHorizontal();
-        const values = this.ticksAsNumbers;
-        const positions = this._labelItems || values.map((_, i) => ({ [isHor ? 'x' : 'y']: this.getPixelForTick(i) }));
-
-        (this._gridLineItems || []).forEach((item) => {
-          ctx.save();
-          ctx.strokeStyle = item.color;
-          ctx.lineWidth = item.width;
-
-          if (ctx.setLineDash) {
-            ctx.setLineDash(item.borderDash);
-            ctx.lineDashOffset = item.borderDashOffset;
-          }
-
-          ctx.beginPath();
-
-          if (this.options.gridLines.drawTicks) {
-            switch (this.options.position) {
-              case 'left':
-                ctx.moveTo(0, item.ty1);
-                ctx.lineTo(shift, item.ty2);
-                break;
-              case 'top':
-                ctx.moveTo(item.tx1, 0);
-                ctx.lineTo(item.tx2, shift);
-                break;
-              case 'bottom':
-                ctx.moveTo(item.tx1, shift);
-                ctx.lineTo(item.tx2, shift * 2);
-                break;
-              default:
-                // right
-                ctx.moveTo(shift, item.ty1);
-                ctx.lineTo(shift * 2, item.ty2);
-                break;
-            }
-          }
-          ctx.stroke();
-          ctx.restore();
-        });
-
-        if (this._model) {
-          const vm = this._model;
-          ctx.strokeStyle = vm.borderColor || Chart.defaults.color;
-          ctx.lineWidth = vm.borderWidth == null ? Chart.elements.point.borderWidth : vm.borderWidth;
-          ctx.fillStyle = vm.backgroundColor || Chart.defaults.color;
-        } else {
-          ctx.fillStyle = 'blue';
-        }
-
-        values.forEach((v, i) => {
-          const pos = positions[i];
-          const radius = this.getSizeForValue(v);
-          const x = isHor ? pos.x : shift;
-          const y = isHor ? shift : pos.y;
-          Chart.helpers.canvas.drawPoint(ctx, this._model ? this._model.pointStyle : null, radius, x, y, 0);
-        });
-      },
-    })
-  );
-}
-
-export const SizeScale = createScale(Chart.scaleService.getScaleConstructor('linear'));
-export const SizeScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));
-
-Chart.scaleService.registerScaleType(
-  'size',
-  SizeScale,
-  Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('linear'), baseDefaults, defaults])
-);
-Chart.scaleService.registerScaleType(
-  'sizeLogarithmic',
-  SizeScaleLogarithmic,
-  Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('logarithmic'), baseDefaults, defaults])
-);
+SizeScale.id = 'size';
+SizeScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, scaleDefaults]);

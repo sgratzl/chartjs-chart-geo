@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+    <script src="https://unpkg.com/chart.js@3.0.0-alpha/dist/Chart.js"></script>
     <script src="../build/Chart.Geo.js"></script>
   </head>
 
@@ -35,16 +35,13 @@
               legend: {
                 display: false,
               },
-              scale: {
-                projection: 'mercator',
+              scales: {
+                xy: {
+                  projection: 'mercator',
+                },
               },
               onClick: (evt, elems) => {
                 console.log(elems.map((elem) => elem.feature.properties.name));
-              },
-              geo: {
-                colorScale: {
-                  display: true,
-                },
               },
             },
           });

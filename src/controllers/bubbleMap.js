@@ -1,117 +1,111 @@
-import * as Chart from 'chart.js';
+import { helpers, elements, controllers } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
-import { wrapProjectionScale } from '../scales';
-import { resolveScale } from './utils';
 
-const defaults = {
-  showOutline: true,
-  clipMap: 'outline+graticule',
-  hover: {
-    mode: 'single',
-  },
-
-  tooltips: {
-    callbacks: {
-      title() {
-        // Title doesn't make sense for scatter since we format the data as a point
-        return '';
-      },
-      label(item, data) {
-        if (item.value == null) {
-          return data.labels[item.index];
-        }
-        return `${data.labels[item.index]}: ${item.value}`;
-      },
-    },
-  },
-  geo: {
-    radiusScale: {
-      display: false,
-      id: 'radius',
-      type: 'size',
-    },
-  },
-  elements: {
-    point: {
-      radius(context) {
-        if (context.dataIndex == null) {
-          return null;
-        }
-        const value = context.dataset.data[context.dataIndex];
-        const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-        return controller.valueToRadius(value);
-      },
-    },
-  },
-};
-
-Chart.defaults.bubbleMap = Chart.helpers.configMerge(geoDefaults, defaults);
-
-const superClass = Geo.prototype;
-const bubbleClass = Chart.controllers.bubble.prototype;
-export const BubbleMap = (Chart.controllers.bubbleMap = Geo.extend({
-  dataElementType: Chart.elements.Point,
-
-  _dataElementOptions: bubbleClass._dataElementOptions,
-
+export class BubbleMap extends Geo {
   linkScales() {
-    superClass.linkScales.call(this);
-    if (this._radiusScale) {
-      Chart.layouts.removeBox(this.chart, this._radiusScale);
-    }
-    this._radiusScale = resolveScale(this.chart, this.chart.options.geo.radiusScale);
-  },
-
-  _getValueScale() {
-    const base = superClass._getValueScale.call(this);
-    if (!this._radiusScale) {
-      return base;
-    }
-    return wrapProjectionScale(base, this._radiusScale.options.property);
-  },
-
-  updateElement(point, index, reset) {
-    superClass.updateElement.apply(this, arguments);
-
+    super.linkScales();
+    const dataset = this.getDataset();
     const meta = this.getMeta();
-    const custom = point.custom || {};
-    const data = this.getDataset().data[index];
+    meta.vAxisID = meta.rAxisID = 'r';
+    dataset.vAxisID = dataset.rAxisID = 'r';
+    meta.rScale = this.getScaleForId('r');
+    meta.vScale = meta.rScale;
+    meta.iScale = meta.xScale;
+    meta.iAxisID = dataset.iAxisID = meta.xAxisID;
+  }
 
-    const scale = this.getProjectionScale();
-    const [x, y] = scale.projection([
-      data.longitude == null ? data.x : data.longitude,
-      data.latitude == null ? data.y : data.latitude,
-    ]);
-
-    point._xScale = this.getScaleForId(meta.xAxisID);
-    point._yScale = this.getScaleForId(meta.yAxisID);
-    point._datasetIndex = this.index;
-    point._index = index;
-
-    const method = bubbleClass._resolveElementOptions || bubbleClass._resolveDataElementOptions;
-    const options = method.call(this, point, index);
-    point._options = options;
-    point._model = {
-      backgroundColor: options.backgroundColor,
-      borderColor: options.borderColor,
-      borderWidth: options.borderWidth,
-      hitRadius: options.hitRadius,
-      pointStyle: options.pointStyle,
-      rotation: options.rotation,
-      radius: reset ? 0 : options.radius,
-      skip: custom.skip || isNaN(x) || isNaN(y),
-      x,
-      y,
-    };
-
-    if (this._radiusScale) {
-      this._radiusScale._model = options;
+  parse(start, count) {
+    const rScale = this.getMeta().rScale;
+    const data = this.getDataset().data;
+    const meta = this._cachedMeta;
+    for (let i = start; i < start + count; ++i) {
+      const d = data[i];
+      meta._parsed[i] = {
+        x: d.longitude == null ? d.x : d.longitude,
+        y: d.latitude == null ? d.y : d.latitude,
+        [rScale.axis]: rScale.parse(d),
+      };
     }
+  }
 
-    point.pivot();
-  },
+  updateElements(elems, start, mode) {
+    const reset = mode === 'reset';
+    const firstOpts = this.resolveDataElementOptions(start, mode);
+    const sharedOptions = this.getSharedOptions(mode, elems[start], firstOpts);
+    const includeOptions = this.includeOptions(mode, sharedOptions);
+    const scale = this.getProjectionScale();
 
-  valueToRadius(value) {
-    return this._radiusScale ? this._radiusScale.getSizeForValue(value) : 5;
+    this.getMeta().rScale._model = firstOpts; // for legend rendering styling
+
+    for (let i = 0; i < elems.length; i++) {
+      const index = start + i;
+      const elem = elems[i];
+      const parsed = this.getParsed(i);
+      const xy = scale.projection([parsed.x, parsed.y]);
+      const properties = {
+        x: xy ? xy[0] : 0,
+        y: xy ? xy[1] : 0,
+        skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
+      };
+      if (includeOptions) {
+        properties.options = this.resolveDataElementOptions(index, mode);
+        if (reset) {
+          properties.options.radius = 0;
+        }
+      }
+      this.updateElement(elem, index, properties, mode);
+    }
+    this.updateSharedOptions(sharedOptions, mode);
+  }
+
+  indexToRadius(index) {
+    const rScale = this.getMeta().rScale;
+    return rScale.getSizeForValue(this.getParsed(index)[rScale.axis]);
+  }
+}
+
+BubbleMap.defaults = helpers.merge({}, [
+  geoDefaults,
+  {
+    showOutline: true,
+    clipMap: 'outline+graticule',
+    hover: {
+      mode: 'single',
+    },
+
+    tooltips: {
+      callbacks: {
+        title() {
+          // Title doesn't make sense for scatter since we format the data as a point
+          return '';
+        },
+        label(item, data) {
+          if (item.value == null) {
+            return data.labels[item.index];
+          }
+          return `${data.labels[item.index]}: ${item.value}`;
+        },
+      },
+    },
+    scales: {
+      r: {
+        type: 'size',
+      },
+    },
+    elements: {
+      point: {
+        radius(context) {
+          if (context.dataIndex == null) {
+            return null;
+          }
+          const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+          return controller.indexToRadius(context.dataIndex);
+        },
+      },
+    },
   },
-}));
+]);
+
+BubbleMap.id = 'bubbleMap';
+BubbleMap.prototype.dataElementType = elements.Point;
+BubbleMap.prototype.dataElementOptions = controllers.bubble.prototype.dataElementOptions;

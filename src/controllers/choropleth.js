@@ -1,48 +1,6 @@
-import { defaults, helpers } from 'chart.js';
+import { helpers } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
 import { GeoFeature } from '../elements';
-
-defaults.set(
-  'choropleth',
-  helpers.merge({}, [
-    geoDefaults,
-    {
-      hover: {
-        mode: 'single',
-      },
-      tooltips: {
-        callbacks: {
-          title() {
-            // Title doesn't make sense for scatter since we format the data as a point
-            return '';
-          },
-          label(item, data) {
-            if (item.value == null) {
-              return data.labels[item.index];
-            }
-            return `${data.labels[item.index]}: ${item.value}`;
-          },
-        },
-      },
-      scales: {
-        color: {
-          type: 'color',
-        },
-      },
-      elements: {
-        geoFeature: {
-          backgroundColor(context) {
-            if (context.dataIndex == null) {
-              return null;
-            }
-            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-            return controller.valueToColor(context.dataIndex);
-          },
-        },
-      },
-    },
-  ])
-);
 
 export class Choropleth extends Geo {
   linkScales() {
@@ -68,11 +26,75 @@ export class Choropleth extends Geo {
     }
   }
 
-  valueToColor(index) {
+  updateElements(elems, start, mode) {
+    const firstOpts = this.resolveDataElementOptions(start, mode);
+    const sharedOptions = this.getSharedOptions(mode, elems[start], firstOpts);
+    const includeOptions = this.includeOptions(mode, sharedOptions);
+    const scale = this.getProjectionScale();
+
+    for (let i = 0; i < elems.length; i++) {
+      const index = start + i;
+      const elem = elems[i];
+      elem.projectionScale = scale;
+      elem.feature = this._data[i].feature;
+      const center = elem.getCenterPoint();
+
+      const properties = {
+        x: center.x,
+        y: center.y,
+      };
+      if (includeOptions) {
+        properties.options = this.resolveDataElementOptions(index, mode);
+      }
+      this.updateElement(elem, index, properties, mode);
+    }
+    this.updateSharedOptions(sharedOptions, mode);
+  }
+
+  indexToColor(index) {
     const rScale = this.getMeta().rScale;
     return rScale.getColorForValue(this.getParsed(index)[rScale.axis]);
   }
 }
 
+Choropleth.id = 'choropleth';
+Choropleth.defaults = helpers.merge({}, [
+  geoDefaults,
+  {
+    hover: {
+      mode: 'single',
+    },
+    tooltips: {
+      callbacks: {
+        title() {
+          // Title doesn't make sense for scatter since we format the data as a point
+          return '';
+        },
+        label(item, data) {
+          if (item.value == null) {
+            return data.labels[item.index];
+          }
+          return `${data.labels[item.index]}: ${item.value}`;
+        },
+      },
+    },
+    scales: {
+      color: {
+        type: 'color',
+      },
+    },
+    elements: {
+      geoFeature: {
+        backgroundColor(context) {
+          if (context.dataIndex == null) {
+            return null;
+          }
+          const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+          return controller.indexToColor(context.dataIndex);
+        },
+      },
+    },
+  },
+]);
 Choropleth.prototype.dataElementType = GeoFeature;
-Geo.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];
+Choropleth.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];

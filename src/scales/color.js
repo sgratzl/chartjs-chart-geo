@@ -118,12 +118,6 @@ export class ColorScale extends Chart.scaleService.getScaleConstructor('linear')
     }
     return super.parse(raw, index);
   }
-  _getNormalizedValue(v) {
-    if (v == null || Number.isNaN(v)) {
-      return null;
-    }
-    return (v - this._startValue) / this._valueRange;
-  }
   getColorForValue(value) {
     const v = this._getNormalizedValue(value);
     if (v == null || Number.isNaN(v)) {
@@ -198,7 +192,6 @@ const defaults = {
 
 ColorScale.id = 'color';
 ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, defaults]);
-scaleService.registerScale(ColorScale);
 
 // export const ColorScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));
 

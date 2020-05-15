@@ -16,6 +16,23 @@ export const geoDefaults = {
   },
 };
 
+function patchDatasetElementOptions(options) {
+  // patch the options by removing the `outline` or `hoverOutline` option;
+  // see https://github.com/chartjs/Chart.js/issues/7362
+  const r = {};
+  Object.keys(options).forEach((key) => {
+    let targetKey = key;
+    if (key.startsWith('outline')) {
+      const sub = key.slice('outline'.length);
+      targetKey = sub[0].toLowerCase() + sub.slice(1);
+    } else if (key.startsWith('hoverOutline')) {
+      targetKey = 'hover' + key.slice('hoverOutline'.length);
+    }
+    r[targetKey] = options[key];
+  });
+  return r;
+}
+
 export class Geo extends DatasetController {
   getProjectionScale() {
     return this.getScaleForId('xy');
@@ -62,7 +79,7 @@ export class Geo extends DatasetController {
       if (mode !== 'resize') {
         const properties = {
           feature: this.resolveOutline(),
-          options: this.resolveDatasetElementOptions(active),
+          options: patchDatasetElementOptions(this.resolveDatasetElementOptions(active)),
         };
         this.updateElement(elem, undefined, properties, mode);
         if (this.getGraticule()) {
@@ -70,38 +87,13 @@ export class Geo extends DatasetController {
         }
       }
     } else if (this.getGraticule() && mode !== 'resize') {
-      meta.graticule = this.resolveDatasetElementOptions(active);
+      meta.graticule = patchDatasetElementOptions(this.resolveDatasetElementOptions(active));
     }
 
     this.updateElements(meta.data, 0, mode);
     if (dirtyCache) {
       meta.data.forEach((elem) => delete elem.cache);
     }
-  }
-
-  updateElements(elems, start, mode) {
-    const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(mode, elems[start], firstOpts);
-    const includeOptions = this.includeOptions(mode, sharedOptions);
-    const scale = this.getProjectionScale();
-
-    for (let i = 0; i < elems.length; i++) {
-      const index = start + i;
-      const elem = elems[i];
-      elem.projectionScale = scale;
-      elem.feature = this._data[i].feature;
-      const center = elem.getCenterPoint();
-
-      const properties = {
-        x: center.x,
-        y: center.y,
-      };
-      if (includeOptions) {
-        properties.options = this.resolveDataElementOptions(index, mode);
-      }
-      this.updateElement(elem, index, properties, mode);
-    }
-    this.updateSharedOptions(sharedOptions, mode);
   }
 
   resolveOutline() {
@@ -194,10 +186,10 @@ export class Geo extends DatasetController {
 }
 
 Geo.prototype.datasetElementType = GeoFeature;
-Geo.prototype.datasetElementOptions = {
-  backgroundColor: 'outlineBackgroundColor',
-  borderColor: 'outlineBorderColor',
-  borderWidth: 'outlineBorderWidth',
-  graticuleBorderColor: 'graticuleBorderColor',
-  graticuleBorderWidth: 'graticuleBorderWidth',
-};
+Geo.prototype.datasetElementOptions = [
+  'outlineBackgroundColor',
+  'outlineBorderColor',
+  'outlineBorderWidth',
+  'graticuleBorderColor',
+  'graticuleBorderWidth',
+];

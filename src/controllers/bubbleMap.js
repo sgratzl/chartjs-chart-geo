@@ -69,10 +69,6 @@ BubbleMap.defaults = helpers.merge({}, [
   {
     showOutline: true,
     clipMap: 'outline+graticule',
-    hover: {
-      mode: 'single',
-    },
-
     tooltips: {
       callbacks: {
         title() {
@@ -101,6 +97,7 @@ BubbleMap.defaults = helpers.merge({}, [
           const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
           return controller.indexToRadius(context.dataIndex);
         },
+        hoverRadius: undefined,
       },
     },
   },

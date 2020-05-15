@@ -16,8 +16,6 @@
           const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
           const states = ChartGeo.topojson.feature(us, us.objects.states).features;
 
-          const scale = (v) => new Color('steelblue').lightness(value.value).rgbString();
-
           const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
             type: 'choropleth',
             data: {

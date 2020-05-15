@@ -6,7 +6,6 @@ export const geoDefaults = {
   showOutline: false,
   showGraticule: false,
   clipMap: true,
-  animation: false,
   scales: {
     xy: {
       type: 'projection',

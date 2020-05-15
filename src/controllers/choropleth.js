@@ -61,9 +61,6 @@ Choropleth.id = 'choropleth';
 Choropleth.defaults = helpers.merge({}, [
   geoDefaults,
   {
-    hover: {
-      mode: 'single',
-    },
     tooltips: {
       callbacks: {
         title() {

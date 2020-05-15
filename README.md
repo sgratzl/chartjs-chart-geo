@@ -4,7 +4,8 @@
 
 Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
 
-**Works only with Chart.js >= 2.8.0**
+**v2.X.X only works with Chart.js >= 2.8.0 < 3.0.0**
+**v3.X.X only works with Chart.js >= 3.0.0**
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 

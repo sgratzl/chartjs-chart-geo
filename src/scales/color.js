@@ -1,4 +1,4 @@
-import * as Chart from 'chart.js';
+import { scaleService, helpers } from 'chart.js';
 import {
   interpolateBlues,
   interpolateBrBG,
@@ -180,16 +180,15 @@ function createScale(superClassConstructor) {
   );
 }
 
-export const ColorScale = createScale(Chart.scaleService.getScaleConstructor('linear'));
-export const ColorScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));
+export class ColorScale extends Chart.scaleService.getScaleConstructor('linear') {}
+ColorScale.id = 'color';
+ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, defaults]);
+scaleService.registerScale('color', ColorScale);
 
-Chart.scaleService.registerScaleType(
-  'color',
-  ColorScale,
-  Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('linear'), baseDefaults, defaults])
-);
-Chart.scaleService.registerScaleType(
-  'colorLogarithmic',
-  ColorScaleLogarithmic,
-  Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('logarithmic'), baseDefaults, defaults])
-);
+// export const ColorScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));
+
+// scaleService.registerScaleType(
+//   'colorLogarithmic',
+//   ColorScaleLogarithmic,
+//   Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults('logarithmic'), baseDefaults, defaults])
+// );

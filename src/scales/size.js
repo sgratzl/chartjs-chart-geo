@@ -75,9 +75,9 @@ function createScale(superClassConstructor) {
 
         if (this._model) {
           const vm = this._model;
-          ctx.strokeStyle = vm.borderColor || Chart.defaults.global.defaultColor;
+          ctx.strokeStyle = vm.borderColor || Chart.defaults.color;
           ctx.lineWidth = vm.borderWidth == null ? Chart.elements.point.borderWidth : vm.borderWidth;
-          ctx.fillStyle = vm.backgroundColor || Chart.defaults.global.defaultColor;
+          ctx.fillStyle = vm.backgroundColor || Chart.defaults.color;
         } else {
           ctx.fillStyle = 'blue';
         }

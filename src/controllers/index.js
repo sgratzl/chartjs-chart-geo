@@ -1,3 +1,3 @@
 export * from './geo';
 export * from './choropleth';
-export * from './bubbleMap';
+// export * from './bubbleMap';

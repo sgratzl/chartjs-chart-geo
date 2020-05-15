@@ -68,5 +68,10 @@
     "release:minor": "release-it minor",
     "release:patch": "release-it patch",
     "release:pre": "release-it --preRelease=alpha --npm.tag=next"
+  },
+  "dependenciesMeta": {
+    "chart.js": {
+      "unplugged": true
+    }
   }
 }

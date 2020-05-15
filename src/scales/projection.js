@@ -1,4 +1,4 @@
-import * as Chart from 'chart.js';
+import { Scale, scaleService } from 'chart.js';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -17,10 +17,6 @@ import {
   geoTransverseMercator,
   geoNaturalEarth1,
 } from 'd3-geo';
-
-const defaults = {
-  projection: 'albersUsa',
-};
 
 const lookup = {
   geoAzimuthalEqualArea,
@@ -43,11 +39,9 @@ Object.keys(lookup).forEach((key) => {
   lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
 });
 
-const superClass = Chart.Scale.prototype;
-export const ProjectionScale = Chart.Scale.extend({
-  ticks: [],
-  initialize() {
-    superClass.initialize.call(this);
+export class ProjectionScale extends Scale {
+  constructor(cfg) {
+    super(cfg);
     this.geoPath = geoPath();
     if (typeof this.options.projection === 'string' && typeof lookup[this.options.projection] === 'function') {
       this.projection = lookup[this.options.projection]();
@@ -55,7 +49,7 @@ export const ProjectionScale = Chart.Scale.extend({
       this.projection = this.options.projection;
     }
     this.geoPath.projection(this.projection);
-  },
+  }
 
   computeBounds(outline) {
     const bb = geoPath(this.projection.fitWidth(1000, outline)).bounds(outline);
@@ -71,7 +65,7 @@ export const ProjectionScale = Chart.Scale.extend({
       refX: t[0],
       refY: t[1],
     };
-  },
+  }
 
   updateBounds() {
     const area = this.chart.chartArea;
@@ -101,9 +95,13 @@ export const ProjectionScale = Chart.Scale.extend({
     return (
       !bak || bak.chartWidth !== this.oldChartBounds.chartWidth || bak.chartHeight !== this.oldChartBounds.chartHeight
     );
-  },
-});
-Chart.scaleService.registerScaleType('projection', ProjectionScale, defaults);
+  }
+}
+ProjectionScale.id = 'projection';
+ProjectionScale.defaults = {
+  projection: 'albersUsa',
+};
+scaleService.registerScale(ProjectionScale);
 
 export function wrapProjectionScale(scale, attr) {
   if (!(scale instanceof ProjectionScale)) {

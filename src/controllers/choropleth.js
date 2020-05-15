@@ -1,75 +1,68 @@
-import * as Chart from 'chart.js';
+import { defaults, helpers, layouts } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
 import { wrapProjectionScale } from '../scales';
-import { resolveScale } from './utils';
+import { GeoFeature } from '../elements';
 
-const defaults = {
-  hover: {
-    mode: 'single',
-  },
-  tooltips: {
-    callbacks: {
-      title() {
-        // Title doesn't make sense for scatter since we format the data as a point
-        return '';
+defaults.set(
+  'choropleth',
+  helpers.merge({}, [
+    geoDefaults,
+    {
+      hover: {
+        mode: 'single',
       },
-      label(item, data) {
-        if (item.value == null) {
-          return data.labels[item.index];
-        }
-        return `${data.labels[item.index]}: ${item.value}`;
+      tooltips: {
+        callbacks: {
+          title() {
+            // Title doesn't make sense for scatter since we format the data as a point
+            return '';
+          },
+          label(item, data) {
+            if (item.value == null) {
+              return data.labels[item.index];
+            }
+            return `${data.labels[item.index]}: ${item.value}`;
+          },
+        },
+      },
+      scales: {
+        color: {
+          position: 'chartArea',
+          type: 'color',
+        },
+      },
+      elements: {
+        geoFeature: {
+          backgroundColor(context) {
+            if (context.dataIndex == null) {
+              return null;
+            }
+            const value = context.dataset.data[context.dataIndex];
+            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+            return controller.valueToColor(value);
+          },
+        },
       },
     },
-  },
-  geo: {
-    colorScale: {
-      display: false,
-      id: 'color',
-      type: 'color',
-    },
-  },
-  elements: {
-    geoFeature: {
-      backgroundColor(context) {
-        if (context.dataIndex == null) {
-          return null;
-        }
-        const value = context.dataset.data[context.dataIndex];
-        const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-        return controller.valueToColor(value);
-      },
-    },
-  },
-};
+  ])
+);
 
-Chart.defaults.choropleth = Chart.helpers.configMerge(geoDefaults, defaults);
-
-const superClass = Geo.prototype;
-export const Choropleth = (Chart.controllers.choropleth = Geo.extend({
-  dataElementType: Chart.elements.GeoFeature,
-
+export class Choropleth extends Geo {
   linkScales() {
-    superClass.linkScales.call(this);
-    if (this._colorScale) {
-      Chart.layouts.removeBox(this.chart, this._colorScale);
-    }
-    this._colorScale = resolveScale(this.chart, this.chart.options.geo.colorScale);
-  },
-
-  _getValueScale() {
-    const base = superClass._getValueScale.call(this);
-    if (!this._colorScale) {
-      return base;
-    }
-    return wrapProjectionScale(base, this._colorScale.options.property);
-  },
-
-  updateElement(elem, index, reset) {
-    superClass.updateElement.call(this, elem, index, reset);
-    this.updateGeoFeatureElement(elem, index, reset);
-  },
+    super.linkScales();
+    const dataset = this.getDataset();
+    const meta = this.getMeta();
+    meta.iAxisID = dataset.vAxisID = 'color';
+    meta.cScale = this.getScaleForId('color');
+    meta.vScale = meta.cScale ? wrapProjectionScale(meta.xScale, meta.cScale.options.property) : meta.xScale;
+    meta.iScale = meta.vScale;
+  }
 
   valueToColor(value) {
-    return this._colorScale ? this._colorScale.getColorForValue(value) : 'blue';
-  },
-}));
+    const cScale = this.getMeta().cScale;
+    return cScale ? cScale.getColorForValue(value) : 'blue';
+  }
+}
+
+Choropleth.prototype.dataElementType = GeoFeature;
+Geo.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];

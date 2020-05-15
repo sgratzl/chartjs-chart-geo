@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
+    <script src="https://unpkg.com/chart.js@next/dist/Chart.js"></script>
     <script src="../build/Chart.Geo.js"></script>
   </head>
 
@@ -37,11 +37,11 @@
               legend: {
                 display: false,
               },
-              scale: {
-                projection: 'albersUsa',
-              },
-              geo: {
-                colorScale: {
+              scales: {
+                xy: {
+                  projection: 'albersUsa',
+                },
+                color: {
                   display: true,
                   position: 'bottom',
                   quantize: 5,

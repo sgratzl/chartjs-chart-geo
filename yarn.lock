@@ -2585,6 +2585,9 @@ __metadata:
     uglify-es: ^3.3.9
   peerDependencies:
     chart.js: ^3.0.0-alpha
+  dependenciesMeta:
+    chart.js:
+      unplugged: true
   languageName: unknown
   linkType: soft
 

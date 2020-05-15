@@ -1,14 +1,14 @@
-import * as Chart from 'chart.js';
+import { scaleService, helpers, layouts } from 'chart.js';
 
 export function resolveScale(chart, scaleOptions) {
-  const scaleClass = Chart.scaleService.getScaleConstructor(scaleOptions.type);
+  const scaleClass = scaleService.getScaleConstructor(scaleOptions.type);
   if (!scaleClass) {
     return null;
   }
   const s = new scaleClass({
     id: scaleOptions.id,
     type: scaleOptions.type,
-    options: Chart.helpers.merge({}, [Chart.scaleService.getScaleDefaults(scaleOptions.type), scaleOptions]),
+    options: helpers.merge({}, [scaleService.getScaleDefaults(scaleOptions.type), scaleOptions]),
     ctx: chart.ctx,
     chart: chart,
   });
@@ -18,6 +18,6 @@ export function resolveScale(chart, scaleOptions) {
   s.position = 'chartArea';
   s.weight = s.options.weight;
 
-  Chart.layouts.addBox(chart, s);
+  layouts.addBox(chart, s);
   return s;
 }

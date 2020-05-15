@@ -1,4 +1,4 @@
-import { defaults, helpers, layouts } from 'chart.js';
+import { defaults, helpers } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
 import { wrapProjectionScale } from '../scales';
 import { GeoFeature } from '../elements';
@@ -52,29 +52,29 @@ export class Choropleth extends Geo {
     super.linkScales();
     const dataset = this.getDataset();
     const meta = this.getMeta();
-    meta.cAxisID = meta.vAxisID = meta.rAxisID = 'color';
-    dataset.cAxisID = dataset.vAxisID = dataset.rAxisID = 'color';
-    meta.cScale = meta.rScale = this.getScaleForId('color');
-    meta.vScale = wrapProjectionScale(meta.xScale, meta.cScale.options.property);
+    meta.vAxisID = meta.rAxisID = 'color';
+    dataset.vAxisID = dataset.rAxisID = 'color';
+    meta.rScale = this.getScaleForId('color');
+    meta.vScale = wrapProjectionScale(meta.xScale, meta.rScale.options.property);
     meta.iScale = meta.xScale;
     meta.iAxisID = dataset.iAxisID = meta.xAxisID;
   }
 
   parse(start, count) {
-    const cScale = this.getMeta().cScale;
+    const rScale = this.getMeta().rScale;
     const data = this.getDataset().data;
     const meta = this._cachedMeta;
     let i, ilen;
     for (i = start, ilen = start + count; i < ilen; ++i) {
       meta._parsed[i] = {
-        [cScale.axis]: cScale.parse(data[i]),
+        [rScale.axis]: rScale.parse(data[i]),
       };
     }
   }
 
   valueToColor(index) {
-    const cScale = this.getMeta().cScale;
-    return cScale.getColorForValue(this.getParsed(index)[cScale.axis]);
+    const rScale = this.getMeta().rScale;
+    return rScale.getColorForValue(this.getParsed(index)[rScale.axis]);
   }
 }
 

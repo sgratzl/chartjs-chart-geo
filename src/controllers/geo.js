@@ -50,13 +50,15 @@ export class Geo extends DatasetController {
     const active = mode === 'active';
     const meta = this.getMeta();
 
-    const dirtyCache = this.getProjectionScale().updateBounds();
+    const scale = this.getProjectionScale();
+    const dirtyCache = scale.updateBounds();
 
     if (this.showOutline()) {
       const elem = meta.dataset;
       if (dirtyCache) {
         delete elem.cache;
       }
+      elem.projectionScale = scale;
       if (mode !== 'resize') {
         const properties = {
           feature: this.resolveOutline(),
@@ -120,7 +122,8 @@ export class Geo extends DatasetController {
       return;
     }
     const ctx = this.chart.ctx;
-    const path = this.getProjectionScale().geoPath.context(ctx);
+    const scale = this.getProjectionScale();
+    const path = scale.geoPath.context(ctx);
 
     ctx.save();
     ctx.beginPath();

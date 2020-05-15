@@ -5,6 +5,7 @@ const defaults = {
   position: 'bottom',
   missing: 1,
   range: [1, 20],
+  mode: 'radius' | 'area',
   legend: {
     length: 90,
     width: 70,
@@ -24,8 +25,16 @@ function createScale(superClassConstructor) {
         return this.getSizeImpl(v);
       },
       getSizeImpl(normalized) {
-        const range = this.options.range[1] - this.options.range[0];
-        return normalized * range + this.options.range[0];
+        const [r0, r1] = this.options.range;
+        if (this.options.mode === 'area') {
+          const a1 = r1 * r1 * Math.PI;
+          const a0 = r0 * r0 * Math.PI;
+          const range = a1 - a0;
+          const a = normalized * range + a0;
+          return Math.sqrt(a / Math.PI);
+        }
+        const range = r1 - r0;
+        return normalized * range + r0;
       },
       _drawIndicator() {
         /** @type {CanvasRenderingContext2D} */

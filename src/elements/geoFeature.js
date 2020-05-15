@@ -99,7 +99,15 @@ export class GeoFeature extends Element {
     this._drawImpl(ctx);
     ctx.restore();
 
-    this.cache = Object.assign({}, this.cache || {}, { canvas });
+    this.cache = Object.assign({}, this.cache || {}, {
+      canvas,
+      canvasKey: this._optionsToKey(),
+    });
+  }
+
+  _optionsToKey() {
+    const options = this.options;
+    return `${options.backgroundColor};${options.borderColor};${options.borderWidth}`;
   }
 
   _drawImpl(ctx) {
@@ -121,7 +129,7 @@ export class GeoFeature extends Element {
     if (!this.feature) {
       return;
     }
-    if (!this.cache || !this.cache.canvas) {
+    if (!this.cache || this.cache.canvasKey !== this._optionsToKey()) {
       this._drawInCache(ctx.canvas.ownerDocument);
     }
     const bounds = this.getBounds();

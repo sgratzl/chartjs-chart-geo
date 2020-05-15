@@ -48,7 +48,7 @@ export class GeoFeature extends Element {
       x: centroid[0],
       y: centroid[1],
     };
-    this.cache = Object.assign({}, this.cache || {}, center);
+    this.cache = Object.assign({}, this.cache || {}, { center });
     return center;
   }
 
@@ -56,6 +56,7 @@ export class GeoFeature extends Element {
     if (this.cache && this.cache.bounds) {
       return this.cache.bounds;
     }
+    console.log('compute bounds');
     const bb = this.projectionScale.geoPath.bounds(this.feature);
     const bounds = {
       x: bb[0][0],
@@ -65,7 +66,7 @@ export class GeoFeature extends Element {
       width: bb[1][0] - bb[0][0],
       height: bb[1][1] - bb[0][1],
     };
-    this.cache = Object.assign({}, this.cache || {}, bounds);
+    this.cache = Object.assign({}, this.cache || {}, { bounds });
     return bounds;
   }
 
@@ -75,7 +76,7 @@ export class GeoFeature extends Element {
     }
     const area = this.projectionScale.geoPath.area(this.feature);
 
-    this.cache = Object.assign({}, this.cache || {}, area);
+    this.cache = Object.assign({}, this.cache || {}, { area });
     return area;
   }
 
@@ -83,13 +84,26 @@ export class GeoFeature extends Element {
     return this.getCenterPoint();
   }
 
-  draw(ctx) {
-    if (!this.feature) {
+  _drawInCache(doc) {
+    const bounds = this.getBounds();
+    if (!Number.isFinite(bounds.x)) {
       return;
     }
-    const options = this.options;
+    const canvas = doc.createElement('canvas');
+    canvas.width = bounds.width;
+    canvas.height = bounds.height;
 
+    const ctx = canvas.getContext('2d');
     ctx.save();
+    ctx.translate(-bounds.x, -bounds.y);
+    this._drawImpl(ctx);
+    ctx.restore();
+
+    this.cache = Object.assign({}, this.cache || {}, { canvas });
+  }
+
+  _drawImpl(ctx) {
+    const options = this.options;
     ctx.beginPath();
     this.projectionScale.geoPath.context(ctx)(this.feature);
     if (options.backgroundColor) {
@@ -101,7 +115,23 @@ export class GeoFeature extends Element {
       ctx.lineWidth = options.borderWidth;
       ctx.stroke();
     }
-    ctx.restore();
+  }
+
+  draw(ctx) {
+    if (!this.feature) {
+      return;
+    }
+    if (!this.cache || !this.cache.canvas) {
+      this._drawInCache(ctx.canvas.ownerDocument);
+    }
+    const bounds = this.getBounds();
+    if (this.cache && this.cache.canvas) {
+      ctx.drawImage(this.cache.canvas, bounds.x, bounds.y, bounds.width, bounds.height);
+    } else if (Number.isFinite(bounds.x)) {
+      ctx.save();
+      this._drawImpl(ctx);
+      ctx.restore();
+    }
   }
 }
 GeoFeature._type = 'geoFeature';

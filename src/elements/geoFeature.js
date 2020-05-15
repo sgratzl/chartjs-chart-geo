@@ -84,25 +84,63 @@ export const GeoFeature = (Chart.elements.GeoFeature = Chart.Element.extend({
     return this.getCenterPoint();
   },
 
+  _drawInCache(doc) {
+    const bounds = this.getBounds();
+    if (!Number.isFinite(bounds.x)) {
+      return;
+    }
+    const canvas = this.cache && this.cache.canvas ? this.cache.canvas : doc.createElement('canvas');
+    canvas.width = Math.max(Math.ceil(bounds.width), 1);
+    canvas.height = Math.max(Math.ceil(bounds.height), 1);
+
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.save();
+    ctx.translate(-bounds.x, -bounds.y);
+    this._drawImpl(ctx);
+    ctx.restore();
+
+    this.cache = Object.assign({}, this.cache || {}, {
+      canvas,
+      canvasKey: this._optionsToKey(),
+    });
+  },
+
+  _optionsToKey() {
+    const options = this._view;
+    return `${options.backgroundColor};${options.borderColor};${options.borderWidth}`;
+  },
+
+  _drawImpl(ctx) {
+    const options = this._view;
+    ctx.beginPath();
+    this._xScale.geoPath.context(ctx)(this.feature);
+    if (options.backgroundColor) {
+      ctx.fillStyle = options.backgroundColor;
+      ctx.fill();
+    }
+    if (options.borderColor) {
+      ctx.strokeStyle = options.borderColor;
+      ctx.lineWidth = options.borderWidth;
+      ctx.stroke();
+    }
+  },
+
   draw() {
     if (!this.feature) {
       return;
     }
-
-    const vm = this._view;
     const ctx = this._chart.ctx;
-    ctx.save();
-    ctx.beginPath();
-    this._xScale.geoPath.context(ctx)(this.feature);
-    if (vm.backgroundColor) {
-      ctx.fillStyle = vm.backgroundColor;
-      ctx.fill();
+    if (!this.cache || this.cache.canvasKey !== this._optionsToKey()) {
+      this._drawInCache(ctx.canvas.ownerDocument);
     }
-    if (vm.borderColor) {
-      ctx.strokeStyle = vm.borderColor;
-      ctx.lineWidth = vm.borderWidth;
-      ctx.stroke();
+    const bounds = this.getBounds();
+    if (this.cache && this.cache.canvas) {
+      ctx.drawImage(this.cache.canvas, bounds.x, bounds.y, bounds.width, bounds.height);
+    } else if (Number.isFinite(bounds.x)) {
+      ctx.save();
+      this._drawImpl(ctx);
+      ctx.restore();
     }
-    ctx.restore();
   },
 }));

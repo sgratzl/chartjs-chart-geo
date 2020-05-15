@@ -4,7 +4,7 @@
 
 Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
 
-**Works only with Chart.js >= 2.8.0**
+**Works only with Chart.js >= 3.0.0**
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
@@ -23,7 +23,7 @@ works great with https://github.com/chartjs/chartjs-plugin-datalabels
 ## Install
 
 ```bash
-npm install --save chart.js chartjs-chart-geo
+npm install --save chart.js@next chartjs-chart-geo@next
 ```
 
 ## Usage
@@ -127,13 +127,9 @@ const config = {
     }]
   },
   options: {
-    // ! Only one scale is supported via the options.scale option
-    scale: {
-      projection: 'albersUsa' // ... projection method
-    },
-    geo: {
-      colorScale: {
-        display: true
+    scales: {
+      xy: {
+        projection: 'albersUsa' // ... projection method
       }
     }
   }
@@ -183,9 +179,10 @@ interface IGeoFeatureOptions {
 The coloring of the nodes will be done with a special color scale. The scale itself is based on a linear scale.
 
 ```ts
-interface IGeoChartOptions {
-  // can just be specified as a global option
-  colorScale: IColorScaleOptions;
+interface IChartOptions {
+  scales: {
+    color: IColorScaleOptions;
+  }
 }
 
 interface IColorScaleOptions {
@@ -222,13 +219,6 @@ interface IColorScaleOptions {
   quantize: number;
 
   /**
-   * orientation of the scale, e.g., `right` means that it is a vertical scale
-   * with the ticks on the right side
-   * @default right
-   */
-  position: 'left' | 'right' | 'top' | 'bottom';
-
-  /**
    * the property name that stores the value in the data elements
    * @default value
    */
@@ -240,6 +230,12 @@ interface IColorScaleOptions {
      * @default bottom-right
      */
     position: 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'top-right' | 'bottom-right';
+    /**
+     * alignment of the scale, e.g., `right` means that it is a vertical scale
+     * with the ticks on the right side
+     * @default right
+     */
+    align: 'left' | 'right' | 'top' | 'bottom';
     /**
      * length of the legend, i.e., for a horizontal scale the width
      * if a value < 1 is given, is it assume to be a ratio of the corresponding
@@ -296,12 +292,13 @@ A regular point is used and thus supports the [Point Element](https://www.chartj
 
 ### Legend
 
-Similiar to the choropleth chart a new `radiusScale` is used to map the values to symbol radius size. The scale itself is based on a linear scale.
+Similar to the choropleth chart a new `radiusScale` is used to map the values to symbol radius size. The scale itself is based on a linear scale.
 
 ```ts
-interface IGeoChartOptions {
-  // can just be specified as a global option
-  radiusScale: ISizeScaleOptions;
+interface IChartOptions {
+  scales: {
+    color: ISizeScaleOptions;
+  };
 }
 
 interface ISizeScaleOptions {
@@ -330,13 +327,6 @@ interface ISizeScaleOptions {
   missing: number;
 
   /**
-   * orientation of the scale, e.g., `right` means that it is a vertical scale
-   * with the ticks on the right side
-   * @default bottom
-   */
-  position: 'left' | 'right' | 'top' | 'bottom';
-
-  /**
    * the property name that stores the value in the data elements
    * @default value
    */
@@ -348,6 +338,12 @@ interface ISizeScaleOptions {
      * @default bottom-right
      */
     position: 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'top-right' | 'bottom-right';
+    /**
+     * alignment of the scale, e.g., `right` means that it is a vertical scale
+     * with the ticks on the right side
+     * @default bottom
+     */
+    align: 'left' | 'right' | 'top' | 'bottom';
     /**
      * length of the legend, i.e., for a horizontal scale the width
      * if a value < 1 is given, is it assume to be a ratio of the corresponding
@@ -381,6 +377,12 @@ interface ISizeScaleOptions {
 A new scale `projection` is registered and used by default by Choropleth and BubbleMap. It provides just one option to specify the projection method. The available methods are the one from https://github.com/d3/d3-geo#projections. Just remove the `geo` prefix. Alternatively, the projection method instance can be directly given.
 
 ```ts
+interface IChartOptions {
+  scales: {
+    xy: IProjectionScaleOptions;
+  };
+}
+
 interface IProjectionScaleOptions {
   /**
    * projection method used

@@ -21,7 +21,7 @@ export function patchOptions(cfg) {
 
 export const baseMixin = {
   isHorizontal() {
-    return this.options.align === 'top' || this.options.align === 'bottom';
+    return this.options.legend.align === 'top' || this.options.legend.align === 'bottom';
   },
 
   _getNormalizedValue(v) {

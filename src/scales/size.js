@@ -113,12 +113,12 @@ export class SizeScale extends Chart.scaleService.getScaleConstructor('linear') 
 Object.assign(SizeScale.prototype, baseMixin);
 
 const scaleDefaults = {
-  position: 'bottom',
   missing: 1,
   mode: 'area', // 'radius'
   // mode: 'radius',
   range: [2, 20],
   legend: {
+    align: 'bottom',
     length: 90,
     width: 70,
     indicatorWidth: 42,

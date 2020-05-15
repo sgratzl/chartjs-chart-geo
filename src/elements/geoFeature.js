@@ -56,7 +56,6 @@ export class GeoFeature extends Element {
     if (this.cache && this.cache.bounds) {
       return this.cache.bounds;
     }
-    console.log('compute bounds');
     const bb = this.projectionScale.geoPath.bounds(this.feature);
     const bounds = {
       x: bb[0][0],

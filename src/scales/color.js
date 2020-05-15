@@ -39,7 +39,7 @@ import {
   interpolateYlOrBr,
   interpolateYlOrRd,
 } from 'd3-scale-chromatic';
-import { baseDefaults } from './base';
+import { baseDefaults, baseMixin, patchOptions } from './base';
 
 const lookup = {
   interpolateBlues,
@@ -103,12 +103,6 @@ function quantize(v, steps) {
   return v;
 }
 
-function patchOptions(cfg) {
-  cfg.options.lPosition = cfg.options.position;
-  cfg.options.position = 'chartArea';
-  return cfg;
-}
-
 export class ColorScale extends Chart.scaleService.getScaleConstructor('linear') {
   constructor(cfg) {
     super(patchOptions(cfg));
@@ -145,57 +139,65 @@ export class ColorScale extends Chart.scaleService.getScaleConstructor('linear')
     return this.interpolate(v);
   }
 
-  // _drawIndicator() {
-  //   /** @type {CanvasRenderingContext2D} */
-  //   const ctx = this.ctx;
-  //   const w = this.width;
-  //   const h = this.height;
-  //   const indicatorSize = this.options.legend.indicatorWidth;
-  //   const reverse = this._reversePixels || this.ticksAsNumbers[0] > this.ticksAsNumbers[this.ticksAsNumbers.length - 1];
+  update(maxWidth, maxHeight, margins) {
+    this.updateImpl(maxWidth, maxHeight, margins, (w, h, m) => super.update(w, h, m));
+  }
 
-  //   if (this.isHorizontal()) {
-  //     if (this.options.quantize > 0) {
-  //       const stepWidth = w / this.options.quantize;
-  //       const offset = !reverse ? (i) => i : (i) => w - stepWidth - i;
-  //       for (let i = 0; i < w; i += stepWidth) {
-  //         const v = (i + stepWidth / 2) / w;
-  //         ctx.fillStyle = this.getColor(v);
-  //         ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
-  //       }
-  //     } else {
-  //       const offset = !reverse ? (i) => i : (i) => w - 1 - i;
-  //       for (let i = 0; i < w; ++i) {
-  //         ctx.fillStyle = this.getColor((i + 0.5) / w);
-  //         ctx.fillRect(offset(i), 0, 1, indicatorSize);
-  //       }
-  //     }
-  //   } else if (this.options.quantize > 0) {
-  //     const stepWidth = h / this.options.quantize;
-  //     const offset = !reverse ? (i) => i : (i) => h - stepWidth - i;
-  //     for (let i = 0; i < h; i += stepWidth) {
-  //       const v = (i + stepWidth / 2) / h;
-  //       ctx.fillStyle = this.getColor(v);
-  //       ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
-  //     }
-  //   } else {
-  //     const offset = !reverse ? (i) => i : (i) => h - 1 - i;
-  //     for (let i = 0; i < h; ++i) {
-  //       ctx.fillStyle = this.getColor((i + 0.5) / h);
-  //       ctx.fillRect(0, offset(i), indicatorSize, 1);
-  //     }
-  //   }
-  // }
+  draw(chartArea) {
+    this.drawImpl(chartArea, (chartArea) => super.draw(chartArea));
+  }
+
+  _drawIndicator() {
+    /** @type {CanvasRenderingContext2D} */
+    const ctx = this.ctx;
+    const w = this.width;
+    const h = this.height;
+    const indicatorSize = this.options.legend.indicatorWidth;
+    const reverse = this._reversePixels;
+
+    if (this.isHorizontal()) {
+      if (this.options.quantize > 0) {
+        const stepWidth = w / this.options.quantize;
+        const offset = !reverse ? (i) => i : (i) => w - stepWidth - i;
+        for (let i = 0; i < w; i += stepWidth) {
+          const v = (i + stepWidth / 2) / w;
+          ctx.fillStyle = this.getColor(v);
+          ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
+        }
+      } else {
+        const offset = !reverse ? (i) => i : (i) => w - 1 - i;
+        for (let i = 0; i < w; ++i) {
+          ctx.fillStyle = this.getColor((i + 0.5) / w);
+          ctx.fillRect(offset(i), 0, 1, indicatorSize);
+        }
+      }
+    } else if (this.options.quantize > 0) {
+      const stepWidth = h / this.options.quantize;
+      const offset = !reverse ? (i) => i : (i) => h - stepWidth - i;
+      for (let i = 0; i < h; i += stepWidth) {
+        const v = (i + stepWidth / 2) / h;
+        ctx.fillStyle = this.getColor(v);
+        ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
+      }
+    } else {
+      const offset = !reverse ? (i) => i : (i) => h - 1 - i;
+      for (let i = 0; i < h; ++i) {
+        ctx.fillStyle = this.getColor((i + 0.5) / h);
+        ctx.fillRect(0, offset(i), indicatorSize, 1);
+      }
+    }
+  }
 }
+Object.assign(ColorScale.prototype, baseMixin);
+
+const defaults = {
+  interpolate: 'blues',
+  missing: 'transparent',
+  quantize: 0,
+};
+
 ColorScale.id = 'color';
-ColorScale.defaults = helpers.merge({}, [
-  scaleService.getScaleDefaults('linear'),
-  baseDefaults,
-  {
-    interpolate: 'blues',
-    missing: 'transparent',
-    quantize: 0,
-  },
-]);
+ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, defaults]);
 scaleService.registerScale(ColorScale);
 
 // export const ColorScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));

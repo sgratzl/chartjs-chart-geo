@@ -49,7 +49,7 @@ export const GeoFeature = (Chart.elements.GeoFeature = Chart.Element.extend({
       x: centroid[0],
       y: centroid[1],
     };
-    this.cache = Object.assign({}, this.cache || {}, center);
+    this.cache = Object.assign({}, this.cache || {}, { center });
     return center;
   },
 
@@ -66,7 +66,7 @@ export const GeoFeature = (Chart.elements.GeoFeature = Chart.Element.extend({
       width: bb[1][0] - bb[0][0],
       height: bb[1][1] - bb[0][1],
     };
-    this.cache = Object.assign({}, this.cache || {}, bounds);
+    this.cache = Object.assign({}, this.cache || {}, { bounds });
     return bounds;
   },
 
@@ -76,7 +76,7 @@ export const GeoFeature = (Chart.elements.GeoFeature = Chart.Element.extend({
     }
     const area = this._xScale.geoPath.area(this.feature);
 
-    this.cache = Object.assign({}, this.cache || {}, area);
+    this.cache = Object.assign({}, this.cache || {}, { area });
     return area;
   },
 

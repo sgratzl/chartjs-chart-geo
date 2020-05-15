@@ -316,7 +316,7 @@ interface ISizeScaleOptions {
    * first entry,  the maximal one to the second and a linear interpolation
    * for all values in between.
    *
-   * @default [1, 20]
+   * @default [2, 20]
    */
   range: [number, number];
 

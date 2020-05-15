@@ -117,7 +117,7 @@ const scaleDefaults = {
   missing: 1,
   mode: 'area', // 'radius'
   // mode: 'radius',
-  range: [1, 20],
+  range: [2, 20],
   legend: {
     length: 90,
     width: 70,

@@ -1,7 +1,8 @@
 // rollup.config.js
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import babel from 'rollup-plugin-babel';
+import pnp from 'rollup-plugin-pnp-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import resolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
 
 export default [
   {
@@ -14,7 +15,7 @@ export default [
       },
     },
     external: ['chart.js'],
-    plugins: [resolve(), commonjs(), babel()],
+    plugins: [commonjs(), pnp(), resolve(), babel({ babelHelpers: 'runtime' })],
   },
   {
     output: {
@@ -25,7 +26,7 @@ export default [
         'chart.js': 'Chart',
       },
     },
-    external: ['chart.js'],
-    plugins: [resolve(), commonjs(), babel()],
+    external: ['chart.js', '@babel/runtime', 'd3-geo', 'd3-scale-chromatic', 'topojson-client'],
+    plugins: [commonjs(), pnp(), resolve(), babel({ babelHelpers: 'runtime' })],
   },
 ];

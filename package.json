@@ -1,7 +1,7 @@
 {
   "name": "chartjs-chart-geo",
   "description": "Chart.js module for charting maps",
-  "version": "2.0.0",
+  "version": "3.0.0-alpha.0",
   "author": {
     "name": "Samuel Gratzl",
     "email": "samu@sgratzl.com",
@@ -20,30 +20,33 @@
     "src/**/*.js"
   ],
   "peerDependencies": {
-    "chart.js": "^2.8.0"
+    "chart.js": "^3.0.0-alpha"
   },
   "dependencies": {
-    "d3-geo": "^1.11.9",
+    "@babel/runtime": "^7.9.6",
+    "d3-geo": "^1.12.0",
     "d3-scale-chromatic": "^1.5.0",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.5",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^25.3.0",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@rollup/plugin-babel": "^5.0.0",
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.3",
+    "@yarnpkg/pnpify": "^2.0.0-rc.22",
+    "babel-jest": "^26.0.1",
+    "chart.js": "^3.0.0-alpha",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
-    "jest": "^25.3.0",
-    "prettier": "^2.0.4",
-    "release-it": "^13.5.2",
+    "jest": "^26.0.1",
+    "prettier": "^2.0.5",
+    "release-it": "^13.6.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.6.1",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-watch": "^4.3.1",
+    "rollup": "^2.10.2",
+    "rollup-plugin-pnp-resolve": "^2.0.0",
     "uglify-es": "^3.3.9"
   },
   "scripts": {

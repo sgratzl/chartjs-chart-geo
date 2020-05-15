@@ -95,7 +95,6 @@ A data point has to have a `.feature` property containing the feature to render 
 - World map: https://www.npmjs.com/package/world-atlas
 - individual countries: https://github.com/markmarkoh/datamaps/tree/master/src/js/data (untested)
 
-
 ```js
 const us = await fetch('https://unpkg.com/us-atlas/states-10m.json').then((r) => r.json());
 
@@ -391,11 +390,20 @@ interface IProjectionScaleOptions {
 }
 ```
 
-## Building
+## Development Environment
 
 ```sh
-npm install
-npm run build
+npm i -g yarn
+yarn set version 2
+yarn
+yarn pnpify --sdk
+```
+
+### Building
+
+```sh
+yarn install
+yarn build
 ```
 
 [npm-image]: https://badge.fury.io/js/chartjs-chart-geo.svg

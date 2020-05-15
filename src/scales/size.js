@@ -22,8 +22,16 @@ export class SizeScale extends Chart.scaleService.getScaleConstructor('linear') 
   }
 
   getSizeImpl(normalized) {
-    const range = this.options.range[1] - this.options.range[0];
-    return normalized * range + this.options.range[0];
+    const [r0, r1] = this.options.range;
+    if (this.options.mode === 'area') {
+      const a1 = r1 * r1 * Math.PI;
+      const a0 = r0 * r0 * Math.PI;
+      const range = a1 - a0;
+      const a = normalized * range + a0;
+      return Math.sqrt(a / Math.PI);
+    }
+    const range = r1 - r0;
+    return normalized * range + r0;
   }
 
   update(maxWidth, maxHeight, margins) {
@@ -107,6 +115,8 @@ Object.assign(SizeScale.prototype, baseMixin);
 const scaleDefaults = {
   position: 'bottom',
   missing: 1,
+  mode: 'area', // 'radius'
+  // mode: 'radius',
   range: [1, 20],
   legend: {
     length: 90,

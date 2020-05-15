@@ -321,6 +321,13 @@ interface ISizeScaleOptions {
   range: [number, number];
 
   /**
+   * operation mode for the scale, area means that the area is linearly increasing whereas radius the radius is.
+   * The area one is the default since it gives a better visual comparison of values
+   * @default area
+   */
+  mode: 'radius' | 'area';
+
+  /**
    * radius to render for missing values
    * @default 1
    */

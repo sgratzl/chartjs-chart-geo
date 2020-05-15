@@ -89,8 +89,8 @@ export class GeoFeature extends Element {
       return;
     }
     const canvas = doc.createElement('canvas');
-    canvas.width = bounds.width;
-    canvas.height = bounds.height;
+    canvas.width = Math.max(Math.ceil(bounds.width), 1);
+    canvas.height = Math.max(Math.ceil(bounds.height), 1);
 
     const ctx = canvas.getContext('2d');
     ctx.save();

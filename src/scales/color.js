@@ -39,7 +39,7 @@ import {
   interpolateYlOrBr,
   interpolateYlOrRd,
 } from 'd3-scale-chromatic';
-import { createBase, baseDefaults } from './base';
+import { baseDefaults } from './base';
 
 const lookup = {
   interpolateBlues,
@@ -103,87 +103,100 @@ function quantize(v, steps) {
   return v;
 }
 
-const defaults = {
-  interpolate: 'blues',
-  missing: 'transparent',
-  quantize: 0,
-};
-
-function createScale(superClassConstructor) {
-  const superClass = superClassConstructor.prototype;
-  return superClassConstructor.extend(
-    Object.assign(createBase(superClass), {
-      initialize() {
-        superClass.initialize.call(this);
-        if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
-          this.interpolate = lookup[this.options.interpolate];
-        } else {
-          this.interpolate = this.options.interpolate;
-        }
-      },
-      getColorForValue(value) {
-        const v = this._getNormalizedValue(value);
-        if (v == null || Number.isNaN(v)) {
-          return this.options.missing;
-        }
-        return this.getColor(v);
-      },
-      getColor(normalized) {
-        let v = normalized;
-        if (this.options.quantize > 0) {
-          v = quantize(v, this.options.quantize);
-        }
-        return this.interpolate(v);
-      },
-      _drawIndicator() {
-        /** @type {CanvasRenderingContext2D} */
-        const ctx = this.ctx;
-        const w = this.width;
-        const h = this.height;
-        const indicatorSize = this.options.legend.indicatorWidth;
-        const reverse =
-          this._reversePixels || this.ticksAsNumbers[0] > this.ticksAsNumbers[this.ticksAsNumbers.length - 1];
-
-        if (this.isHorizontal()) {
-          if (this.options.quantize > 0) {
-            const stepWidth = w / this.options.quantize;
-            const offset = !reverse ? (i) => i : (i) => w - stepWidth - i;
-            for (let i = 0; i < w; i += stepWidth) {
-              const v = (i + stepWidth / 2) / w;
-              ctx.fillStyle = this.getColor(v);
-              ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
-            }
-          } else {
-            const offset = !reverse ? (i) => i : (i) => w - 1 - i;
-            for (let i = 0; i < w; ++i) {
-              ctx.fillStyle = this.getColor((i + 0.5) / w);
-              ctx.fillRect(offset(i), 0, 1, indicatorSize);
-            }
-          }
-        } else if (this.options.quantize > 0) {
-          const stepWidth = h / this.options.quantize;
-          const offset = !reverse ? (i) => i : (i) => h - stepWidth - i;
-          for (let i = 0; i < h; i += stepWidth) {
-            const v = (i + stepWidth / 2) / h;
-            ctx.fillStyle = this.getColor(v);
-            ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
-          }
-        } else {
-          const offset = !reverse ? (i) => i : (i) => h - 1 - i;
-          for (let i = 0; i < h; ++i) {
-            ctx.fillStyle = this.getColor((i + 0.5) / h);
-            ctx.fillRect(0, offset(i), indicatorSize, 1);
-          }
-        }
-      },
-    })
-  );
+function patchOptions(cfg) {
+  cfg.options.lPosition = cfg.options.position;
+  cfg.options.position = 'chartArea';
+  return cfg;
 }
 
-export class ColorScale extends Chart.scaleService.getScaleConstructor('linear') {}
+export class ColorScale extends Chart.scaleService.getScaleConstructor('linear') {
+  constructor(cfg) {
+    super(patchOptions(cfg));
+    if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
+      this.interpolate = lookup[this.options.interpolate];
+    } else {
+      this.interpolate = this.options.interpolate;
+    }
+  }
+  parse(raw, index) {
+    if (raw && typeof raw[this.options.property] === 'number') {
+      return raw[this.options.property];
+    }
+    return super.parse(raw, index);
+  }
+  _getNormalizedValue(v) {
+    if (v == null || Number.isNaN(v)) {
+      return null;
+    }
+    return (v - this._startValue) / this._valueRange;
+  }
+  getColorForValue(value) {
+    const v = this._getNormalizedValue(value);
+    if (v == null || Number.isNaN(v)) {
+      return this.options.missing;
+    }
+    return this.getColor(v);
+  }
+  getColor(normalized) {
+    let v = normalized;
+    if (this.options.quantize > 0) {
+      v = quantize(v, this.options.quantize);
+    }
+    return this.interpolate(v);
+  }
+
+  // _drawIndicator() {
+  //   /** @type {CanvasRenderingContext2D} */
+  //   const ctx = this.ctx;
+  //   const w = this.width;
+  //   const h = this.height;
+  //   const indicatorSize = this.options.legend.indicatorWidth;
+  //   const reverse = this._reversePixels || this.ticksAsNumbers[0] > this.ticksAsNumbers[this.ticksAsNumbers.length - 1];
+
+  //   if (this.isHorizontal()) {
+  //     if (this.options.quantize > 0) {
+  //       const stepWidth = w / this.options.quantize;
+  //       const offset = !reverse ? (i) => i : (i) => w - stepWidth - i;
+  //       for (let i = 0; i < w; i += stepWidth) {
+  //         const v = (i + stepWidth / 2) / w;
+  //         ctx.fillStyle = this.getColor(v);
+  //         ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
+  //       }
+  //     } else {
+  //       const offset = !reverse ? (i) => i : (i) => w - 1 - i;
+  //       for (let i = 0; i < w; ++i) {
+  //         ctx.fillStyle = this.getColor((i + 0.5) / w);
+  //         ctx.fillRect(offset(i), 0, 1, indicatorSize);
+  //       }
+  //     }
+  //   } else if (this.options.quantize > 0) {
+  //     const stepWidth = h / this.options.quantize;
+  //     const offset = !reverse ? (i) => i : (i) => h - stepWidth - i;
+  //     for (let i = 0; i < h; i += stepWidth) {
+  //       const v = (i + stepWidth / 2) / h;
+  //       ctx.fillStyle = this.getColor(v);
+  //       ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
+  //     }
+  //   } else {
+  //     const offset = !reverse ? (i) => i : (i) => h - 1 - i;
+  //     for (let i = 0; i < h; ++i) {
+  //       ctx.fillStyle = this.getColor((i + 0.5) / h);
+  //       ctx.fillRect(0, offset(i), indicatorSize, 1);
+  //     }
+  //   }
+  // }
+}
 ColorScale.id = 'color';
-ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, defaults]);
-scaleService.registerScale('color', ColorScale);
+ColorScale.defaults = helpers.merge({}, [
+  scaleService.getScaleDefaults('linear'),
+  baseDefaults,
+  {
+    interpolate: 'blues',
+    missing: 'transparent',
+    quantize: 0,
+  },
+]);
+scaleService.registerScale(ColorScale);
 
 // export const ColorScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));
 

@@ -27,6 +27,7 @@ defaults.set(
       },
       scales: {
         color: {
+          display: false,
           position: 'chartArea',
           type: 'color',
         },
@@ -37,9 +38,8 @@ defaults.set(
             if (context.dataIndex == null) {
               return null;
             }
-            const value = context.dataset.data[context.dataIndex];
             const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-            return controller.valueToColor(value);
+            return controller.valueToColor(context.dataIndex);
           },
         },
       },
@@ -52,15 +52,29 @@ export class Choropleth extends Geo {
     super.linkScales();
     const dataset = this.getDataset();
     const meta = this.getMeta();
-    meta.iAxisID = dataset.vAxisID = 'color';
-    meta.cScale = this.getScaleForId('color');
-    meta.vScale = meta.cScale ? wrapProjectionScale(meta.xScale, meta.cScale.options.property) : meta.xScale;
-    meta.iScale = meta.vScale;
+    meta.cAxisID = meta.vAxisID = meta.rAxisID = 'color';
+    dataset.cAxisID = dataset.vAxisID = dataset.rAxisID = 'color';
+    meta.cScale = meta.rScale = this.getScaleForId('color');
+    meta.vScale = wrapProjectionScale(meta.xScale, meta.cScale.options.property);
+    meta.iScale = meta.xScale;
+    meta.iAxisID = dataset.iAxisID = meta.xAxisID;
   }
 
-  valueToColor(value) {
+  parse(start, count) {
     const cScale = this.getMeta().cScale;
-    return cScale ? cScale.getColorForValue(value) : 'blue';
+    const data = this.getDataset().data;
+    const meta = this._cachedMeta;
+    let i, ilen;
+    for (i = start, ilen = start + count; i < ilen; ++i) {
+      meta._parsed[i] = {
+        [cScale.axis]: cScale.parse(data[i]),
+      };
+    }
+  }
+
+  valueToColor(index) {
+    const cScale = this.getMeta().cScale;
+    return cScale.getColorForValue(this.getParsed(index)[cScale.axis]);
   }
 }
 

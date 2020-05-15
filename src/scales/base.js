@@ -1,5 +1,5 @@
 export const baseDefaults = {
-  position: 'right',
+  position: 'chartArea',
   property: 'value',
   gridLines: {
     drawOnChartArea: false,
@@ -15,11 +15,11 @@ export const baseDefaults = {
 
 export function createBase(superClass) {
   return {
-    getRightValue(value) {
-      if (value && typeof value[this.options.property] === 'number') {
-        return value[this.options.property];
+    parse(raw, index) {
+      if (raw && typeof raw[this.options.property] === 'number') {
+        return raw[this.options.property];
       }
-      return superClass.getRightValue.call(this, value);
+      return super.parse(raw, index);
     },
     determineDataLimits() {
       const id = this.id;

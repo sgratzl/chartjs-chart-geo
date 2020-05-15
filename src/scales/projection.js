@@ -39,9 +39,14 @@ Object.keys(lookup).forEach((key) => {
   lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
 });
 
+function patchOptions(cfg) {
+  cfg.options.position = 'chartArea';
+  return cfg;
+}
+
 export class ProjectionScale extends Scale {
   constructor(cfg) {
-    super(cfg);
+    super(patchOptions(cfg));
     this.geoPath = geoPath();
     if (typeof this.options.projection === 'string' && typeof lookup[this.options.projection] === 'function') {
       this.projection = lookup[this.options.projection]();

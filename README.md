@@ -399,6 +399,25 @@ interface IProjectionScaleOptions {
 }
 ```
 
+### ESM and Tree Shaking
+
+The ESM build of the library supports three shaking but having no side effects. As a consequence the chart.js library won't be automatically manipulated nor new controllers automatically registered. One has to manually import and register them.
+
+```js
+import Chart from 'chart.js';
+import { Choropleth } from 'chartjs-chart-geo';
+
+// register controller in chart.js and ensure the defaults are set
+Choropleth.register();
+
+const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
+  type: Choropleth.id,
+  data: {
+    //...
+  },
+});
+```
+
 ## Development Environment
 
 ```sh

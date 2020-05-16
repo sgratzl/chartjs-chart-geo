@@ -192,7 +192,10 @@ const defaults = {
 
 ColorScale.id = 'color';
 ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, defaults]);
-
+ColorScale.register = () => {
+  scaleService.registerScale(ColorScale);
+  return ColorScale;
+};
 // export const ColorScaleLogarithmic = createScale(Chart.scaleService.getScaleConstructor('logarithmic'));
 
 // scaleService.registerScaleType(

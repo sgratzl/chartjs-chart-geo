@@ -15,6 +15,7 @@
   "main": "build/Chart.Geo.js",
   "unpkg": "build/Chart.Geo.min.js",
   "module": "build/Chart.Geo.esm.js",
+  "sideEffects": false,
   "files": [
     "build",
     "src/**/*.js"
@@ -51,12 +52,12 @@
   },
   "scripts": {
     "clean": "rimraf build *.tgz",
-    "watch": "rollup -c -w -i src/index.js",
+    "watch": "rollup -c -w",
     "lint": "eslint src",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "posttest": "npm run lint",
-    "build:dev": "rollup -c -i src/index.js",
+    "build:dev": "rollup -c",
     "build:prod": "npm run build:dev && uglifyjs build/Chart.Geo.js -c -m -o build/Chart.Geo.min.js",
     "prebuild": "npm run clean && npm test",
     "build": "npm run build:prod",

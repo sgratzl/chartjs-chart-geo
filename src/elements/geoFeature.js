@@ -1,17 +1,6 @@
 import { defaults, Element } from 'chart.js';
 import { geoContains } from 'd3-geo';
 
-defaults.set('elements', {
-  geoFeature: Object.assign({}, defaults.elements.rectangle, {
-    outlineBackgroundColor: null,
-    outlineBorderColor: defaults.color,
-    outlineBorderWidth: 0,
-
-    graticuleBorderColor: '#CCCCCC',
-    graticuleBorderWidth: 0,
-  }),
-});
-
 export class GeoFeature extends Element {
   inRange(mouseX, mouseY) {
     const bb = this.getBounds();
@@ -143,3 +132,16 @@ export class GeoFeature extends Element {
   }
 }
 GeoFeature._type = 'geoFeature';
+GeoFeature.register = () => {
+  defaults.set('elements', {
+    [GeoFeature._type]: Object.assign({}, defaults.elements.rectangle, {
+      outlineBackgroundColor: null,
+      outlineBorderColor: defaults.color,
+      outlineBorderWidth: 0,
+
+      graticuleBorderColor: '#CCCCCC',
+      graticuleBorderWidth: 0,
+    }),
+  });
+  return GeoFeature;
+};

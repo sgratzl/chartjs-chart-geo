@@ -106,3 +106,7 @@ ProjectionScale.id = 'projection';
 ProjectionScale.defaults = {
   projection: 'albersUsa',
 };
+ProjectionScale.register = () => {
+  scaleService.registerScale(ProjectionScale);
+  return ProjectionScale;
+};

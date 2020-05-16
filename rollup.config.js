@@ -6,6 +6,7 @@ import babel from '@rollup/plugin-babel';
 
 export default [
   {
+    input: 'src/bundle.js',
     output: {
       file: 'build/Chart.Geo.js',
       name: 'ChartGeo',
@@ -18,6 +19,7 @@ export default [
     plugins: [commonjs(), pnp(), resolve(), babel({ babelHelpers: 'runtime' })],
   },
   {
+    input: 'src/index.js',
     output: {
       file: 'build/Chart.Geo.esm.js',
       name: 'ChartGeo',
@@ -27,6 +29,6 @@ export default [
       },
     },
     external: ['chart.js', '@babel/runtime', 'd3-geo', 'd3-scale-chromatic', 'topojson-client'],
-    plugins: [commonjs(), pnp(), resolve(), babel({ babelHelpers: 'runtime' })],
+    plugins: [commonjs(), pnp(), resolve()],
   },
 ];

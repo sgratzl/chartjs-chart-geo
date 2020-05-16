@@ -1,5 +1,6 @@
-import { helpers, elements, controllers } from 'chart.js';
+import { helpers, elements, controllers, defaults } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
+import { SizeScale } from '../scales';
 
 export class BubbleMap extends Geo {
   linkScales() {
@@ -64,45 +65,54 @@ export class BubbleMap extends Geo {
   }
 }
 
-BubbleMap.defaults = helpers.merge({}, [
-  geoDefaults,
-  {
-    showOutline: true,
-    clipMap: 'outline+graticule',
-    tooltips: {
-      callbacks: {
-        title() {
-          // Title doesn't make sense for scatter since we format the data as a point
-          return '';
-        },
-        label(item, data) {
-          if (item.value == null) {
-            return data.labels[item.index];
-          }
-          return `${data.labels[item.index]}: ${item.value}`;
-        },
-      },
-    },
-    scales: {
-      r: {
-        type: 'size',
-      },
-    },
-    elements: {
-      point: {
-        radius(context) {
-          if (context.dataIndex == null) {
-            return null;
-          }
-          const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-          return controller.indexToRadius(context.dataIndex);
-        },
-        hoverRadius: undefined,
-      },
-    },
-  },
-]);
-
-BubbleMap.id = 'bubbleMap';
 BubbleMap.prototype.dataElementType = elements.Point;
 BubbleMap.prototype.dataElementOptions = controllers.bubble.prototype.dataElementOptions;
+
+BubbleMap.id = 'bubbleMap';
+BubbleMap.register = () => {
+  BubbleMap.prototype.datasetElementType = GeoFeature.register();
+
+  controllers[BubbleMap.id] = BubbleMap;
+  defaults.set(
+    BubbleMap.id,
+    helpers.merge({}, [
+      geoDefaults(),
+      {
+        showOutline: true,
+        clipMap: 'outline+graticule',
+        tooltips: {
+          callbacks: {
+            title() {
+              // Title doesn't make sense for scatter since we format the data as a point
+              return '';
+            },
+            label(item, data) {
+              if (item.value == null) {
+                return data.labels[item.index];
+              }
+              return `${data.labels[item.index]}: ${item.value}`;
+            },
+          },
+        },
+        scales: {
+          r: {
+            type: SizeScale.register().id,
+          },
+        },
+        elements: {
+          point: {
+            radius(context) {
+              if (context.dataIndex == null) {
+                return null;
+              }
+              const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+              return controller.indexToRadius(context.dataIndex);
+            },
+            hoverRadius: undefined,
+          },
+        },
+      },
+    ])
+  );
+  return BubbleMap;
+};

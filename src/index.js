@@ -16,6 +16,3 @@ Object.assign(controllers, {
 });
 defaults.set(Choropleth.id, Choropleth.defaults);
 defaults.set(BubbleMap.id, BubbleMap.defaults);
-scaleService.registerScale(ProjectionScale);
-scaleService.registerScale(ColorScale);
-scaleService.registerScale(SizeScale);

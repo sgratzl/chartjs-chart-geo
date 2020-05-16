@@ -127,3 +127,7 @@ const scaleDefaults = {
 
 SizeScale.id = 'size';
 SizeScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, scaleDefaults]);
+SizeScale.register = () => {
+  scaleService.registerScale(SizeScale);
+  return SizeScale;
+};

@@ -1,19 +1,22 @@
 import { DatasetController, helpers } from 'chart.js';
 import { geoGraticule, geoGraticule10 } from 'd3-geo';
 import { GeoFeature } from '../elements';
+import { ProjectionScale } from '../scales';
 
-export const geoDefaults = {
-  showOutline: false,
-  showGraticule: false,
-  clipMap: true,
-  scales: {
-    xy: {
-      type: 'projection',
-      position: 'chartArea',
-      display: false,
+export function geoDefaults() {
+  return {
+    showOutline: false,
+    showGraticule: false,
+    clipMap: true,
+    scales: {
+      xy: {
+        type: ProjectionScale.register().id,
+        position: 'chartArea',
+        display: false,
+      },
     },
-  },
-};
+  };
+}
 
 function patchDatasetElementOptions(options) {
   // patch the options by removing the `outline` or `hoverOutline` option;
@@ -184,7 +187,7 @@ export class Geo extends DatasetController {
   }
 }
 
-Geo.prototype.datasetElementType = GeoFeature;
+Geo.prototype.datasetElementType = GeoFeature.register();
 Geo.prototype.datasetElementOptions = [
   'outlineBackgroundColor',
   'outlineBorderColor',

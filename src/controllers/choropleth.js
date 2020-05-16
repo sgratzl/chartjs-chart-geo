@@ -1,6 +1,7 @@
 import { helpers } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
 import { GeoFeature } from '../elements';
+import { ColorScale } from '../scales';
 
 export class Choropleth extends Geo {
   linkScales() {
@@ -57,41 +58,50 @@ export class Choropleth extends Geo {
   }
 }
 
-Choropleth.id = 'choropleth';
-Choropleth.defaults = helpers.merge({}, [
-  geoDefaults,
-  {
-    tooltips: {
-      callbacks: {
-        title() {
-          // Title doesn't make sense for scatter since we format the data as a point
-          return '';
-        },
-        label(item, data) {
-          if (item.value == null) {
-            return data.labels[item.index];
-          }
-          return `${data.labels[item.index]}: ${item.value}`;
-        },
-      },
-    },
-    scales: {
-      color: {
-        type: 'color',
-      },
-    },
-    elements: {
-      geoFeature: {
-        backgroundColor(context) {
-          if (context.dataIndex == null) {
-            return null;
-          }
-          const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-          return controller.indexToColor(context.dataIndex);
-        },
-      },
-    },
-  },
-]);
-Choropleth.prototype.dataElementType = GeoFeature;
 Choropleth.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];
+
+Choropleth.id = 'choropleth';
+Choropleth.register = () => {
+  Choropleth.prototype.datasetElementType = GeoFeature.register();
+  Choropleth.prototype.dataElementType = GeoFeature.register();
+  controllers[Choropleth.id] = Choropleth;
+  defaults.set(
+    Choropleth.id,
+    helpers.merge({}, [
+      geoDefaults(),
+      {
+        tooltips: {
+          callbacks: {
+            title() {
+              // Title doesn't make sense for scatter since we format the data as a point
+              return '';
+            },
+            label(item, data) {
+              if (item.value == null) {
+                return data.labels[item.index];
+              }
+              return `${data.labels[item.index]}: ${item.value}`;
+            },
+          },
+        },
+        scales: {
+          color: {
+            type: ColorScale.register().id,
+          },
+        },
+        elements: {
+          geoFeature: {
+            backgroundColor(context) {
+              if (context.dataIndex == null) {
+                return null;
+              }
+              const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+              return controller.indexToColor(context.dataIndex);
+            },
+          },
+        },
+      },
+    ])
+  );
+  return Choropleth;
+};

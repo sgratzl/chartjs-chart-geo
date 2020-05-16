@@ -103,7 +103,7 @@ function quantize(v, steps) {
   return v;
 }
 
-export class ColorScale extends Chart.scaleService.getScaleConstructor('linear') {
+export class ColorScale extends scaleService.getScaleConstructor('linear') {
   constructor(cfg) {
     super(patchOptions(cfg));
     if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
@@ -184,14 +184,16 @@ export class ColorScale extends Chart.scaleService.getScaleConstructor('linear')
 }
 Object.assign(ColorScale.prototype, baseMixin);
 
-const defaults = {
-  interpolate: 'blues',
-  missing: 'transparent',
-  quantize: 0,
-};
-
 ColorScale.id = 'color';
-ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, defaults]);
+ColorScale.defaults = helpers.merge({}, [
+  scaleService.getScaleDefaults('linear'),
+  baseDefaults,
+  {
+    interpolate: 'blues',
+    missing: 'transparent',
+    quantize: 0,
+  },
+]);
 ColorScale.register = () => {
   scaleService.registerScale(ColorScale);
   return ColorScale;

@@ -1,6 +1,7 @@
 import { helpers, elements, controllers, defaults } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
 import { SizeScale } from '../scales';
+import { GeoFeature } from '../elements';
 
 export class BubbleMap extends Geo {
   linkScales() {

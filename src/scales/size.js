@@ -1,7 +1,7 @@
 import { scaleService, defaults, elements, helpers } from 'chart.js';
 import { baseDefaults, baseMixin, patchOptions } from './base';
 
-export class SizeScale extends Chart.scaleService.getScaleConstructor('linear') {
+export class SizeScale extends scaleService.getScaleConstructor('linear') {
   constructor(cfg) {
     super(patchOptions(cfg));
   }

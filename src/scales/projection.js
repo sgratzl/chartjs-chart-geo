@@ -1,4 +1,4 @@
-import { Scale } from 'chart.js';
+import { Scale, scaleService } from 'chart.js';
 import {
   geoPath,
   geoAzimuthalEqualArea,

@@ -1,4 +1,4 @@
-import { helpers } from 'chart.js';
+import { helpers, controllers, defaults } from 'chart.js';
 import { geoDefaults, Geo } from './geo';
 import { GeoFeature } from '../elements';
 import { ColorScale } from '../scales';

@@ -1,6 +1,5 @@
 import { DatasetController, helpers } from 'chart.js';
 import { geoGraticule, geoGraticule10 } from 'd3-geo';
-import { GeoFeature } from '../elements';
 import { ProjectionScale } from '../scales';
 
 export function geoDefaults() {
@@ -187,7 +186,7 @@ export class Geo extends DatasetController {
   }
 }
 
-Geo.prototype.datasetElementType = GeoFeature.register();
+// Geo.prototype.datasetElementType = GeoFeature.register();
 Geo.prototype.datasetElementOptions = [
   'outlineBackgroundColor',
   'outlineBorderColor',

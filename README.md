@@ -8,15 +8,15 @@ Chart.js module for charting maps with legends. Adding new chart types: `choropl
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
-[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/GRKLQBw)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/gOaBQep)
 
 ![Earth Choropleth](https://user-images.githubusercontent.com/4129778/78821946-8d610a80-79da-11ea-9ebb-23baca9db670.png)
 
-[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/qBWwxKP)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/bGVmQKw)
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
-[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/wvwZyxb)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/YzyJRvm)
 
 works great with https://github.com/chartjs/chartjs-plugin-datalabels
 
@@ -32,9 +32,9 @@ see [Samples](https://github.com/sgratzl/chartjs-chart-geo/tree/master/samples) 
 
 CodePens
 
-- [Choropleth](https://codepen.io/sgratzl/pen/GRKLQBw)
-- [Earth Choropleth](https://codepen.io/sgratzl/pen/qBWwxKP)
-- [Bubble Map](https://codepen.io/sgratzl/pen/wvwZyxb)
+- [Choropleth](https://codepen.io/sgratzl/pen/gOaBQep)
+- [Earth Choropleth](https://codepen.io/sgratzl/pen/bGVmQKw)
+- [Bubble Map](https://codepen.io/sgratzl/pen/YzyJRvm)
 
 ## Options
 
@@ -79,11 +79,11 @@ A Choropleth (chart type: `choropleth`) is used to render maps with the area fil
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
-[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/GRKLQBw)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/gOaBQep)
 
 ![Earth Choropleth](https://user-images.githubusercontent.com/4129778/78821946-8d610a80-79da-11ea-9ebb-23baca9db670.png)
 
-[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/qBWwxKP)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/bGVmQKw)
 
 ### Data Structure
 
@@ -270,7 +270,7 @@ A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
-[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/wvwZyxb)
+[![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/YzyJRvm)
 
 ### Data Structure
 

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="../node_modules/chart.js/dist/Chart.bundle.js"></script>
-    <script src="https://unpkg.com/chartjs-plugin-datalabels"></script>
+    <script src="https://unpkg.com/chart.js@3.0.0-alpha/dist/Chart.js"></script>
+    <!-- <script src="https://unpkg.com/chartjs-plugin-datalabels"></script> -->
     <script src="../build/Chart.Geo.js"></script>
     <script src="https://unpkg.com/papaparse"></script>
   </head>
@@ -39,23 +39,22 @@
             legend: {
               display: false,
             },
-            plugins: {
-              datalabels: {
-                align: 'top',
-                formatter: (v) => {
-                  return v.description;
-                },
-              },
-            },
-            scale: {
-              projection: 'albersUsa',
-            },
+            // plugins: {
+            //   datalabels: {
+            //     align: 'top',
+            //     formatter: (v) => {
+            //       return v.description;
+            //     },
+            //   },
+            // },
             layout: {
               // padding: 20
             },
-            geo: {
-              radiusScale: {
-                display: true,
+            scales: {
+              xy: {
+                projection: 'albersUsa',
+              },
+              r: {
                 size: [1, 20],
                 mode: 'area',
               },

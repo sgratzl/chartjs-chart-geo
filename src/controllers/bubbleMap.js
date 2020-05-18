@@ -1,4 +1,4 @@
-import { controllers, defaults, Point, BubbleController } from '../chart';
+import { Chart, controllers, defaults, Point, BubbleController } from '../chart';
 import { geoDefaults, GeoController } from './geo';
 import { SizeScale } from '../scales';
 import { GeoFeature } from '../elements';

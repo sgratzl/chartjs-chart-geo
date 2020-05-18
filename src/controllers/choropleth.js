@@ -1,4 +1,4 @@
-import { controllers, defaults, merge } from '../chart';
+import { Chart, controllers, defaults, merge } from '../chart';
 import { geoDefaults, GeoController } from './geo';
 import { GeoFeature } from '../elements';
 import { ColorScale } from '../scales';

@@ -1,9 +1,11 @@
-import { helpers, elements, controllers, defaults } from 'chart.js';
-import { geoDefaults, Geo } from './geo';
+import { controllers, defaults, Point, BubbleController } from '../chart';
+import { geoDefaults, GeoController } from './geo';
 import { SizeScale } from '../scales';
 import { GeoFeature } from '../elements';
+import { merge } from '../chart';
+import { patchControllerConfig } from './utils';
 
-export class BubbleMap extends Geo {
+export class BubbleMapController extends GeoController {
   linkScales() {
     super.linkScales();
     const dataset = this.getDataset();
@@ -66,17 +68,17 @@ export class BubbleMap extends Geo {
   }
 }
 
-BubbleMap.prototype.dataElementType = elements.Point;
-BubbleMap.prototype.dataElementOptions = controllers.bubble.prototype.dataElementOptions;
+BubbleMapController.prototype.dataElementType = Point;
+BubbleMapController.prototype.dataElementOptions = BubbleController.prototype.dataElementOptions;
 
-BubbleMap.id = 'bubbleMap';
-BubbleMap.register = () => {
-  BubbleMap.prototype.datasetElementType = GeoFeature.register();
+BubbleMapController.id = 'bubbleMap';
+BubbleMapController.register = () => {
+  BubbleMapController.prototype.datasetElementType = GeoFeature.register();
 
-  controllers[BubbleMap.id] = BubbleMap;
+  controllers[BubbleMapController.id] = BubbleMapController;
   defaults.set(
-    BubbleMap.id,
-    helpers.merge({}, [
+    BubbleMapController.id,
+    merge({}, [
       geoDefaults(),
       {
         showOutline: true,
@@ -115,5 +117,12 @@ BubbleMap.register = () => {
       },
     ])
   );
-  return BubbleMap;
+  return BubbleMapController;
 };
+
+export class BubbleMapChart extends Chart {
+  constructor(item, config) {
+    super(item, patchControllerConfig(config, BubbleMapController));
+  }
+}
+BubbleMapChart.id = BubbleMapController.id;

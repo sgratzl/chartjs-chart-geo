@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Box Plot Chart</title>
+  </head>
+  <body>
+    <div id="container" style="width: 75%;">
+      <canvas id="canvas"></canvas>
+    </div>
+    <script defer src="https://unpkg.com/es-module-shims"></script>
+    <script type="importmap-shim">
+      {
+        "imports": {
+          "chart.js": "https://unpkg.com/chart.js@3.0.0-alpha/dist/Chart.esm.js",
+          "chartjs-chart-geo": "../build/Chart.Geo.esm.js",
+          "d3-geo": "https://unpkg.com/d3-geo?module",
+          "d3-scale-chromatic": "https://unpkg.com/d3-scale-chromatic?module",
+          "topojson-client": "https://unpkg.com/topojson-client?module"
+        }
+      }
+    </script>
+    <script type="module-shim">
+      import Chart from 'chart.js';
+      import { ChoroplethChart } from 'chartjs-chart-geo';
+      import {feature} from 'topojson-client';
+
+      fetch('https://unpkg.com/us-atlas/states-10m.json')
+        .then((r) => r.json())
+        .then((us) => {
+          const nation = feature(us, us.objects.nation).features[0];
+          const states = feature(us, us.objects.states).features;
+
+          const chart = new ChoroplethChart(document.getElementById('canvas').getContext('2d'), {
+            data: {
+              labels: states.map((d) => d.properties.name),
+              datasets: [
+                {
+                  label: 'States',
+                  outline: nation,
+                  data: states.map((d) => ({
+                    feature: d,
+                    value: Math.random() * 10,
+                  })),
+                },
+              ],
+            },
+            options: {
+              legend: {
+                display: false,
+              },
+              scales: {
+                xy: {
+                  projection: 'albersUsa',
+                },
+                color: {
+                  quantize: 5,
+                  legend: {
+                    position: 'bottom-right',
+                    align: 'right',
+                  },
+                },
+              },
+            },
+          });
+        });
+    </script>
+  </body>
+</html>

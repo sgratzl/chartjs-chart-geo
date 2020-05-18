@@ -1,4 +1,4 @@
-import { defaults, Element } from 'chart.js';
+import { defaults, Element } from '../chart';
 import { geoContains } from 'd3-geo';
 
 export class GeoFeature extends Element {

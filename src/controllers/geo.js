@@ -1,4 +1,4 @@
-import { DatasetController, helpers } from 'chart.js';
+import { DatasetController, clipArea, unclipArea, valueOrDefault } from '../chart';
 import { geoGraticule, geoGraticule10 } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 
@@ -34,7 +34,7 @@ function patchDatasetElementOptions(options) {
   return r;
 }
 
-export class Geo extends DatasetController {
+export class GeoController extends DatasetController {
   getProjectionScale() {
     return this.getScaleForId('xy');
   }
@@ -51,15 +51,15 @@ export class Geo extends DatasetController {
   }
 
   showOutline() {
-    return helpers.valueOrDefault(this.getDataset().showOutline, this.chart.options.showOutline);
+    return valueOrDefault(this.getDataset().showOutline, this.chart.options.showOutline);
   }
 
   clipMap() {
-    return helpers.valueOrDefault(this.getDataset().clipMap, this.chart.options.clipMap);
+    return valueOrDefault(this.getDataset().clipMap, this.chart.options.clipMap);
   }
 
   getGraticule() {
-    return helpers.valueOrDefault(this.getDataset().showGraticule, this.chart.options.showGraticule);
+    return valueOrDefault(this.getDataset().showGraticule, this.chart.options.showGraticule);
   }
 
   update(mode) {
@@ -150,7 +150,7 @@ export class Geo extends DatasetController {
     let enabled = false;
     if (clipMap === true || clipMap === 'outline' || clipMap === 'outline+graticule') {
       enabled = true;
-      helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+      clipArea(chart.ctx, chart.chartArea);
     }
 
     if (this.showOutline()) {
@@ -159,35 +159,35 @@ export class Geo extends DatasetController {
 
     if (clipMap === true || clipMap === 'graticule' || clipMap === 'outline+graticule') {
       if (!enabled) {
-        helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+        clipArea(chart.ctx, chart.chartArea);
       }
     } else if (enabled) {
       enabled = false;
-      helpers.canvas.unclipArea(chart.ctx);
+      unclipArea(chart.ctx);
     }
 
     this.showGraticule();
 
     if (clipMap === true || clipMap === 'items') {
       if (!enabled) {
-        helpers.canvas.clipArea(chart.ctx, chart.chartArea);
+        clipArea(chart.ctx, chart.chartArea);
       }
     } else if (enabled) {
       enabled = false;
-      helpers.canvas.unclipArea(chart.ctx);
+      unclipArea(chart.ctx);
     }
 
     this.getMeta().data.forEach((elem) => elem.draw(chart.ctx));
 
     if (enabled) {
       enabled = false;
-      helpers.canvas.unclipArea(chart.ctx);
+      unclipArea(chart.ctx);
     }
   }
 }
 
 // Geo.prototype.datasetElementType = GeoFeature.register();
-Geo.prototype.datasetElementOptions = [
+GeoController.prototype.datasetElementOptions = [
   'outlineBackgroundColor',
   'outlineBorderColor',
   'outlineBorderWidth',

@@ -1,4 +1,4 @@
-import { scaleService, defaults, elements, helpers } from 'chart.js';
+import { scaleService, defaults, LinearScale, LogarithmicScale, merge, drawPoint } from '../chart';
 import { baseDefaults, BaseMixin } from './base';
 
 function SizeSaleMixin(superClass) {
@@ -71,10 +71,10 @@ function SizeSaleMixin(superClass) {
       });
 
       if (this._model) {
-        const vm = this._model;
-        ctx.strokeStyle = vm.borderColor || defaults.color;
-        ctx.lineWidth = vm.borderWidth == null ? elements.point.borderWidth : vm.borderWidth;
-        ctx.fillStyle = vm.backgroundColor || defaults.color;
+        const props = this._model;
+        ctx.strokeStyle = props.borderColor || defaults.color;
+        ctx.lineWidth = props.borderWidth == null ? defaults.elements.point.borderWidth : props.borderWidth;
+        ctx.fillStyle = props.backgroundColor || defaults.color;
       } else {
         ctx.fillStyle = 'blue';
       }
@@ -87,13 +87,13 @@ function SizeSaleMixin(superClass) {
         const renderOptions = Object.assign({}, this._model || {}, {
           radius,
         });
-        helpers.canvas.drawPoint(ctx, renderOptions, x, y);
+        drawPoint(ctx, renderOptions, x, y);
       });
     }
   };
 }
 
-export class SizeScale extends SizeSaleMixin(scaleService.getScaleConstructor('linear')) {}
+export class SizeScale extends SizeSaleMixin(LinearScale) {}
 
 const scaleDefaults = {
   missing: 1,
@@ -109,13 +109,13 @@ const scaleDefaults = {
 };
 
 SizeScale.id = 'size';
-SizeScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, scaleDefaults]);
+SizeScale.defaults = merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 SizeScale.register = () => {
   scaleService.registerScale(SizeScale);
   return SizeScale;
 };
 
-export class SizeLogarithmicScale extends SizeSaleMixin(scaleService.getScaleConstructor('logarithmic')) {
+export class SizeLogarithmicScale extends SizeSaleMixin(LogarithmicScale) {
   _getNormalizedValue(v) {
     if (v == null || Number.isNaN(v)) {
       return null;
@@ -125,11 +125,7 @@ export class SizeLogarithmicScale extends SizeSaleMixin(scaleService.getScaleCon
 }
 
 SizeLogarithmicScale.id = 'sizeLogarithmic';
-SizeLogarithmicScale.defaults = helpers.merge({}, [
-  scaleService.getScaleDefaults('logarithmic'),
-  baseDefaults,
-  scaleDefaults,
-]);
+SizeLogarithmicScale.defaults = merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
 SizeLogarithmicScale.register = () => {
   scaleService.registerScale(SizeLogarithmicScale);
   return SizeLogarithmicScale;

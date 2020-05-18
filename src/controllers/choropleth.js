@@ -1,9 +1,10 @@
-import { helpers, controllers, defaults } from 'chart.js';
-import { geoDefaults, Geo } from './geo';
+import { controllers, defaults, merge } from '../chart';
+import { geoDefaults, GeoController } from './geo';
 import { GeoFeature } from '../elements';
 import { ColorScale } from '../scales';
+import { patchControllerConfig } from './utils';
 
-export class Choropleth extends Geo {
+export class ChoroplethController extends GeoController {
   linkScales() {
     super.linkScales();
     const dataset = this.getDataset();
@@ -58,16 +59,16 @@ export class Choropleth extends Geo {
   }
 }
 
-Choropleth.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];
+ChoroplethController.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];
 
-Choropleth.id = 'choropleth';
-Choropleth.register = () => {
-  Choropleth.prototype.datasetElementType = GeoFeature.register();
-  Choropleth.prototype.dataElementType = GeoFeature.register();
-  controllers[Choropleth.id] = Choropleth;
+ChoroplethController.id = 'choropleth';
+ChoroplethController.register = () => {
+  ChoroplethController.prototype.datasetElementType = GeoFeature.register();
+  ChoroplethController.prototype.dataElementType = GeoFeature.register();
+  controllers[ChoroplethController.id] = ChoroplethController;
   defaults.set(
-    Choropleth.id,
-    helpers.merge({}, [
+    ChoroplethController.id,
+    merge({}, [
       geoDefaults(),
       {
         tooltips: {
@@ -103,5 +104,12 @@ Choropleth.register = () => {
       },
     ])
   );
-  return Choropleth;
+  return ChoroplethController;
 };
+
+export class ChoroplethChart extends Chart {
+  constructor(item, config) {
+    super(item, patchControllerConfig(config, ChoroplethController));
+  }
+}
+ChoroplethChart.id = ChoroplethController.id;

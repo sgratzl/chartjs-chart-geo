@@ -1,4 +1,4 @@
-import { scaleService, helpers } from 'chart.js';
+import { scaleService, merge, LinearScale, LogarithmicScale } from '../chart';
 import {
   interpolateBlues,
   interpolateBrBG,
@@ -170,7 +170,7 @@ function ColorScaleMixin(superClass) {
     }
   };
 }
-export class ColorScale extends ColorScaleMixin(scaleService.getScaleConstructor('linear')) {}
+export class ColorScale extends ColorScaleMixin(LinearScale) {}
 
 const colorScaleDefaults = {
   interpolate: 'blues',
@@ -178,13 +178,13 @@ const colorScaleDefaults = {
   quantize: 0,
 };
 ColorScale.id = 'color';
-ColorScale.defaults = helpers.merge({}, [scaleService.getScaleDefaults('linear'), baseDefaults, colorScaleDefaults]);
+ColorScale.defaults = merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 ColorScale.register = () => {
   scaleService.registerScale(ColorScale);
   return ColorScale;
 };
 
-export class ColorLogarithmicScale extends ColorScaleMixin(scaleService.getScaleConstructor('logarithmic')) {
+export class ColorLogarithmicScale extends ColorScaleMixin(LogarithmicScale) {
   _getNormalizedValue(v) {
     if (v == null || Number.isNaN(v)) {
       return null;
@@ -194,11 +194,7 @@ export class ColorLogarithmicScale extends ColorScaleMixin(scaleService.getScale
 }
 
 ColorLogarithmicScale.id = 'colorLogarithmic';
-ColorLogarithmicScale.defaults = helpers.merge({}, [
-  scaleService.getScaleDefaults('logarithmic'),
-  baseDefaults,
-  colorScaleDefaults,
-]);
+ColorLogarithmicScale.defaults = merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
 ColorLogarithmicScale.register = () => {
   scaleService.registerScale(ColorLogarithmicScale);
   return ColorLogarithmicScale;

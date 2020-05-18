@@ -1,10 +1,10 @@
 export * from '.';
 
-import { Choropleth, BubbleMap } from './controllers';
+import { ChoroplethController, BubbleMapController } from './controllers';
 import { ColorLogarithmicScale, SizeLogarithmicScale } from './scales';
 
-Choropleth.register();
-BubbleMap.register();
+ChoroplethController.register();
+BubbleMapController.register();
 
 ColorLogarithmicScale.register();
 SizeLogarithmicScale.register();

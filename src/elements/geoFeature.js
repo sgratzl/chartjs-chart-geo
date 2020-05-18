@@ -18,12 +18,10 @@ export class GeoFeature extends Element {
     return r;
   }
 
-  inLabelRange(mouseX, mouseY) {
-    return this.inRange(mouseX, mouseY);
-  }
   inXRange(mouseX) {
     return this.inRange(mouseX, Number.NaN);
   }
+
   inYRange(mouseY) {
     return this.inRange(Number.NaN, mouseY);
   }
@@ -56,16 +54,6 @@ export class GeoFeature extends Element {
     };
     this.cache = Object.assign({}, this.cache || {}, { bounds });
     return bounds;
-  }
-
-  getArea() {
-    if (this.cache && this.cache.area) {
-      return this.cache.area;
-    }
-    const area = this.projectionScale.geoPath.area(this.feature);
-
-    this.cache = Object.assign({}, this.cache || {}, { area });
-    return area;
   }
 
   tooltipPosition() {

@@ -26,6 +26,9 @@ jobs:
       - run: yarn build
         env:
           CI: true
+      - run: yarn lint
+        env:
+          CI: true
       - run: yarn test
         env:
           CI: true

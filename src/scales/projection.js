@@ -1,4 +1,4 @@
-import { Scale, scaleService } from '../chart';
+import { Scale, registerScale } from '../chart';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -106,7 +106,4 @@ ProjectionScale.id = 'projection';
 ProjectionScale.defaults = {
   projection: 'albersUsa',
 };
-ProjectionScale.register = () => {
-  scaleService.registerScale(ProjectionScale);
-  return ProjectionScale;
-};
+ProjectionScale.register = () => registerScale(ProjectionScale);

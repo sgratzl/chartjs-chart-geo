@@ -1,4 +1,4 @@
-import { scaleService, defaults, LinearScale, LogarithmicScale, merge, drawPoint } from '../chart';
+import { registerScale, defaults, LinearScale, LogarithmicScale, merge, drawPoint } from '../chart';
 import { baseDefaults, BaseMixin } from './base';
 
 function SizeSaleMixin(superClass) {
@@ -110,10 +110,7 @@ const scaleDefaults = {
 
 SizeScale.id = 'size';
 SizeScale.defaults = merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
-SizeScale.register = () => {
-  scaleService.registerScale(SizeScale);
-  return SizeScale;
-};
+SizeScale.register = () => registerScale(SizeScale);
 
 export class SizeLogarithmicScale extends SizeSaleMixin(LogarithmicScale) {
   _getNormalizedValue(v) {
@@ -126,7 +123,4 @@ export class SizeLogarithmicScale extends SizeSaleMixin(LogarithmicScale) {
 
 SizeLogarithmicScale.id = 'sizeLogarithmic';
 SizeLogarithmicScale.defaults = merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
-SizeLogarithmicScale.register = () => {
-  scaleService.registerScale(SizeLogarithmicScale);
-  return SizeLogarithmicScale;
-};
+SizeLogarithmicScale.register = () => registerScale(SizeLogarithmicScale);

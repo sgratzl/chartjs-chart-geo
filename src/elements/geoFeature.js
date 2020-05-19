@@ -1,4 +1,4 @@
-import { defaults, Element } from '../chart';
+import { defaults, Element, registerElement } from '../chart';
 import { geoContains } from 'd3-geo';
 
 export class GeoFeature extends Element {
@@ -119,17 +119,14 @@ export class GeoFeature extends Element {
     }
   }
 }
-GeoFeature._type = 'geoFeature';
-GeoFeature.register = () => {
-  defaults.set('elements', {
-    [GeoFeature._type]: Object.assign({}, defaults.elements.rectangle, {
-      outlineBackgroundColor: null,
-      outlineBorderColor: defaults.color,
-      outlineBorderWidth: 0,
 
-      graticuleBorderColor: '#CCCCCC',
-      graticuleBorderWidth: 0,
-    }),
-  });
-  return GeoFeature;
-};
+GeoFeature.id = GeoFeature._type = 'geoFeature';
+GeoFeature.defaults = Object.assign({}, defaults.elements.rectangle, {
+  outlineBackgroundColor: null,
+  outlineBorderColor: defaults.color,
+  outlineBorderWidth: 0,
+
+  graticuleBorderColor: '#CCCCCC',
+  graticuleBorderWidth: 0,
+});
+GeoFeature.register = () => registerElement(GeoFeature);

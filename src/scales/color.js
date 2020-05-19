@@ -1,4 +1,4 @@
-import { scaleService, merge, LinearScale, LogarithmicScale } from '../chart';
+import { registerScale, merge, LinearScale, LogarithmicScale } from '../chart';
 import {
   interpolateBlues,
   interpolateBrBG,
@@ -179,10 +179,7 @@ const colorScaleDefaults = {
 };
 ColorScale.id = 'color';
 ColorScale.defaults = merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
-ColorScale.register = () => {
-  scaleService.registerScale(ColorScale);
-  return ColorScale;
-};
+ColorScale.register = () => registerScale(ColorScale);
 
 export class ColorLogarithmicScale extends ColorScaleMixin(LogarithmicScale) {
   _getNormalizedValue(v) {
@@ -195,7 +192,4 @@ export class ColorLogarithmicScale extends ColorScaleMixin(LogarithmicScale) {
 
 ColorLogarithmicScale.id = 'colorLogarithmic';
 ColorLogarithmicScale.defaults = merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
-ColorLogarithmicScale.register = () => {
-  scaleService.registerScale(ColorLogarithmicScale);
-  return ColorLogarithmicScale;
-};
+ColorLogarithmicScale.register = () => registerScale(ColorLogarithmicScale);

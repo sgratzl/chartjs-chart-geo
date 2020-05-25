@@ -42,6 +42,9 @@ describe('choropleth', () => {
           },
           color: {
             quantize: 5,
+            ticks: {
+              display: false,
+            },
             legend: {
               position: 'bottom-right',
               align: 'right',
@@ -86,6 +89,9 @@ describe('choropleth', () => {
           color: {
             type: ColorLogarithmicScale.register().id,
             quantize: 5,
+            ticks: {
+              display: false,
+            },
             legend: {
               position: 'bottom-right',
               align: 'right',
@@ -126,6 +132,11 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'equalEarth',
+          },
+          color: {
+            ticks: {
+              display: false,
+            },
           },
         },
       },

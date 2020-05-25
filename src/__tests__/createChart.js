@@ -25,11 +25,13 @@ export default function createChart(config, options = {}) {
     {
       responsive: false,
       animation: false,
+      fontColor: 'black',
       fontFamily: "'Arial', sans-serif",
     },
     config.options || {}
   );
   const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
 
   // sync
   Chart.helpers.requestAnimFrame = (c) => c();
@@ -40,7 +42,7 @@ export default function createChart(config, options = {}) {
     chart: t,
     canvas,
     ctx,
-    toMatchImageSnapshot(options) {
+    toMatchImageSnapshot() {
       return toBuffer(canvas).then((image) => expect(image).toMatchImageSnapshot(options));
     },
   };

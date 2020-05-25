@@ -15,3 +15,4 @@ npm-debug.log*
 
 *.tgz
 /.vscode
+__diff_output__

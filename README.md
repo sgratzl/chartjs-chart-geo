@@ -95,6 +95,7 @@ A data point has to have a `.feature` property containing the feature to render 
 - US map: https://www.npmjs.com/package/us-atlas
 - World map: https://www.npmjs.com/package/world-atlas
 - individual countries: https://github.com/markmarkoh/datamaps/tree/master/src/js/data (untested)
+- topojson collection: https://github.com/deldersveld/topojson (untested)
 
 
 ```js

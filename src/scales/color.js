@@ -1,4 +1,4 @@
-import { registerScale, merge, LinearScale, LogarithmicScale } from '../chart';
+import { merge, LinearScale, LogarithmicScale } from '@sgratzl/chartjs-esm-facade';
 import {
   interpolateBlues,
   interpolateBrBG,
@@ -105,8 +105,8 @@ function quantize(v, steps) {
 
 function ColorScaleMixin(superClass) {
   return class extends BaseMixin(superClass) {
-    constructor(cfg) {
-      super(cfg);
+    init(options) {
+      super.init(options);
       if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
         this.interpolate = lookup[this.options.interpolate];
       } else {
@@ -178,8 +178,7 @@ const colorScaleDefaults = {
   quantize: 0,
 };
 ColorScale.id = 'color';
-ColorScale.defaults = merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
-ColorScale.register = () => registerScale(ColorScale);
+ColorScale.defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 
 export class ColorLogarithmicScale extends ColorScaleMixin(LogarithmicScale) {
   _getNormalizedValue(v) {
@@ -191,5 +190,4 @@ export class ColorLogarithmicScale extends ColorScaleMixin(LogarithmicScale) {
 }
 
 ColorLogarithmicScale.id = 'colorLogarithmic';
-ColorLogarithmicScale.defaults = merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
-ColorLogarithmicScale.register = () => registerScale(ColorLogarithmicScale);
+ColorLogarithmicScale.defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);

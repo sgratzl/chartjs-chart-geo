@@ -1,4 +1,4 @@
-import { registerScale, defaults, LinearScale, LogarithmicScale, merge, drawPoint } from '../chart';
+import { defaults, LinearScale, LogarithmicScale, merge, drawPoint } from '@sgratzl/chartjs-esm-facade';
 import { baseDefaults, BaseMixin } from './base';
 
 function SizeSaleMixin(superClass) {
@@ -73,7 +73,7 @@ function SizeSaleMixin(superClass) {
       if (this._model) {
         const props = this._model;
         ctx.strokeStyle = props.borderColor || defaults.color;
-        ctx.lineWidth = props.borderWidth == null ? defaults.elements.point.borderWidth : props.borderWidth;
+        ctx.lineWidth = props.borderWidth || 0;
         ctx.fillStyle = props.backgroundColor || defaults.color;
       } else {
         ctx.fillStyle = 'blue';
@@ -109,8 +109,7 @@ const scaleDefaults = {
 };
 
 SizeScale.id = 'size';
-SizeScale.defaults = merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
-SizeScale.register = () => registerScale(SizeScale);
+SizeScale.defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 
 export class SizeLogarithmicScale extends SizeSaleMixin(LogarithmicScale) {
   _getNormalizedValue(v) {
@@ -122,5 +121,4 @@ export class SizeLogarithmicScale extends SizeSaleMixin(LogarithmicScale) {
 }
 
 SizeLogarithmicScale.id = 'sizeLogarithmic';
-SizeLogarithmicScale.defaults = merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
-SizeLogarithmicScale.register = () => registerScale(SizeLogarithmicScale);
+SizeLogarithmicScale.defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);

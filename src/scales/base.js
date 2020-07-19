@@ -14,15 +14,12 @@ export const baseDefaults = {
   },
 };
 
-function patchOptions(cfg) {
-  cfg.options.position = 'chartArea';
-  return cfg;
-}
-
 export function BaseMixin(superClass) {
   return class extends superClass {
-    constructor(cfg) {
-      super(patchOptions(cfg));
+    init(options) {
+      options.position = 'chartArea';
+      super.init(options);
+      this.axis = 'r';
     }
 
     parse(raw, index) {
@@ -89,8 +86,8 @@ export function BaseMixin(superClass) {
     }
 
     update(maxWidth, maxHeight, margins) {
-      const ch = Math.min(maxHeight, this.bottom);
-      const cw = Math.min(maxWidth, this.right);
+      const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
+      const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
 
       const l = this.options.legend;
       const isHor = this.isHorizontal();

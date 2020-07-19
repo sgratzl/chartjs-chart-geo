@@ -1,21 +1,26 @@
-import { DatasetController, clipArea, unclipArea, valueOrDefault } from '../chart';
+import { DatasetController, clipArea, unclipArea, valueOrDefault } from '@sgratzl/chartjs-esm-facade';
 import { geoGraticule, geoGraticule10 } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 
-export function geoDefaults() {
-  return {
-    showOutline: false,
-    showGraticule: false,
-    clipMap: true,
-    scales: {
-      xy: {
-        type: ProjectionScale.register().id,
-        position: 'chartArea',
-        display: false,
-      },
+export const geoDefaults = {
+  datasetElementOptions: [
+    'outlineBackgroundColor',
+    'outlineBorderColor',
+    'outlineBorderWidth',
+    'graticuleBorderColor',
+    'graticuleBorderWidth',
+  ],
+  showOutline: false,
+  showGraticule: false,
+  clipMap: true,
+  scales: {
+    xy: {
+      type: ProjectionScale.id,
+      position: 'chartArea',
+      display: false,
     },
-  };
-}
+  },
+};
 
 function patchDatasetElementOptions(options) {
   // patch the options by removing the `outline` or `hoverOutline` option;
@@ -185,12 +190,3 @@ export class GeoController extends DatasetController {
     }
   }
 }
-
-// Geo.prototype.datasetElementType = GeoFeature.register();
-GeoController.prototype.datasetElementOptions = [
-  'outlineBackgroundColor',
-  'outlineBorderColor',
-  'outlineBorderWidth',
-  'graticuleBorderColor',
-  'graticuleBorderWidth',
-];

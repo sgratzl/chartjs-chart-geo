@@ -1,4 +1,4 @@
-import { defaults, Element, registerElement } from '../chart';
+import { Element, Rectangle } from '@sgratzl/chartjs-esm-facade';
 import { geoContains } from 'd3-geo';
 
 export class GeoFeature extends Element {
@@ -120,13 +120,17 @@ export class GeoFeature extends Element {
   }
 }
 
-GeoFeature.id = GeoFeature._type = 'geoFeature';
-GeoFeature.defaults = Object.assign({}, defaults.elements.rectangle, {
+GeoFeature.id = 'geoFeature';
+GeoFeature.defaults = /*#__PURE__*/ Object.assign({}, Rectangle.defaults, {
   outlineBackgroundColor: null,
-  outlineBorderColor: defaults.color,
   outlineBorderWidth: 0,
 
   graticuleBorderColor: '#CCCCCC',
   graticuleBorderWidth: 0,
 });
-GeoFeature.register = () => registerElement(GeoFeature);
+GeoFeature.defaultRoutes = Object.assign(
+  {
+    outlineBorderColor: 'color',
+  },
+  Rectangle.defaultRoutes || {}
+);

@@ -5,11 +5,13 @@ import createChart from '../__tests__/createChart';
 import states10m from 'us-atlas/states-10m.json';
 import rnd from 'seedrandom';
 import data from './__tests__/data';
+import { registry } from '@sgratzl/chartjs-esm-facade';
 
 describe('bubbleMap', () => {
   beforeAll(() => {
-    BubbleMapController.register();
-  });
+    registry.addControllers(BubbleMapController);
+    registry.addScales(ProjectionScale, SizeScale, SizeLogarithmicScale);
+    registry.addElements(GeoFeature);
 
   test('default', async () => {
     const random = rnd('default');
@@ -154,7 +156,7 @@ describe('bubbleMap', () => {
             projection: 'albersUsa',
           },
           r: {
-            type: SizeLogarithmicScale.register().id,
+            type: SizeLogarithmicScale.id,
             size: [1, 20],
             ticks: {
               display: false,

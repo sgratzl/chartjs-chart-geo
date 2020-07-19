@@ -7,13 +7,14 @@ import pkg from './package.json';
 
 export default [
   {
-    input: 'src/bundle.js',
+    input: 'src/index.umd.js',
     output: {
       file: pkg.main,
       name: 'ChartGeo',
       format: 'umd',
       globals: {
         'chart.js': 'Chart',
+        '@sgratzl/chartjs-esm-facade': 'ChartESMFacade',
       },
     },
     external: Object.keys(pkg.peerDependencies),

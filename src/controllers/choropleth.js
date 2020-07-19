@@ -1,4 +1,4 @@
-import { Chart, registerController, merge, patchControllerConfig } from '../chart';
+import { Chart, merge } from '@sgratzl/chartjs-esm-facade';
 import { geoDefaults, GeoController } from './geo';
 import { GeoFeature } from '../elements';
 import { ColorScale } from '../scales';
@@ -58,53 +58,49 @@ export class ChoroplethController extends GeoController {
   }
 }
 
-ChoroplethController.prototype.dataElementOptions = ['backgroundColor', 'borderColor', 'borderWidth'];
-
 ChoroplethController.id = 'choropleth';
-ChoroplethController.register = () => {
-  ChoroplethController.prototype.datasetElementType = GeoFeature.register();
-  ChoroplethController.prototype.dataElementType = GeoFeature.register();
-  ChoroplethController.defaults = merge({}, [
-    geoDefaults(),
-    {
-      tooltips: {
-        callbacks: {
-          title() {
-            // Title doesn't make sense for scatter since we format the data as a point
-            return '';
-          },
-          label(item, data) {
-            if (item.value == null) {
-              return data.labels[item.index];
-            }
-            return `${data.labels[item.index]}: ${item.value}`;
-          },
+ChoroplethController.defaults = /*#__PURE__*/ merge({}, [
+  geoDefaults,
+  {
+    datasetElementType: GeoFeature.id,
+    dataElementType: GeoFeature.id,
+    dataElementOptions: ['backgroundColor', 'borderColor', 'borderWidth'],
+    tooltips: {
+      callbacks: {
+        title() {
+          // Title doesn't make sense for scatter since we format the data as a point
+          return '';
         },
-      },
-      scales: {
-        color: {
-          type: ColorScale.register().id,
-        },
-      },
-      elements: {
-        geoFeature: {
-          backgroundColor(context) {
-            if (context.dataIndex == null) {
-              return null;
-            }
-            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
-            return controller.indexToColor(context.dataIndex);
-          },
+        label(item) {
+          if (item.formattedValue == null) {
+            return item.chart.data.labels[item.dataIndex];
+          }
+          return `${item.chart.data.labels[item.dataIndex]}: ${item.formattedValue}`;
         },
       },
     },
-  ]);
-  return registerController(ChoroplethController);
-};
+    scales: {
+      color: {
+        type: ColorScale.id,
+      },
+    },
+    elements: {
+      geoFeature: {
+        backgroundColor(context) {
+          if (context.dataIndex == null) {
+            return null;
+          }
+          const controller = context.chart.getDatasetMeta(context.datasetIndex).controller;
+          return controller.indexToColor(context.dataIndex);
+        },
+      },
+    },
+  },
+]);
 
 export class ChoroplethChart extends Chart {
   constructor(item, config) {
-    super(item, patchControllerConfig(config, ChoroplethController));
+    super(item, patchController(config, ChoroplethController, GeoFeature, ColorScale));
   }
 }
 ChoroplethChart.id = ChoroplethController.id;

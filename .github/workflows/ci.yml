@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: "12.x"
       - run: npm i -g yarn
       - run: yarn set version berry
       - run: yarn config set checksumBehavior ignore
@@ -21,17 +21,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - run: yarn install --immutable
-        env:
-          CI: true
       - run: yarn build
-        env:
-          CI: true
       - run: yarn lint
-        env:
-          CI: true
       - run: yarn test
-        env:
-          CI: true
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

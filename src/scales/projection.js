@@ -1,4 +1,4 @@
-import { Scale, registerScale } from '../chart';
+import { Scale } from '@sgratzl/chartjs-esm-facade';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -39,15 +39,15 @@ Object.keys(lookup).forEach((key) => {
   lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
 });
 
-function patchOptions(cfg) {
-  cfg.options.position = 'chartArea';
-  return cfg;
-}
-
 export class ProjectionScale extends Scale {
   constructor(cfg) {
-    super(patchOptions(cfg));
+    super(cfg);
     this.geoPath = geoPath();
+  }
+
+  init(options) {
+    options.position = 'chartArea';
+    super.init(options);
     if (typeof this.options.projection === 'string' && typeof lookup[this.options.projection] === 'function') {
       this.projection = lookup[this.options.projection]();
     } else {
@@ -106,4 +106,3 @@ ProjectionScale.id = 'projection';
 ProjectionScale.defaults = {
   projection: 'albersUsa',
 };
-ProjectionScale.register = () => registerScale(ProjectionScale);

@@ -1,11 +1,12 @@
 import { ChoroplethController } from './choropleth';
-import { ColorLogarithmicScale, ColorScale } from '../scales';
+import { ColorLogarithmicScale, ColorScale, ProjectionScale } from '../scales';
 import { feature } from 'topojson-client';
 import createChart from '../__tests__/createChart';
 import states10m from 'us-atlas/states-10m.json';
 import countries50m from 'world-atlas/countries-50m.json';
 import rnd from 'seedrandom';
 import { registry } from '@sgratzl/chartjs-esm-facade';
+import { GeoFeature } from '../elements';
 
 describe('choropleth', () => {
   beforeAll(() => {

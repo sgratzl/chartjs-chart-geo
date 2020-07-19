@@ -1,4 +1,4 @@
-import { Chart } from '../chart';
+import { Chart } from '@sgratzl/chartjs-esm-facade';
 const { toMatchImageSnapshot } = require('jest-image-snapshot');
 
 expect.extend({ toMatchImageSnapshot });

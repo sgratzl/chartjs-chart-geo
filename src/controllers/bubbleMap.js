@@ -1,7 +1,8 @@
 import { Chart, Point, BubbleController, merge } from '@sgratzl/chartjs-esm-facade';
 import { geoDefaults, GeoController } from './geo';
-import { SizeScale } from '../scales';
+import { SizeScale, ProjectionScale } from '../scales';
 import { GeoFeature } from '../elements';
+import patchController from './patchController';
 
 export class BubbleMapController extends GeoController {
   linkScales() {
@@ -111,7 +112,7 @@ BubbleMapController.defaults = merge({}, [
 
 export class BubbleMapChart extends Chart {
   constructor(item, config) {
-    super(item, patchController(config, BubbleMapController, GeoFeature, SizeScale));
+    super(item, patchController(config, BubbleMapController, GeoFeature, [SizeScale, ProjectionScale]));
   }
 }
 BubbleMapChart.id = BubbleMapController.id;

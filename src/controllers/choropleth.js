@@ -1,7 +1,8 @@
 import { Chart, merge } from '@sgratzl/chartjs-esm-facade';
 import { geoDefaults, GeoController } from './geo';
 import { GeoFeature } from '../elements';
-import { ColorScale } from '../scales';
+import { ColorScale, ProjectionScale } from '../scales';
+import patchController from './patchController';
 
 export class ChoroplethController extends GeoController {
   linkScales() {
@@ -100,7 +101,7 @@ ChoroplethController.defaults = /*#__PURE__*/ merge({}, [
 
 export class ChoroplethChart extends Chart {
   constructor(item, config) {
-    super(item, patchController(config, ChoroplethController, GeoFeature, ColorScale));
+    super(item, patchController(config, ChoroplethController, GeoFeature, [ColorScale, ProjectionScale]));
   }
 }
 ChoroplethChart.id = ChoroplethController.id;

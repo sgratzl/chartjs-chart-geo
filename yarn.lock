@@ -1915,15 +1915,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sgratzl/chartjs-esm-facade@npm:^3.0.0-alpha.1":
-  version: 3.0.0-alpha.1
-  resolution: "@sgratzl/chartjs-esm-facade@npm:3.0.0-alpha.1"
+"@sgratzl/chartjs-esm-facade@npm:^3.0.0-alpha.2":
+  version: 3.0.0-alpha.2
+  resolution: "@sgratzl/chartjs-esm-facade@npm:3.0.0-alpha.2"
+  dependencies:
+    "@types/chart.js": ^2.9.23
   peerDependencies:
     chart.js: ^3.0.0-alpha.2
   dependenciesMeta:
     chart.js:
       unplugged: true
-  checksum: 7ad43bf60bac1f14cd8f48f59845fdd1037e256901256db89ea9a0eb2999e9abbcb948133a78abbbdcf3f1e2214a6f314fcb6b342cf1b39483954b018a1c354e
+  checksum: c6dc456567c914f2a45ad2480ea8c6386edbbcec10bb86bd294dd96ee0147a93c8e26c3c328299e5af0d5d061feb0192f5f9a426e7677db2fa804856f7bc98dd
   languageName: node
   linkType: hard
 
@@ -2027,6 +2029,15 @@ __metadata:
     "@types/node": "*"
     "@types/responselike": "*"
   checksum: 3dae802a0808573986c56b92bf16cd031a5b648b6c893d20c7ef6bfda3fc72a2107c7978697d2b27b14febc597162d6959985eeb5befc307a9f9f3c5081d4905
+  languageName: node
+  linkType: hard
+
+"@types/chart.js@npm:^2.9.23":
+  version: 2.9.23
+  resolution: "@types/chart.js@npm:2.9.23"
+  dependencies:
+    moment: ^2.10.2
+  checksum: 6ba0c6fc96be0cf762ef9c11a227b50933b34dc681d04cb463ee7130cb72116670cc53c180dc38c6307398aea83a439ec599f82c9ae4a1d78e5cd5c15a6d36c9
   languageName: node
   linkType: hard
 
@@ -3075,7 +3086,7 @@ __metadata:
     "@rollup/plugin-babel": ^5.1.0
     "@rollup/plugin-commonjs": ^14.0.0
     "@rollup/plugin-node-resolve": ^8.4.0
-    "@sgratzl/chartjs-esm-facade": ^3.0.0-alpha.1
+    "@sgratzl/chartjs-esm-facade": ^3.0.0-alpha.2
     "@yarnpkg/pnpify": ^2.1.0
     babel-jest: ^26.1.0
     canvas: ^2.6.1
@@ -3098,11 +3109,8 @@ __metadata:
     us-atlas: ^3.0.0
     world-atlas: ^2.0.2
   peerDependencies:
-    "@sgratzl/chartjs-esm-facade": ^3.0.0-alpha.1
+    "@sgratzl/chartjs-esm-facade": ^3.0.0-alpha.2
     chart.js: ^3.0.0-alpha.2
-  dependenciesMeta:
-    chart.js:
-      unplugged: true
   languageName: unknown
   linkType: soft
 
@@ -6468,6 +6476,13 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: 9dd9792e891927b14ca02226dbe1daeb717b9517a001620d5e2658bbc72c5e4f06887b6cbcbb60595fa5a56e701073cf250f1ed69c1988a6b89faf9fd6a4d049
+  languageName: node
+  linkType: hard
+
+"moment@npm:^2.10.2":
+  version: 2.27.0
+  resolution: "moment@npm:2.27.0"
+  checksum: 72d9a7d8dba59e3d538440cdc0b59fa895b123361e370be231896478aaf157a484355ce32bd8daf6f731d6d1636d3a67ecb67531e536e093ca18b43e0cbae194
   languageName: node
   linkType: hard
 

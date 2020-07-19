@@ -1,7 +1,7 @@
 {
   "name": "chartjs-chart-geo",
   "description": "Chart.js module for charting maps",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.19",
   "author": {
     "name": "Samuel Gratzl",
     "email": "samu@sgratzl.com",
@@ -21,7 +21,7 @@
     "src/**/*.js"
   ],
   "peerDependencies": {
-    "@sgratzl/chartjs-esm-facade": "^3.0.0-alpha.1",
+    "@sgratzl/chartjs-esm-facade": "^3.0.0-alpha.2",
     "chart.js": "^3.0.0-alpha.2"
   },
   "dependencies": {
@@ -38,7 +38,7 @@
     "@rollup/plugin-babel": "^5.1.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-node-resolve": "^8.4.0",
-    "@sgratzl/chartjs-esm-facade": "^3.0.0-alpha.1",
+    "@sgratzl/chartjs-esm-facade": "^3.0.0-alpha.2",
     "@yarnpkg/pnpify": "^2.1.0",
     "babel-jest": "^26.1.0",
     "canvas": "^2.6.1",
@@ -75,10 +75,5 @@
     "prepublishOnly": "npm run build:prod",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
-  },
-  "dependenciesMeta": {
-    "chart.js": {
-      "unplugged": true
-    }
   }
 }

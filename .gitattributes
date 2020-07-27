@@ -20,9 +20,7 @@
 *.less text
 *.styl text
 *.js text
-*.jsx text
 *.ts text
-*.tsx text
 *.coffee text
 *.json text
 *.htm text

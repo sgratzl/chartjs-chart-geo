@@ -12,9 +12,9 @@ import {
   ChartItem,
   IPointOptions,
 } from '@sgratzl/chartjs-esm-facade';
-import { geoDefaults, GeoController, IGeoChartOptions, GeoDataPoint } from './geo';
+import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint } from './geo';
 import { GeoFeature, IGeoFeatureOptions, IGeoFeatureProps } from '../elements';
-import { ColorScale, ProjectionScale } from '../scales';
+import { ColorScale, ProjectionScale, IColorScaleType, ILogarithmicColorScaleType } from '../scales';
 import patchController from './patchController';
 
 export class ChoroplethController extends GeoController<GeoFeature> {
@@ -71,8 +71,8 @@ export class ChoroplethController extends GeoController<GeoFeature> {
     return rScale.getColorForValue(this.getParsed(index)[rScale.axis]);
   }
 
-  static id = 'choropleth';
-  static defaults: any = /*#__PURE__*/ merge({}, [
+  static readonly id = 'choropleth';
+  static readonly defaults: any = /*#__PURE__*/ merge({}, [
     geoDefaults,
     {
       datasetElementType: GeoFeature.id,
@@ -118,16 +118,23 @@ export interface IChoroplethControllerDatasetOptions
     ScriptableAndArrayOptions<IGeoFeatureOptions>,
     ScriptableAndArrayOptions<ICommonHoverOptions> {}
 
-export type IChoroplethControllerDataset<T = GeoDataPoint> = IChartDataset<T, IChoroplethControllerDatasetOptions>;
+export type IChoroplethControllerDataset<T = IGeoDataPoint> = IChartDataset<T, IChoroplethControllerDatasetOptions>;
 
-export type IChoroplethControllerConfiguration<T = GeoDataPoint, L = string> = IChartConfiguration<
+export type IChoroplethChartOptions = IGeoChartOptions & {
+  scales: {
+    color: IColorScaleType | ILogarithmicColorScaleType;
+  };
+};
+
+export type IChoroplethControllerConfiguration<T = IGeoDataPoint, L = string> = IChartConfiguration<
   'choropleth',
   T,
   L,
-  IChoroplethControllerDataset<T>
+  IChoroplethControllerDataset<T>,
+  IChoroplethChartOptions
 >;
 
-export class ChoroplethChart<T = GeoDataPoint, L = string> extends Chart<
+export class ChoroplethChart<T = IGeoDataPoint, L = string> extends Chart<
   T,
   L,
   IChoroplethControllerConfiguration<T, L>

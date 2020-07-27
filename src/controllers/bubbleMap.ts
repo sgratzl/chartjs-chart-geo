@@ -16,7 +16,7 @@ import {
   IPointProps,
 } from '@sgratzl/chartjs-esm-facade';
 import { geoDefaults, GeoController, IGeoChartOptions } from './geo';
-import { SizeScale, ProjectionScale } from '../scales';
+import { SizeScale, ProjectionScale, IProjectionScaleType, ISizeScaleType, ILogarithmicSizeScaleType } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 import patchController from './patchController';
 
@@ -35,7 +35,7 @@ export class BubbleMapController extends GeoController<Point> {
 
   parse(start: number, count: number) {
     const rScale = this.getMeta().rScale!;
-    const data = (this.getDataset().data as unknown) as IBubbleMapPoint[];
+    const data = (this.getDataset().data as unknown) as IBubbleMapDataPoint[];
     const meta = this._cachedMeta;
     for (let i = start; i < start + count; ++i) {
       const d = data[i];
@@ -82,8 +82,9 @@ export class BubbleMapController extends GeoController<Point> {
     return rScale.getSizeForValue(this.getParsed(index)[rScale.axis]);
   }
 
-  static id = 'bubbleMap';
-  static defaults: any = merge({}, [
+  static readonly id = 'bubbleMap';
+
+  static readonly defaults: any = merge({}, [
     geoDefaults,
     {
       dataElementType: Point.id,
@@ -126,7 +127,7 @@ export class BubbleMapController extends GeoController<Point> {
   ]);
 }
 
-interface IBubbleMapPoint {
+export interface IBubbleMapDataPoint {
   longitude: number;
   latitude: number;
   x?: number;
@@ -134,22 +135,29 @@ interface IBubbleMapPoint {
   value: number;
 }
 
+export type IBubbleMapChartOptions = IGeoChartOptions & {
+  scales: {
+    r: ISizeScaleType | ILogarithmicSizeScaleType;
+  };
+};
+
 export interface IBubbleMapControllerDatasetOptions
   extends IControllerDatasetOptions,
     IGeoChartOptions,
     ScriptableAndArrayOptions<IGeoFeatureOptions>,
     ScriptableAndArrayOptions<ICommonHoverOptions> {}
 
-export type IBubbleMapControllerDataset<T = IBubbleMapPoint> = IChartDataset<T, IBubbleMapControllerDatasetOptions>;
+export type IBubbleMapControllerDataset<T = IBubbleMapDataPoint> = IChartDataset<T, IBubbleMapControllerDatasetOptions>;
 
-export type IBubbleMapControllerConfiguration<T = IBubbleMapPoint, L = string> = IChartConfiguration<
+export type IBubbleMapControllerConfiguration<T = IBubbleMapDataPoint, L = string> = IChartConfiguration<
   'bubbleMap',
   T,
   L,
-  IBubbleMapControllerDataset<T>
+  IBubbleMapControllerDataset<T>,
+  IBubbleMapChartOptions
 >;
 
-export class BubbleMapChart<T = IBubbleMapPoint, L = string> extends Chart<
+export class BubbleMapChart<T = IBubbleMapDataPoint, L = string> extends Chart<
   T,
   L,
   IBubbleMapControllerConfiguration<T, L>

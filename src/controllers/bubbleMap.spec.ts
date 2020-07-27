@@ -1,12 +1,12 @@
-import { BubbleMapController } from './bubbleMap';
-import { SizeLogarithmicScale, ProjectionScale, SizeScale } from '../scales';
-import { feature } from 'topojson-client';
-import createChart from '../__tests__/createChart';
-import states10m from 'us-atlas/states-10m.json';
-import rnd from 'seedrandom';
-import data from './__tests__/data';
 import { registry } from '@sgratzl/chartjs-esm-facade';
+import rnd from 'seedrandom';
+import { feature } from 'topojson-client';
+import states10m from 'us-atlas/states-10m.json';
 import { GeoFeature } from '../elements';
+import { ProjectionScale, SizeLogarithmicScale, SizeScale, ISizeScaleType } from '../scales';
+import createChart from '../__tests__/createChart';
+import { BubbleMapController, IBubbleMapControllerConfiguration, IBubbleMapDataPoint } from './bubbleMap';
+import data from './__tests__/data';
 
 describe('bubbleMap', () => {
   beforeAll(() => {
@@ -20,7 +20,7 @@ describe('bubbleMap', () => {
     const us = states10m;
     const states = feature(us, us.objects.states).features;
 
-    const chart = createChart({
+    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -39,10 +39,11 @@ describe('bubbleMap', () => {
         },
         scales: {
           xy: {
+            type: 'projection',
             projection: 'albersUsa',
           },
           r: {
-            size: [1, 20],
+            range: [1, 20],
             ticks: {
               display: false,
             },
@@ -55,10 +56,10 @@ describe('bubbleMap', () => {
   });
   test('radius', async () => {
     const random = rnd('default');
-    const us = states10m;
-    const states = feature(us, us.objects.states).features;
+    const us = states10m as any;
+    const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart({
+    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -80,7 +81,7 @@ describe('bubbleMap', () => {
             projection: 'albersUsa',
           },
           r: {
-            size: [1, 20],
+            range: [1, 20],
             mode: 'radius',
             ticks: {
               display: false,
@@ -94,10 +95,10 @@ describe('bubbleMap', () => {
   });
   test('area', async () => {
     const random = rnd('default');
-    const us = states10m;
-    const states = feature(us, us.objects.states).features;
+    const us = states10m as any;
+    const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart({
+    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -119,11 +120,12 @@ describe('bubbleMap', () => {
             projection: 'albersUsa',
           },
           r: {
+            type: 'size',
             size: [1, 20],
             mode: 'area',
             ticks: {
               display: false,
-            },
+            } as ISizeScaleType,
           },
         },
       },
@@ -133,10 +135,10 @@ describe('bubbleMap', () => {
   });
   test('log', async () => {
     const random = rnd('default');
-    const us = states10m;
-    const states = feature(us, us.objects.states).features;
+    const us = states10m as any;
+    const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart({
+    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),

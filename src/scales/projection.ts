@@ -1,4 +1,4 @@
-import { Scale, IScaleOptions, Chart } from '@sgratzl/chartjs-esm-facade';
+import { Scale, IScaleOptions, DeepPartial } from '@sgratzl/chartjs-esm-facade';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -153,4 +153,8 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   static defaults: Partial<IProjectionScaleOptions> = {
     projection: 'albersUsa',
   };
+}
+
+export interface IProjectionScaleType extends DeepPartial<IProjectionScaleOptions> {
+  type: 'projection';
 }

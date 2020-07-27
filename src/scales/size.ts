@@ -8,6 +8,7 @@ import {
   IPointOptions,
   ILinearScaleOptions,
   ILogarithmicScaleOptions,
+  DeepPartial,
 } from '@sgratzl/chartjs-esm-facade';
 import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
 
@@ -204,8 +205,8 @@ const scaleDefaults = {
 };
 
 export class SizeScale extends SizeSaleMixin<ISizeScaleOptions & ILinearScaleOptions>(LinearScale) {
-  static id = 'size';
-  static defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
+  static readonly id = 'size';
+  static readonly defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 }
 
 export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & ILogarithmicScaleOptions>(
@@ -218,6 +219,13 @@ export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & ILog
     return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
   }
 
-  static id = 'sizeLogarithmic';
-  static defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
+  static readonly id = 'sizeLogarithmic';
+  static readonly defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
+}
+
+export interface ISizeScaleType extends DeepPartial<ISizeScaleOptions & ILinearScaleOptions> {
+  type: 'size';
+}
+export interface ILogarithmicSizeScaleType extends DeepPartial<ISizeScaleOptions & ILogarithmicScaleOptions> {
+  type: 'sizeLogarithmic';
 }

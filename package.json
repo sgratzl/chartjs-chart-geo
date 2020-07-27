@@ -57,6 +57,7 @@
     "@types/jest": "^26.0.7",
     "@types/jest-image-snapshot": "^3.1.0",
     "@types/node": "^14.0.26",
+    "@types/seedrandom": "^2.4.28",
     "@typescript-eslint/eslint-plugin": "^3.7.0",
     "@typescript-eslint/parser": "^3.7.0",
     "@yarnpkg/pnpify": "^2.1.0",

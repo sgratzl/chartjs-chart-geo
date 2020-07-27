@@ -5,6 +5,7 @@ import {
   ILinearScaleOptions,
   Scale,
   ILogarithmicScaleOptions,
+  DeepPartial,
 } from '@sgratzl/chartjs-esm-facade';
 import {
   interpolateBlues,
@@ -255,8 +256,8 @@ const colorScaleDefaults = {
 };
 
 export class ColorScale extends ColorScaleMixin<IColorScaleOptions & ILinearScaleOptions>(LinearScale) {
-  static id = 'color';
-  static defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
+  static readonly id = 'color';
+  static readonly defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 }
 
 export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & ILogarithmicScaleOptions>(
@@ -269,6 +270,13 @@ export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & 
     return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
   }
 
-  static id = 'colorLogarithmic';
-  static defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
+  static readonly id = 'colorLogarithmic';
+  static readonly defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
+}
+
+export interface IColorScaleType extends DeepPartial<IColorScaleOptions & ILinearScaleOptions> {
+  type: 'color';
+}
+export interface ILogarithmicColorScaleType extends DeepPartial<IColorScaleOptions & ILogarithmicScaleOptions> {
+  type: 'colorLogarithmic';
 }

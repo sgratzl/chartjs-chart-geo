@@ -10,7 +10,7 @@ import {
   IVisualElement,
 } from '@sgratzl/chartjs-esm-facade';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
-import { ProjectionScale } from '../scales';
+import { ProjectionScale, IProjectionScaleType } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 
 export const geoDefaults = {
@@ -239,6 +239,10 @@ export interface IGeoChartOptions {
    * @default choropleth: true bubbleMap: 'outline+graticule'
    */
   clipMap: boolean | 'outline' | 'graticule' | 'outline+graticule' | 'items';
+
+  scales: {
+    xy: IProjectionScaleType;
+  };
 }
 
 export interface IGeoControllerDatasetOptions extends IGeoChartOptions, ScriptableAndArrayOptions<IGeoFeatureOptions> {
@@ -249,6 +253,6 @@ export interface IGeoControllerDatasetOptions extends IGeoChartOptions, Scriptab
   vAxisID?: string;
 }
 
-export interface GeoDataPoint {
+export interface IGeoDataPoint {
   feature: ExtendedFeature;
 }

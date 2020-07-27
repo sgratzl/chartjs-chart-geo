@@ -2297,6 +2297,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/seedrandom@npm:^2.4.28":
+  version: 2.4.28
+  resolution: "@types/seedrandom@npm:2.4.28"
+  checksum: 4e56ed5ff9b6e2a73fc9804b7b388648347f73a7ea15512c4e3b59860831a4e791da0f35422b1b3326e5c1ffcafc48902fa9f3bf3fa4f0c242d7e5f1a0ec426e
+  languageName: node
+  linkType: hard
+
 "@types/stack-utils@npm:^1.0.1":
   version: 1.0.1
   resolution: "@types/stack-utils@npm:1.0.1"
@@ -3729,6 +3736,7 @@ __metadata:
     "@types/jest": ^26.0.7
     "@types/jest-image-snapshot": ^3.1.0
     "@types/node": ^14.0.26
+    "@types/seedrandom": ^2.4.28
     "@types/topojson-client": ^3.0.0
     "@typescript-eslint/eslint-plugin": ^3.7.0
     "@typescript-eslint/parser": ^3.7.0

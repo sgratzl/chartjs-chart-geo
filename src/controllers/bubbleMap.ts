@@ -1,23 +1,23 @@
 import {
-  Chart,
-  Point,
   BubbleController,
-  merge,
-  UpdateMode,
-  ITooltipItem,
-  IScriptableContext,
+  Chart,
   ChartItem,
-  IControllerDatasetOptions,
-  ScriptableAndArrayOptions,
-  ICommonHoverOptions,
-  IChartDataset,
   IChartConfiguration,
+  IChartDataset,
+  ICommonHoverOptions,
+  IControllerDatasetOptions,
   IPointOptions,
   IPointProps,
+  IScriptableContext,
+  ITooltipItem,
+  merge,
+  Point,
+  ScriptableAndArrayOptions,
+  UpdateMode,
 } from '@sgratzl/chartjs-esm-facade';
-import { geoDefaults, GeoController, IGeoChartOptions } from './geo';
-import { SizeScale, ProjectionScale, IProjectionScaleType, ISizeScaleType, ILogarithmicSizeScaleType } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
+import { ILogarithmicSizeScaleType, ISizeScaleType, ProjectionScale, SizeScale, IProjectionScaleType } from '../scales';
+import { GeoController, geoDefaults, IGeoChartOptions } from './geo';
 import patchController from './patchController';
 
 export class BubbleMapController extends GeoController<Point> {
@@ -135,11 +135,12 @@ export interface IBubbleMapDataPoint {
   value: number;
 }
 
-export type IBubbleMapChartOptions = IGeoChartOptions & {
+export interface IBubbleMapChartOptions extends IGeoChartOptions {
   scales: {
+    xy: IProjectionScaleType;
     r: ISizeScaleType | ILogarithmicSizeScaleType;
   };
-};
+}
 
 export interface IBubbleMapControllerDatasetOptions
   extends IControllerDatasetOptions,

@@ -1,11 +1,17 @@
 import { ChoroplethController, IChoroplethControllerConfiguration } from './choropleth';
-import { ColorLogarithmicScale, ColorScale, ProjectionScale, IProjectionScaleType } from '../scales';
+import {
+  ColorLogarithmicScale,
+  ColorScale,
+  ProjectionScale,
+  IProjectionScaleOptions,
+  IColorScaleOptions,
+} from '../scales';
 import { feature } from 'topojson-client';
 import createChart from '../__tests__/createChart';
 import states10m from 'us-atlas/states-10m.json';
 import countries50m from 'world-atlas/countries-50m.json';
 import rnd from 'seedrandom';
-import { registry } from '@sgratzl/chartjs-esm-facade';
+import { registry, DeepPartial } from '@sgratzl/chartjs-esm-facade';
 import { GeoFeature } from '../elements';
 import { IGeoDataPoint } from './geo';
 
@@ -44,7 +50,7 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           color: {
             quantize: 5,
             ticks: {
@@ -54,7 +60,7 @@ describe('choropleth', () => {
               position: 'bottom-right',
               align: 'right',
             },
-          },
+          } as IColorScaleOptions,
         },
       },
     });
@@ -90,7 +96,7 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           color: {
             type: ColorLogarithmicScale.id,
             quantize: 5,
@@ -101,7 +107,7 @@ describe('choropleth', () => {
               position: 'bottom-right',
               align: 'right',
             },
-          },
+          } as DeepPartial<IColorScaleOptions>,
         },
       },
     });
@@ -137,12 +143,12 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'equalEarth',
-          },
+          } as IProjectionScaleOptions,
           color: {
             ticks: {
               display: false,
             },
-          },
+          } as DeepPartial<IColorScaleOptions>,
         },
       },
     });

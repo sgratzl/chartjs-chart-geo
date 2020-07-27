@@ -3,7 +3,14 @@ import rnd from 'seedrandom';
 import { feature } from 'topojson-client';
 import states10m from 'us-atlas/states-10m.json';
 import { GeoFeature } from '../elements';
-import { ProjectionScale, SizeLogarithmicScale, SizeScale, ISizeScaleType } from '../scales';
+import {
+  ProjectionScale,
+  SizeLogarithmicScale,
+  SizeScale,
+  ISizeScaleOptions,
+  IProjectionScaleOptions,
+  ILogarithmicSizeScaleType,
+} from '../scales';
 import createChart from '../__tests__/createChart';
 import { BubbleMapController, IBubbleMapControllerConfiguration, IBubbleMapDataPoint } from './bubbleMap';
 import data from './__tests__/data';
@@ -17,8 +24,8 @@ describe('bubbleMap', () => {
 
   test('default', async () => {
     const random = rnd('default');
-    const us = states10m;
-    const states = feature(us, us.objects.states).features;
+    const us = states10m as any;
+    const states = (feature(us, us.objects.states) as any).features;
 
     const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
       type: BubbleMapController.id,
@@ -39,15 +46,14 @@ describe('bubbleMap', () => {
         },
         scales: {
           xy: {
-            type: 'projection',
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           r: {
             range: [1, 20],
             ticks: {
               display: false,
             },
-          },
+          } as ISizeScaleOptions,
         },
       },
     });
@@ -79,14 +85,14 @@ describe('bubbleMap', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           r: {
             range: [1, 20],
             mode: 'radius',
             ticks: {
               display: false,
             },
-          },
+          } as ISizeScaleOptions,
         },
       },
     });
@@ -118,15 +124,14 @@ describe('bubbleMap', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           r: {
-            type: 'size',
-            size: [1, 20],
+            range: [1, 20],
             mode: 'area',
             ticks: {
               display: false,
-            } as ISizeScaleType,
-          },
+            },
+          } as ISizeScaleOptions,
         },
       },
     });
@@ -158,14 +163,14 @@ describe('bubbleMap', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           r: {
             type: SizeLogarithmicScale.id,
-            size: [1, 20],
+            range: [1, 20],
             ticks: {
               display: false,
             },
-          },
+          } as ILogarithmicSizeScaleType,
         },
       },
     });

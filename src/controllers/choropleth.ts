@@ -14,7 +14,13 @@ import {
 } from '@sgratzl/chartjs-esm-facade';
 import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint } from './geo';
 import { GeoFeature, IGeoFeatureOptions, IGeoFeatureProps } from '../elements';
-import { ColorScale, ProjectionScale, IColorScaleType, ILogarithmicColorScaleType } from '../scales';
+import {
+  ColorScale,
+  ProjectionScale,
+  IColorScaleType,
+  ILogarithmicColorScaleType,
+  IProjectionScaleType,
+} from '../scales';
 import patchController from './patchController';
 
 export class ChoroplethController extends GeoController<GeoFeature> {
@@ -120,11 +126,12 @@ export interface IChoroplethControllerDatasetOptions
 
 export type IChoroplethControllerDataset<T = IGeoDataPoint> = IChartDataset<T, IChoroplethControllerDatasetOptions>;
 
-export type IChoroplethChartOptions = IGeoChartOptions & {
+export interface IChoroplethChartOptions extends IGeoChartOptions {
   scales: {
+    xy: IProjectionScaleType;
     color: IColorScaleType | ILogarithmicColorScaleType;
   };
-};
+}
 
 export type IChoroplethControllerConfiguration<T = IGeoDataPoint, L = string> = IChartConfiguration<
   'choropleth',

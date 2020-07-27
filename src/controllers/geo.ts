@@ -239,10 +239,6 @@ export interface IGeoChartOptions {
    * @default choropleth: true bubbleMap: 'outline+graticule'
    */
   clipMap: boolean | 'outline' | 'graticule' | 'outline+graticule' | 'items';
-
-  scales: {
-    xy: IProjectionScaleType;
-  };
 }
 
 export interface IGeoControllerDatasetOptions extends IGeoChartOptions, ScriptableAndArrayOptions<IGeoFeatureOptions> {

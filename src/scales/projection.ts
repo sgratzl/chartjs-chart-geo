@@ -1,4 +1,4 @@
-import { Scale } from '@sgratzl/chartjs-esm-facade';
+import { Scale, IScaleOptions, Chart } from '@sgratzl/chartjs-esm-facade';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -16,9 +16,16 @@ import {
   geoMercator,
   geoTransverseMercator,
   geoNaturalEarth1,
+  GeoProjection,
+  GeoPath,
+  GeoPermissibleObjects,
+  ExtendedFeatureCollection,
+  ExtendedFeature,
+  GeoGeometryObjects,
+  ExtendedGeometryCollection,
 } from 'd3-geo';
 
-const lookup = {
+const lookup: { [key: string]: () => GeoProjection } = {
   geoAzimuthalEqualArea,
   geoAzimuthalEquidistant,
   geoGnomonic,
@@ -39,24 +46,64 @@ Object.keys(lookup).forEach((key) => {
   lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
 });
 
-export class ProjectionScale extends Scale {
-  constructor(cfg) {
+export interface IProjectionScaleOptions extends IScaleOptions {
+  /**
+   * projection method used
+   * @default albersUsa
+   */
+  projection:
+    | GeoProjection
+    | 'azimuthalEqualArea'
+    | 'azimuthalEquidistant'
+    | 'gnomonic'
+    | 'orthographic'
+    | 'stereographic'
+    | 'equalEarth'
+    | 'albers'
+    | 'albersUsa'
+    | 'conicConformal'
+    | 'conicEqualArea'
+    | 'conicEquidistant'
+    | 'equirectangular'
+    | 'mercator'
+    | 'transverseMercator'
+    | 'naturalEarth1';
+}
+
+export class ProjectionScale extends Scale<IProjectionScaleOptions> {
+  readonly geoPath: GeoPath<any, GeoPermissibleObjects>;
+  projection!: GeoProjection;
+  private outlineBounds: {
+    refX: number;
+    refY: number;
+    refScale: number;
+    width: number;
+    height: number;
+    aspectRatio: number;
+  } | null = null;
+  private oldChartBounds: { chartWidth: number; chartHeight: number } | null = null;
+
+  constructor(cfg: any) {
     super(cfg);
     this.geoPath = geoPath();
   }
 
-  init(options) {
-    options.position = 'chartArea';
+  init(options: IProjectionScaleOptions) {
+    (options as any).position = 'chartArea';
     super.init(options);
-    if (typeof this.options.projection === 'string' && typeof lookup[this.options.projection] === 'function') {
-      this.projection = lookup[this.options.projection]();
+    if (typeof options.projection === 'function') {
+      this.projection = options.projection;
     } else {
-      this.projection = this.options.projection;
+      this.projection = (lookup[options.projection] || lookup['albersUsa']!)();
     }
     this.geoPath.projection(this.projection);
   }
 
-  computeBounds(outline) {
+  computeBounds(outline: ExtendedFeature): void;
+  computeBounds(outline: ExtendedFeatureCollection): void;
+  computeBounds(outline: GeoGeometryObjects): void;
+  computeBounds(outline: ExtendedGeometryCollection): void;
+  computeBounds(outline: any) {
     const bb = geoPath(this.projection.fitWidth(1000, outline)).bounds(outline);
     const bHeight = Math.ceil(bb[1][1] - bb[0][1]);
     const bWidth = Math.ceil(bb[1][0] - bb[0][0]);
@@ -74,7 +121,7 @@ export class ProjectionScale extends Scale {
 
   updateBounds() {
     const area = this.chart.chartArea;
-    const bb = this.outlineBounds;
+    const bb = this.outlineBounds!;
 
     const chartWidth = area.right - area.left;
     const chartHeight = area.bottom - area.top;
@@ -101,8 +148,9 @@ export class ProjectionScale extends Scale {
       !bak || bak.chartWidth !== this.oldChartBounds.chartWidth || bak.chartHeight !== this.oldChartBounds.chartHeight
     );
   }
+
+  static id = 'projection';
+  static defaults: Partial<IProjectionScaleOptions> = {
+    projection: 'albersUsa',
+  };
 }
-ProjectionScale.id = 'projection';
-ProjectionScale.defaults = {
-  projection: 'albersUsa',
-};

@@ -1,9 +1,98 @@
-import { defaults, LinearScale, LogarithmicScale, merge, drawPoint } from '@sgratzl/chartjs-esm-facade';
-import { baseDefaults, BaseMixin } from './base';
+import {
+  defaults,
+  LinearScale,
+  LogarithmicScale,
+  merge,
+  drawPoint,
+  Scale,
+  IPointOptions,
+  ILinearScaleOptions,
+  ILogarithmicScaleOptions,
+} from '@sgratzl/chartjs-esm-facade';
+import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
 
-function SizeSaleMixin(superClass) {
+export interface ISizeScaleOptions extends ILegendScaleOptions {
+  // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
+  // e.g. for tick manipulation, ...
+
+  /**
+   * whether to render a color legend
+   * @default false (for compatibility reasons)
+   */
+  display: boolean;
+
+  /**
+   * radius range in pixel, the minimal data value will be mapped to the
+   * first entry,  the maximal one to the second and a linear interpolation
+   * for all values in between.
+   *
+   * @default [2, 20]
+   */
+  range: [number, number];
+
+  /**
+   * operation mode for the scale, area means that the area is linearly increasing whereas radius the radius is.
+   * The area one is the default since it gives a better visual comparison of values
+   * @default area
+   */
+  mode: 'radius' | 'area';
+
+  /**
+   * radius to render for missing values
+   * @default 1
+   */
+  missing: number;
+
+  /**
+   * the property name that stores the value in the data elements
+   * @default value
+   */
+  property: string;
+
+  legend: {
+    /**
+     * location of the legend on the chart area
+     * @default bottom-right
+     */
+    position: 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'top-right' | 'bottom-right';
+    /**
+     * alignment of the scale, e.g., `right` means that it is a vertical scale
+     * with the ticks on the right side
+     * @default bottom
+     */
+    align: 'left' | 'right' | 'top' | 'bottom';
+    /**
+     * length of the legend, i.e., for a horizontal scale the width
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 90
+     */
+    length: number;
+    /**
+     * how wide the scale is, i.e., for a horizontal scale the height
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 70
+     */
+    width: number;
+    /**
+     * how many pixels should be used for the color bar
+     * @default 42
+     */
+    indicatorWidth: number;
+    /**
+     * margin pixels such that it doesn't stick to the edge of the chart
+     * @default 8
+     */
+    margin: number;
+  };
+}
+
+function SizeSaleMixin<O extends ISizeScaleOptions>(superClass: { new (...args: any[]): Scale<O> }) {
   return class extends BaseMixin(superClass) {
-    getSizeForValue(value) {
+    _model: IPointOptions | null = null;
+
+    getSizeForValue(value: number) {
       const v = this._getNormalizedValue(value);
       if (v == null || Number.isNaN(v)) {
         return this.options.missing;
@@ -11,7 +100,7 @@ function SizeSaleMixin(superClass) {
       return this.getSizeImpl(v);
     }
 
-    getSizeImpl(normalized) {
+    getSizeImpl(normalized: number) {
       const [r0, r1] = this.options.range;
       if (this.options.mode === 'area') {
         const a1 = r1 * r1 * Math.PI;
@@ -31,9 +120,10 @@ function SizeSaleMixin(superClass) {
 
       const isHor = this.isHorizontal();
       const values = this.ticks;
-      const positions = this._labelItems || values.map((_, i) => ({ [isHor ? 'x' : 'y']: this.getPixelForTick(i) }));
+      const positions =
+        (this as any)._labelItems || values.map((_, i) => ({ [isHor ? 'x' : 'y']: this.getPixelForTick(i) }));
 
-      (this._gridLineItems || []).forEach((item) => {
+      ((this as any)._gridLineItems || []).forEach((item: any) => {
         ctx.save();
         ctx.strokeStyle = item.color;
         ctx.lineWidth = item.width;
@@ -84,16 +174,21 @@ function SizeSaleMixin(superClass) {
         const radius = this.getSizeForValue(v.value);
         const x = isHor ? pos.x : shift;
         const y = isHor ? shift : pos.y;
-        const renderOptions = Object.assign({}, this._model || {}, {
-          radius,
-        });
+        const renderOptions = Object.assign(
+          {
+            pointStyle: 'circle' as const,
+            borderWidth: 0,
+          },
+          this._model || {},
+          {
+            radius,
+          }
+        );
         drawPoint(ctx, renderOptions, x, y);
       });
     }
   };
 }
-
-export class SizeScale extends SizeSaleMixin(LinearScale) {}
 
 const scaleDefaults = {
   missing: 1,
@@ -108,17 +203,21 @@ const scaleDefaults = {
   },
 };
 
-SizeScale.id = 'size';
-SizeScale.defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
+export class SizeScale extends SizeSaleMixin<ISizeScaleOptions & ILinearScaleOptions>(LinearScale) {
+  static id = 'size';
+  static defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
+}
 
-export class SizeLogarithmicScale extends SizeSaleMixin(LogarithmicScale) {
-  _getNormalizedValue(v) {
+export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & ILogarithmicScaleOptions>(
+  LogarithmicScale
+) {
+  _getNormalizedValue(v: number) {
     if (v == null || Number.isNaN(v)) {
       return null;
     }
-    return (Math.log10(v) - this._startValue) / this._valueRange;
+    return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
   }
-}
 
-SizeLogarithmicScale.id = 'sizeLogarithmic';
-SizeLogarithmicScale.defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
+  static id = 'sizeLogarithmic';
+  static defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
+}

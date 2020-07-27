@@ -43,6 +43,9 @@
     "chart.js": "^3.0.0-alpha.2"
   },
   "dependencies": {
+    "@types/d3-geo": "^1.11.1",
+    "@types/d3-scale-chromatic": "^1.5.0",
+    "@types/topojson-client": "^3.0.0",
     "d3-geo": "^1.12.1",
     "d3-scale-chromatic": "^1.5.0",
     "topojson-client": "^3.1.0"
@@ -106,5 +109,8 @@
     "prepare": "npm run build",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
+  },
+  "resolutions": {
+    "@sgratzl/chartjs-esm-facade": "portal:/D:/w/chartjs/chartjs-esm-facade"
   }
 }

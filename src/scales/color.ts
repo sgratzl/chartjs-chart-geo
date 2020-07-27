@@ -1,4 +1,11 @@
-import { merge, LinearScale, LogarithmicScale } from '@sgratzl/chartjs-esm-facade';
+import {
+  merge,
+  LinearScale,
+  LogarithmicScale,
+  ILinearScaleOptions,
+  Scale,
+  ILogarithmicScaleOptions,
+} from '@sgratzl/chartjs-esm-facade';
 import {
   interpolateBlues,
   interpolateBrBG,
@@ -39,9 +46,9 @@ import {
   interpolateYlOrBr,
   interpolateYlOrRd,
 } from 'd3-scale-chromatic';
-import { baseDefaults, BaseMixin } from './base';
+import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
 
-const lookup = {
+const lookup: { [key: string]: (normalizedValue: number) => string } = {
   interpolateBlues,
   interpolateBrBG,
   interpolateBuGn,
@@ -87,7 +94,7 @@ Object.keys(lookup).forEach((key) => {
   lookup[key.slice(11)] = lookup[key];
 });
 
-function quantize(v, steps) {
+function quantize(v: number, steps: number) {
   const perStep = 1 / steps;
   if (v <= perStep) {
     return 0;
@@ -103,24 +110,95 @@ function quantize(v, steps) {
   return v;
 }
 
-function ColorScaleMixin(superClass) {
+export interface IColorScaleOptions extends ILegendScaleOptions {
+  // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
+  // e.g. for tick manipulation, ...
+
+  /**
+   * color interpolation method which is either a function
+   * converting a normalized value to string or a
+   * well defined string of all the interpolation scales
+   * from https://github.com/d3/d3-scale-chromatic.
+   * e.g. interpolateBlues -> blues
+   *
+   * @default blues
+   */
+  interpolate:
+    | ((normalizedValue: number) => string)
+    | 'blues'
+    | 'brBG'
+    | 'buGn'
+    | 'buPu'
+    | 'cividis'
+    | 'cool'
+    | 'cubehelixDefault'
+    | 'gnBu'
+    | 'greens'
+    | 'greys'
+    | 'inferno'
+    | 'magma'
+    | 'orRd'
+    | 'oranges'
+    | 'pRGn'
+    | 'piYG'
+    | 'plasma'
+    | 'puBu'
+    | 'puBuGn'
+    | 'puOr'
+    | 'puRd'
+    | 'purples'
+    | 'rainbow'
+    | 'rdBu'
+    | 'rdGy'
+    | 'rdPu'
+    | 'rdYlBu'
+    | 'rdYlGn'
+    | 'reds'
+    | 'sinebow'
+    | 'spectral'
+    | 'turbo'
+    | 'viridis'
+    | 'warm'
+    | 'ylGn'
+    | 'ylGnBu'
+    | 'ylOrBr'
+    | 'ylOrRd';
+
+  /**
+   * color value to render for missing values
+   * @default transparent
+   */
+  missing: string;
+
+  /**
+   * allows to split the colorscale in N quantized equal bins.
+   * @default 0
+   */
+  quantize: number;
+}
+
+function ColorScaleMixin<O extends IColorScaleOptions>(superClass: { new (...args: any[]): Scale<O> }) {
   return class extends BaseMixin(superClass) {
-    init(options) {
+    private interpolate = (v: number) => `rgb(${v},${v},${v})`;
+
+    init(options: O) {
       super.init(options);
-      if (typeof this.options.interpolate === 'string' && typeof lookup[this.options.interpolate] === 'function') {
-        this.interpolate = lookup[this.options.interpolate];
+      if (typeof options.interpolate === 'function') {
+        this.interpolate = options.interpolate;
       } else {
-        this.interpolate = this.options.interpolate;
+        this.interpolate = lookup[options.interpolate] || lookup.blues;
       }
     }
-    getColorForValue(value) {
+
+    getColorForValue(value: number) {
       const v = this._getNormalizedValue(value);
       if (v == null || Number.isNaN(v)) {
         return this.options.missing;
       }
       return this.getColor(v);
     }
-    getColor(normalized) {
+
+    getColor(normalized: number) {
       let v = normalized;
       if (this.options.quantize > 0) {
         v = quantize(v, this.options.quantize);
@@ -129,24 +207,23 @@ function ColorScaleMixin(superClass) {
     }
 
     _drawIndicator() {
-      /** @type {CanvasRenderingContext2D} */
       const ctx = this.ctx;
       const w = this.width;
       const h = this.height;
       const indicatorSize = this.options.legend.indicatorWidth;
-      const reverse = this._reversePixels;
+      const reverse = (this as any)._reversePixels;
 
       if (this.isHorizontal()) {
         if (this.options.quantize > 0) {
           const stepWidth = w / this.options.quantize;
-          const offset = !reverse ? (i) => i : (i) => w - stepWidth - i;
+          const offset = !reverse ? (i: number) => i : (i: number) => w - stepWidth - i;
           for (let i = 0; i < w; i += stepWidth) {
             const v = (i + stepWidth / 2) / w;
             ctx.fillStyle = this.getColor(v);
             ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
           }
         } else {
-          const offset = !reverse ? (i) => i : (i) => w - 1 - i;
+          const offset = !reverse ? (i: number) => i : (i: number) => w - 1 - i;
           for (let i = 0; i < w; ++i) {
             ctx.fillStyle = this.getColor((i + 0.5) / w);
             ctx.fillRect(offset(i), 0, 1, indicatorSize);
@@ -154,14 +231,14 @@ function ColorScaleMixin(superClass) {
         }
       } else if (this.options.quantize > 0) {
         const stepWidth = h / this.options.quantize;
-        const offset = !reverse ? (i) => i : (i) => h - stepWidth - i;
+        const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;
         for (let i = 0; i < h; i += stepWidth) {
           const v = (i + stepWidth / 2) / h;
           ctx.fillStyle = this.getColor(v);
           ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
         }
       } else {
-        const offset = !reverse ? (i) => i : (i) => h - 1 - i;
+        const offset = !reverse ? (i: number) => i : (i: number) => h - 1 - i;
         for (let i = 0; i < h; ++i) {
           ctx.fillStyle = this.getColor((i + 0.5) / h);
           ctx.fillRect(0, offset(i), indicatorSize, 1);
@@ -170,24 +247,28 @@ function ColorScaleMixin(superClass) {
     }
   };
 }
-export class ColorScale extends ColorScaleMixin(LinearScale) {}
 
 const colorScaleDefaults = {
   interpolate: 'blues',
   missing: 'transparent',
   quantize: 0,
 };
-ColorScale.id = 'color';
-ColorScale.defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 
-export class ColorLogarithmicScale extends ColorScaleMixin(LogarithmicScale) {
-  _getNormalizedValue(v) {
+export class ColorScale extends ColorScaleMixin<IColorScaleOptions & ILinearScaleOptions>(LinearScale) {
+  static id = 'color';
+  static defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
+}
+
+export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & ILogarithmicScaleOptions>(
+  LogarithmicScale
+) {
+  _getNormalizedValue(v: number) {
     if (v == null || Number.isNaN(v)) {
       return null;
     }
-    return (Math.log10(v) - this._startValue) / this._valueRange;
+    return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
   }
-}
 
-ColorLogarithmicScale.id = 'colorLogarithmic';
-ColorLogarithmicScale.defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
+  static id = 'colorLogarithmic';
+  static defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
+}

@@ -4,7 +4,7 @@
 
 Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
 
-**Works only with Chart.js >= 3.0.0**
+**Works only with Chart.js >= 3.0.0-alpha.2**
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
@@ -23,7 +23,7 @@ works great with https://github.com/chartjs/chartjs-plugin-datalabels
 ## Install
 
 ```bash
-npm install --save chart.js@next chartjs-chart-geo@next
+npm install --save chart.js@next @sgratzl/chartjs-esm-facade@next chartjs-chart-geo@next
 ```
 
 ## Usage
@@ -406,7 +406,7 @@ The ESM build of the library supports tree shaking thus having no side effects. 
 Variant A:
 
 ```js
-import Chart from 'chart.js';
+import { Chart } from 'chart.js';
 import { ChoroplethController } from 'chartjs-chart-geo';
 
 // register controller in chart.js and ensure the defaults are set
@@ -437,15 +437,22 @@ const chart = new ChoroplethChart(document.getElementById('canvas').getContext('
 ```sh
 npm i -g yarn
 yarn set version 2
+cat .yarnrc_patch.yml >> .yarnrc.yml
 yarn
 yarn pnpify --sdk
 ```
 
-### Building
+### Common commands
 
 ```sh
-yarn install
+yarn compile
+yarn test
+yarn lint
+yarn fix
 yarn build
+yarn docs
+yarn release
+yarn release:pre
 ```
 
 [npm-image]: https://badge.fury.io/js/chartjs-chart-geo.svg

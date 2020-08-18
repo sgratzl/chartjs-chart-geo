@@ -1,12 +1,19 @@
-import { ChoroplethController } from './choropleth';
-import { ColorLogarithmicScale, ColorScale, ProjectionScale } from '../scales';
+import { ChoroplethController, IChoroplethControllerConfiguration } from './choropleth';
+import {
+  ColorLogarithmicScale,
+  ColorScale,
+  ProjectionScale,
+  IProjectionScaleOptions,
+  IColorScaleOptions,
+} from '../scales';
 import { feature } from 'topojson-client';
 import createChart from '../__tests__/createChart';
 import states10m from 'us-atlas/states-10m.json';
 import countries50m from 'world-atlas/countries-50m.json';
 import rnd from 'seedrandom';
-import { registry } from '@sgratzl/chartjs-esm-facade';
+import { registry, DeepPartial } from '@sgratzl/chartjs-esm-facade';
 import { GeoFeature } from '../elements';
+import { IGeoDataPoint } from './geo';
 
 describe('choropleth', () => {
   beforeAll(() => {
@@ -17,11 +24,11 @@ describe('choropleth', () => {
 
   test('default', async () => {
     const random = rnd('default');
-    const us = states10m;
-    const nation = feature(us, us.objects.nation).features[0];
-    const states = feature(us, us.objects.states).features;
+    const us = states10m as any;
+    const nation = (feature(us, us.objects.nation) as any).features[0];
+    const states = (feature(us, us.objects.states) as any).features as any[];
 
-    const chart = createChart({
+    const chart = createChart<IGeoDataPoint, string, IChoroplethControllerConfiguration>({
       type: ChoroplethController.id,
       data: {
         labels: states.map((d) => d.properties.name),
@@ -43,7 +50,7 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           color: {
             quantize: 5,
             ticks: {
@@ -53,7 +60,7 @@ describe('choropleth', () => {
               position: 'bottom-right',
               align: 'right',
             },
-          },
+          } as IColorScaleOptions,
         },
       },
     });
@@ -63,19 +70,19 @@ describe('choropleth', () => {
 
   test('log', async () => {
     const random = rnd('log');
-    const us = states10m;
-    const nation = feature(us, us.objects.nation).features[0];
-    const states = feature(us, us.objects.states).features;
+    const us = states10m as any;
+    const nation = (feature(us, us.objects.nation) as any).features[0];
+    const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart({
+    const chart = createChart<IGeoDataPoint, string, IChoroplethControllerConfiguration>({
       type: ChoroplethController.id,
       data: {
-        labels: states.map((d) => d.properties.name),
+        labels: states.map((d: any) => d.properties.name),
         datasets: [
           {
             label: 'States',
             outline: nation,
-            data: states.map((d) => ({
+            data: states.map((d: any) => ({
               feature: d,
               value: random() * 10,
             })),
@@ -89,7 +96,7 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'albersUsa',
-          },
+          } as IProjectionScaleOptions,
           color: {
             type: ColorLogarithmicScale.id,
             quantize: 5,
@@ -100,7 +107,7 @@ describe('choropleth', () => {
               position: 'bottom-right',
               align: 'right',
             },
-          },
+          } as DeepPartial<IColorScaleOptions>,
         },
       },
     });
@@ -110,10 +117,10 @@ describe('choropleth', () => {
 
   test('earth', async () => {
     const random = rnd('earth');
-    const data = countries50m;
-    const countries = feature(data, data.objects.countries).features;
+    const data = countries50m as any;
+    const countries = (feature(data, data.objects.countries) as any).features as any[];
 
-    const chart = createChart({
+    const chart = createChart<IGeoDataPoint, string, IChoroplethControllerConfiguration>({
       type: ChoroplethController.id,
       data: {
         labels: countries.map((d) => d.properties.name),
@@ -136,12 +143,12 @@ describe('choropleth', () => {
         scales: {
           xy: {
             projection: 'equalEarth',
-          },
+          } as IProjectionScaleOptions,
           color: {
             ticks: {
               display: false,
             },
-          },
+          } as DeepPartial<IColorScaleOptions>,
         },
       },
     });

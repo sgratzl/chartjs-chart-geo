@@ -1,28 +1,83 @@
-import { Element, Rectangle } from '@sgratzl/chartjs-esm-facade';
-import { geoContains } from 'd3-geo';
+import { Element, Rectangle, IRectangleOptions, IVisualElement, IPoint } from '@sgratzl/chartjs-esm-facade';
+import { geoContains, GeoProjection } from 'd3-geo';
+import { ProjectionScale } from '../scales';
 
-export class GeoFeature extends Element {
-  inRange(mouseX, mouseY) {
+export interface IGeoFeatureOptions extends IRectangleOptions {
+  /**
+   * background color for the outline
+   * @default null
+   */
+  outlineBackgroundColor: string | null;
+  /**
+   * border color for the outline
+   * @default defaultColor of Chart.js
+   */
+  outlineBorderColor: string;
+  /**
+   * border width for the outline
+   * @default 0
+   */
+  outlineBorderWidth: number;
+
+  /**
+   * border color for the graticule
+   * @default #CCCCCC
+   */
+  graticuleBorderColor: string;
+  /**
+   * border width for the graticule
+   * @default 0
+   */
+  graticuleBorderWidth: string;
+}
+
+export type Feature = any;
+
+export interface IGeoFeatureProps {
+  x: number;
+  y: number;
+}
+
+export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> implements IVisualElement {
+  cache?:
+    | {
+        center?: IPoint;
+        bounds?: {
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+          x2: number;
+          y2: number;
+        };
+        canvasKey?: string;
+        canvas?: HTMLCanvasElement;
+      }
+    | undefined = undefined;
+  projectionScale!: ProjectionScale;
+  feature!: Feature;
+
+  inRange(mouseX: number, mouseY: number) {
     const bb = this.getBounds();
     const r =
       (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
 
-    const projection = this.projectionScale.geoPath.projection();
+    const projection = this.projectionScale.geoPath.projection()! as GeoProjection;
     if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
       // test for real if within the bounds
       const longlat = projection.invert([mouseX, mouseY]);
-      return longlat && geoContains(this.feature, longlat);
+      return longlat != null && geoContains(this.feature, longlat);
     }
 
     return r;
   }
 
-  inXRange(mouseX) {
+  inXRange(mouseX: number) {
     return this.inRange(mouseX, Number.NaN);
   }
 
-  inYRange(mouseY) {
+  inYRange(mouseY: number) {
     return this.inRange(Number.NaN, mouseY);
   }
 
@@ -56,11 +111,7 @@ export class GeoFeature extends Element {
     return bounds;
   }
 
-  tooltipPosition() {
-    return this.getCenterPoint();
-  }
-
-  _drawInCache(doc) {
+  _drawInCache(doc: Document) {
     const bounds = this.getBounds();
     if (!Number.isFinite(bounds.x)) {
       return;
@@ -69,7 +120,7 @@ export class GeoFeature extends Element {
     canvas.width = Math.max(Math.ceil(bounds.width), 1);
     canvas.height = Math.max(Math.ceil(bounds.height), 1);
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d')!;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.save();
     ctx.translate(-bounds.x, -bounds.y);
@@ -87,10 +138,11 @@ export class GeoFeature extends Element {
     return `${options.backgroundColor};${options.borderColor};${options.borderWidth}`;
   }
 
-  _drawImpl(ctx) {
+  _drawImpl(ctx: CanvasRenderingContext2D) {
+    const feature = this.feature;
     const options = this.options;
     ctx.beginPath();
-    this.projectionScale.geoPath.context(ctx)(this.feature);
+    this.projectionScale.geoPath.context(ctx)(feature);
     if (options.backgroundColor) {
       ctx.fillStyle = options.backgroundColor;
       ctx.fill();
@@ -102,8 +154,9 @@ export class GeoFeature extends Element {
     }
   }
 
-  draw(ctx) {
-    if (!this.feature) {
+  draw(ctx: CanvasRenderingContext2D) {
+    const feature = this.feature;
+    if (!feature) {
       return;
     }
     if (!this.cache || this.cache.canvasKey !== this._optionsToKey()) {
@@ -118,19 +171,19 @@ export class GeoFeature extends Element {
       ctx.restore();
     }
   }
+
+  static id = 'geoFeature';
+  static defaults = /*#__PURE__*/ Object.assign({}, Rectangle.defaults, {
+    outlineBackgroundColor: null,
+    outlineBorderWidth: 0,
+
+    graticuleBorderColor: '#CCCCCC',
+    graticuleBorderWidth: 0,
+  });
+  static defaultRoutes = /*#__PURE__*/ Object.assign(
+    {
+      outlineBorderColor: 'color',
+    },
+    Rectangle.defaultRoutes || {}
+  );
 }
-
-GeoFeature.id = 'geoFeature';
-GeoFeature.defaults = /*#__PURE__*/ Object.assign({}, Rectangle.defaults, {
-  outlineBackgroundColor: null,
-  outlineBorderWidth: 0,
-
-  graticuleBorderColor: '#CCCCCC',
-  graticuleBorderWidth: 0,
-});
-GeoFeature.defaultRoutes = Object.assign(
-  {
-    outlineBorderColor: 'color',
-  },
-  Rectangle.defaultRoutes || {}
-);

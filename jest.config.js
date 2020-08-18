@@ -1,4 +1,3 @@
 module.exports = {
-  testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
-  transformIgnorePatterns: [],
+  testEnvironment: require.resolve('jest-environment-jsdom-sixteen'),
 };

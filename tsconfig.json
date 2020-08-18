@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["DOM", "ES2020"],
+    "importHelpers": false,
+    "declaration": false,
+    "sourceMap": true,
+    "strict": true,
+    "importsNotUsedAsValues": "remove",
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictBindCallApply": true,
+    "stripInternal": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "@": ["./src"],
+      "*": ["*", "node_modules/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

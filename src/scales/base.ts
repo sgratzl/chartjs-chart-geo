@@ -1,3 +1,67 @@
+import { Scale, IPadding, IChartArea, ICartesianScaleOptions } from '@sgratzl/chartjs-esm-facade';
+
+export interface ILegendScaleOptions extends ICartesianScaleOptions {
+  /**
+   * whether to render a color legend
+   * @default false (for compatibility reasons)
+   */
+  display: boolean;
+
+  /**
+   * the property name that stores the value in the data elements
+   * @default value
+   */
+  property: string;
+
+  legend: {
+    /**
+     * location of the legend on the chart area
+     * @default bottom-right
+     */
+    position:
+      | 'left'
+      | 'right'
+      | 'top'
+      | 'bottom'
+      | 'top-left'
+      | 'top-right'
+      | 'top-right'
+      | 'bottom-right'
+      | 'bottom-left'
+      | { x: number; y: number };
+    /**
+     * alignment of the scale, e.g., `right` means that it is a vertical scale
+     * with the ticks on the right side
+     * @default right
+     */
+    align: 'left' | 'right' | 'top' | 'bottom';
+    /**
+     * length of the legend, i.e., for a horizontal scale the width
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 100
+     */
+    length: number;
+    /**
+     * how wide the scale is, i.e., for a horizontal scale the height
+     * if a value < 1 is given, is it assume to be a ratio of the corresponding
+     * chart area
+     * @default 50
+     */
+    width: number;
+    /**
+     * how many pixels should be used for the color bar
+     * @default 10
+     */
+    indicatorWidth: number;
+    /**
+     * margin pixels such that it doesn't stick to the edge of the chart
+     * @default 8
+     */
+    margin: number | IPadding;
+  };
+}
+
 export const baseDefaults = {
   position: 'chartArea',
   property: 'value',
@@ -14,15 +78,21 @@ export const baseDefaults = {
   },
 };
 
-export function BaseMixin(superClass) {
+interface IPositionOption {
+  position?: string;
+}
+
+export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...args: any[]): Scale<O> }) {
   return class extends superClass {
-    init(options) {
-      options.position = 'chartArea';
+    legendSize: { w: number; h: number } = { w: 0, h: 0 };
+
+    init(options: O) {
+      (options as IPositionOption).position = 'chartArea';
       super.init(options);
       this.axis = 'r';
     }
 
-    parse(raw, index) {
+    parse(raw: any, index: number) {
       if (raw && typeof raw[this.options.property] === 'number') {
         return raw[this.options.property];
       }
@@ -33,11 +103,11 @@ export function BaseMixin(superClass) {
       return this.options.legend.align === 'top' || this.options.legend.align === 'bottom';
     }
 
-    _getNormalizedValue(v) {
+    _getNormalizedValue(v: number) {
       if (v == null || Number.isNaN(v)) {
         return null;
       }
-      return (v - this._startValue) / this._valueRange;
+      return (v - (this as any)._startValue) / (this as any)._valueRange;
     }
 
     _getLegendMargin() {
@@ -52,7 +122,7 @@ export function BaseMixin(superClass) {
       return { left, top, right, bottom };
     }
 
-    _getLegendPosition(chartArea) {
+    _getLegendPosition(chartArea: IChartArea) {
       const indicatorWidth = this.options.legend.indicatorWidth;
       const axisPos = this.options.legend.align;
       const isHor = this.isHorizontal();
@@ -85,29 +155,29 @@ export function BaseMixin(superClass) {
       return [pos.x, pos.y];
     }
 
-    update(maxWidth, maxHeight, margins) {
+    update(maxWidth: number, maxHeight: number, margins: IChartArea) {
       const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
       const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
 
       const l = this.options.legend;
       const isHor = this.isHorizontal();
-      const factor = (v, full) => (v < 1 ? full * v : v);
+      const factor = (v: number, full: number) => (v < 1 ? full * v : v);
       const w = Math.min(cw, factor(isHor ? l.length : l.width, cw)) - (!isHor ? l.indicatorWidth : 0);
       const h = Math.min(ch, factor(!isHor ? l.length : l.width, ch)) - (isHor ? l.indicatorWidth : 0);
       this.legendSize = { w, h };
       this.bottom = this.height = h;
       this.right = this.width = w;
 
-      const bak = this.options.position;
-      this.options.position = this.options.legend.align;
+      const bak = (this.options as IPositionOption).position;
+      (this.options as IPositionOption).position = this.options.legend.align;
       super.update(w, h, margins);
-      this.options.position = bak;
+      (this.options as IPositionOption).position = bak;
       this.height = Math.min(h, this.height);
       this.width = Math.min(w, this.width);
     }
 
-    draw(chartArea) {
-      if (!this._isVisible()) {
+    draw(chartArea: IChartArea) {
+      if (!(this as any)._isVisible()) {
         return;
       }
       const pos = this._getLegendPosition(chartArea);
@@ -116,15 +186,15 @@ export function BaseMixin(superClass) {
       ctx.save();
       ctx.translate(pos[0], pos[1]);
 
-      const bak = this.options.position;
-      this.options.position = this.options.legend.align;
+      const bak = (this.options as IPositionOption).position;
+      (this.options as IPositionOption).position = this.options.legend.align;
       super.draw(
         Object.assign({}, chartArea, {
           bottom: this.height,
           right: this.width,
         })
       );
-      this.options.position = bak;
+      (this.options as IPositionOption).position = bak;
       const indicatorWidth = this.options.legend.indicatorWidth;
       switch (this.options.legend.align) {
         case 'left':
@@ -142,6 +212,10 @@ export function BaseMixin(superClass) {
       }
       this._drawIndicator();
       ctx.restore();
+    }
+
+    _drawIndicator() {
+      // hook
     }
   };
 }

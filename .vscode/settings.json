@@ -13,6 +13,9 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "prettier.packageManager": "yarn",
+  "eslint.packageManager": "yarn",
+  "npm.packageManager": "yarn",
   "eslint.nodePath": ".yarn/sdks",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "files.eol": "\n",

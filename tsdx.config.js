@@ -14,13 +14,12 @@ module.exports = {
     config.output.globals['chart.js'] = 'Chart';
     config.output.globals['@sgratzl/chartjs-esm-facade'] = 'ChartESMFacade';
 
-    const originalExternal = config.external;
     if (options.format === 'umd') {
-      const external = Object.keys(pkg.peerDependencies || {}).concat(['topojson-client', 'd3-geo']);
-      config.external = (v) => (originalExternal(v) ? external.includes(v) : false);
+      const external = Object.keys(pkg.peerDependencies || {});
+      config.external = (v) => external.includes(v);
     } else {
       const external = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.peerDependencies || {}));
-      config.external = (v) => (originalExternal(v) ? external.includes(v) : false);
+      config.external = (v) => external.includes(v);
     }
 
     const c = config.plugins.findIndex((d) => d.name === 'commonjs');
@@ -32,6 +31,7 @@ module.exports = {
       cleanup({
         comments: ['some', 'ts', 'ts3s'],
         extensions: ['ts', 'tsx', 'js', 'jsx'],
+        include: './src/**/*',
       })
     );
     config.output.banner = `/**

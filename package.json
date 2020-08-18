@@ -39,7 +39,7 @@
     "last 2 Firefox versions"
   ],
   "peerDependencies": {
-    "@sgratzl/chartjs-esm-facade": "^3.0.0-alpha.20",
+    "@sgratzl/chartjs-esm-facade": "^3.0.0-alpha.21",
     "chart.js": "^3.0.0-alpha.2"
   },
   "dependencies": {
@@ -110,9 +110,6 @@
     "prepare": "npm run build",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
-  },
-  "resolutions": {
-    "@sgratzl/chartjs-esm-facade": "portal:/D:/w/chartjs/chartjs-esm-facade"
   },
   "dependenciesMeta": {
     "d3-geo": {

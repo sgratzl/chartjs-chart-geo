@@ -10,7 +10,7 @@ import {
   IVisualElement,
 } from '@sgratzl/chartjs-esm-facade';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
-import { ProjectionScale, IProjectionScaleType } from '../scales';
+import { ProjectionScale } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 
 export const geoDefaults = {

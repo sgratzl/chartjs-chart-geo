@@ -13,9 +13,10 @@ module.exports = {
 
     config.output.globals['chart.js'] = 'Chart';
     config.output.globals['@sgratzl/chartjs-esm-facade'] = 'ChartESMFacade';
+
     const originalExternal = config.external;
     if (options.format === 'umd') {
-      const external = Object.keys(pkg.peerDependencies || {});
+      const external = Object.keys(pkg.peerDependencies || {}).concat(['topojson-client', 'd3-geo']);
       config.external = (v) => (originalExternal(v) ? external.includes(v) : false);
     } else {
       const external = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.peerDependencies || {}));
@@ -35,7 +36,7 @@ module.exports = {
     );
     config.output.banner = `/**
  * chartjs-chart-venn
- * https://github.com/upsetjs/chartjs-chart-venn
+ * https://github.com/sgratzl/chartjs-chart-geo
  *
  * Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>
  */`;

@@ -3774,6 +3774,9 @@ __metadata:
   peerDependencies:
     "@sgratzl/chartjs-esm-facade": ^3.0.0-alpha.20
     chart.js: ^3.0.0-alpha.2
+  dependenciesMeta:
+    d3-geo:
+      unplugged: true
   languageName: unknown
   linkType: soft
 

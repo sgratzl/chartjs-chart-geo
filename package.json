@@ -113,5 +113,10 @@
   },
   "resolutions": {
     "@sgratzl/chartjs-esm-facade": "portal:/D:/w/chartjs/chartjs-esm-facade"
+  },
+  "dependenciesMeta": {
+    "d3-geo": {
+      "unplugged": true
+    }
   }
 }

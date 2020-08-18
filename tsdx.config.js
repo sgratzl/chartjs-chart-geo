@@ -27,15 +27,15 @@ module.exports = {
       config.plugins.splice(c, 1);
     }
     config.plugins.splice(0, 0, resolve(), commonjs());
-    config.plugins.push(
+    config.output.plugins = config.output.plugins || [];
+    config.output.plugins.push(
       cleanup({
         comments: ['some', 'ts', 'ts3s'],
         extensions: ['ts', 'tsx', 'js', 'jsx'],
-        include: './src/**/*',
       })
     );
     config.output.banner = `/**
- * chartjs-chart-venn
+ * chartjs-chart-geo
  * https://github.com/sgratzl/chartjs-chart-geo
  *
  * Copyright (c) 2020 Samuel Gratzl <sam@sgratzl.com>

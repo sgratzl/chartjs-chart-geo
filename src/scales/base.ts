@@ -86,10 +86,6 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
   return class extends superClass {
     legendSize: { w: number; h: number } = { w: 0, h: 0 };
 
-    constructor(...args: any[]) {
-      super(args);
-    }
-
     init(options: O) {
       (options as IPositionOption).position = 'chartArea';
       super.init(options);

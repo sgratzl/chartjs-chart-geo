@@ -31,6 +31,7 @@ module.exports = {
       cleanup({
         comments: ['some', 'ts', 'ts3s'],
         extensions: ['ts', 'tsx', 'js', 'jsx'],
+        include: './src/**/*.*',
       })
     );
     config.output.banner = `/**

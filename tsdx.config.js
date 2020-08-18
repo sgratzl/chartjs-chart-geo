@@ -27,8 +27,7 @@ module.exports = {
       config.plugins.splice(c, 1);
     }
     config.plugins.splice(0, 0, resolve(), commonjs());
-    config.output.plugins = config.output.plugins || [];
-    config.output.plugins.push(
+    config.plugins.push(
       cleanup({
         comments: ['some', 'ts', 'ts3s'],
         extensions: ['ts', 'tsx', 'js', 'jsx'],

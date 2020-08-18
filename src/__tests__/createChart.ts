@@ -25,7 +25,7 @@ export default function createChart<
   T = number,
   L = string,
   C extends IChartConfiguration<string, T, L> = IChartConfiguration<string, T, L>
->(config: C, width = 300, height = 300) {
+>(config: C, width = 800, height = 600) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;

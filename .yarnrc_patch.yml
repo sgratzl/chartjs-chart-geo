@@ -5,3 +5,6 @@ packageExtensions:
   'eslint-config-react-app@*':
     dependencies:
       'babel-eslint': '*'
+  'eslint-plugin-prettier@*':
+    dependencies:
+      'eslint-config-prettier': '*'

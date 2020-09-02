@@ -22,12 +22,24 @@
     "esModuleInterop": true,
     "rootDir": "./src",
     "baseUrl": "./",
-    "outDir": "./dist",
+    "noEmit": true,
     "paths": {
       "@": ["./src"],
       "*": ["*", "node_modules/*"]
-    },
-    "skipLibCheck": true // TODO till chart.js bug is fixed
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/__tests__/chartjsFlatHelpers.js"],
+
+  "typedocOptions": {
+    "name": "TSLibrary",
+    "out": "./docs",
+    "mode": "library",
+    "theme": "minimal",
+    "excludeNotExported": true,
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "includeVersion": true,
+    "hideGenerator": true,
+    "entryPoint": "\"index\""
+  }
 }

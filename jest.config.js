@@ -1,4 +1,9 @@
+/* eslint-env node */
+
 module.exports = {
-  testEnvironment: require.resolve('jest-environment-jsdom-sixteen'),
-  transformIgnorePatterns: ['XXX$'],
+  preset: 'ts-jest',
+  testRegex: '((\\.|/)(test|spec))\\.[jt]sx?$',
+  moduleNameMapper: {
+    'chart.js/helpers/.*': '<rootDir>/src/__tests__/chartjsFlatHelpers.js',
+  },
 };

@@ -1,0 +1,6 @@
+{
+  "name": "chartjs-helpers-canvas",
+  "main": "index.js",
+  "module": "index.esm.js",
+  "types": "index.d.ts"
+}

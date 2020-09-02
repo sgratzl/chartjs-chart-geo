@@ -6,8 +6,8 @@ import {
   Element,
   IVisualElement,
 } from 'chart.js';
-import { valueOrDefault } from 'chart.js/helpers/core';
-import { clipArea, unclipArea } from 'chart.js/helpers/canvas';
+import { valueOrDefault } from '../../chartjs-helpers/core';
+import { clipArea, unclipArea } from '../../chartjs-helpers/canvas';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';

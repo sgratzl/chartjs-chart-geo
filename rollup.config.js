@@ -5,8 +5,10 @@ import dts from 'rollup-plugin-dts';
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
+import alias from '@rollup/plugin-alias';
 
 import fs from 'fs';
+import path from 'path';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
@@ -23,6 +25,9 @@ const banner = `/**
  */
 const watchOnly = ['umd'];
 
+const isDependency = (v) => Object.keys(pkg.dependencies || {}).some((e) => e === v || v.startsWith(e + '/'));
+const isPeerDependency = (v) => Object.keys(pkg.peerDependencies || {}).some((e) => e === v || v.startsWith(e + '/'));
+
 export default (options) => {
   const buildFormat = (format) => {
     return !options.watch || watchOnly.includes(format);
@@ -34,9 +39,10 @@ export default (options) => {
       'chart.js': 'Chart',
     },
   };
+
   const base = {
     input: './src/index.ts',
-    external: Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.peerDependencies || {})),
+    external: (v) => isDependency(v) || isPeerDependency(v),
     plugins: [
       typescript(),
       resolve(),
@@ -54,20 +60,32 @@ export default (options) => {
     ],
   };
   return [
-    (buildFormat('esm') || buildFormat('cjs')) && {
+    buildFormat('esm') && {
       ...base,
-      output: [
-        buildFormat('esm') && {
-          ...commonOutput,
-          file: pkg.module,
-          format: 'esm',
-        },
-        buildFormat('esm') && {
-          ...commonOutput,
-          file: pkg.main,
-          format: 'cjs',
-        },
-      ].filter(Boolean),
+      output: {
+        ...commonOutput,
+        file: pkg.module,
+        format: 'esm',
+      },
+    },
+    buildFormat('cjs') && {
+      ...base,
+      output: {
+        ...commonOutput,
+        file: pkg.main,
+        format: 'cjs',
+      },
+      plugins: [
+        alias({
+          entries: [
+            {
+              find: /(.*)chartjs-helpers(.*)/,
+              replacement: '$1chartjs-helpers$2/index.js',
+            },
+          ],
+        }),
+        ...base.plugins,
+      ],
     },
     (buildFormat('umd') || buildFormat('umd-min')) && {
       ...base,
@@ -87,7 +105,18 @@ export default (options) => {
           plugins: [terser()],
         },
       ].filter(Boolean),
-      external: Object.keys(pkg.peerDependencies || {}),
+      external: (v) => isPeerDependency(v),
+      plugins: [
+        alias({
+          entries: [
+            {
+              find: /(.*)chartjs-helpers(.*)/,
+              replacement: '$1chartjs-helpers$2/index.js',
+            },
+          ],
+        }),
+        ...base.plugins,
+      ],
     },
     buildFormat('types') && {
       ...base,

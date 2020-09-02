@@ -6,7 +6,7 @@ import {
   ILogarithmicScaleOptions,
   DeepPartial,
 } from 'chart.js';
-import { merge } from 'chart.js/helpers/core';
+import { merge } from '../../chartjs-helpers/core';
 import {
   interpolateBlues,
   interpolateBrBG,

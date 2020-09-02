@@ -8,8 +8,8 @@ import {
   ILogarithmicScaleOptions,
   DeepPartial,
 } from 'chart.js';
-import { merge } from 'chart.js/helpers/core';
-import { drawPoint } from 'chart.js/helpers/canvas';
+import { merge } from '../../chartjs-helpers/core';
+import { drawPoint } from '../../chartjs-helpers/canvas';
 import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
 
 export interface ISizeScaleOptions extends ILegendScaleOptions {

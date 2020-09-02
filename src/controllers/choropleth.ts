@@ -11,7 +11,7 @@ import {
   ChartItem,
   IPointOptions,
 } from 'chart.js';
-import { merge } from 'chart.js/helpers/core';
+import { merge } from '../../chartjs-helpers/core';
 import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint } from './geo';
 import { GeoFeature, IGeoFeatureOptions, IGeoFeatureProps } from '../elements';
 import {

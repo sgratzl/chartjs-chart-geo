@@ -14,7 +14,7 @@ import {
   ScriptableAndArrayOptions,
   UpdateMode,
 } from 'chart.js';
-import { merge } from 'chart.js/helpers/core';
+import { merge } from '../../chartjs-helpers/core';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 import { ILogarithmicSizeScaleType, ISizeScaleType, ProjectionScale, SizeScale, IProjectionScaleType } from '../scales';
 import { GeoController, geoDefaults, IGeoChartOptions } from './geo';

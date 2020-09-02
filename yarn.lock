@@ -844,6 +844,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-alias@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@rollup/plugin-alias@npm:3.1.1"
+  dependencies:
+    slash: ^3.0.0
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0
+  checksum: 785d8a4283e59bbd76447e2ea5128e34c9ebf59b626841a82d5c8366687439c2fe7d0690be04e73e51ada5264d1efdfd4de8ec2528f4f9428f9541040311262c
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-commonjs@npm:^15.0.0":
   version: 15.0.0
   resolution: "@rollup/plugin-commonjs@npm:15.0.0"
@@ -1036,13 +1047,6 @@ __metadata:
   version: 1.1.1
   resolution: "@types/color-name@npm:1.1.1"
   checksum: 8311db94a9c4ecd247763b81e783ee49d87678b4ce6a7ee502e2bd5cea242b7357804a04855db009f713174bc654cc0c01c7303d40d757e5d710f5ac0368500f
-  languageName: node
-  linkType: hard
-
-"@types/d3-array@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "@types/d3-array@npm:2.0.0"
-  checksum: 5772d8c33e94c7a9f16bd81d7db18ebdfc979e054b0c4b74143e420ae72c163ad78863dd195ce3f3a843d3e52d22fc28809c652dbc2bb700c19aa45d33d29dca
   languageName: node
   linkType: hard
 
@@ -2350,11 +2354,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chartjs-chart-geo@workspace:."
   dependencies:
+    "@rollup/plugin-alias": ^3.1.1
     "@rollup/plugin-commonjs": ^15.0.0
     "@rollup/plugin-node-resolve": ^9.0.0
     "@rollup/plugin-replace": ^2.3.3
     "@rollup/plugin-typescript": ^5.0.2
-    "@types/d3-array": ^2.0.0
     "@types/d3-geo": ^1.11.1
     "@types/d3-scale-chromatic": ^1.5.0
     "@types/jest": ^26.0.12
@@ -2367,7 +2371,6 @@ __metadata:
     "@yarnpkg/pnpify": ^2.2.1
     canvas: ^2.6.1
     chart.js: ^3.0.0-beta
-    d3-array: ^2.7.1
     d3-geo: ^2.0.1
     d3-scale-chromatic: ^2.0.0
     eslint: ^7.8.1
@@ -2749,7 +2752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-array@npm:>=2.5, d3-array@npm:^2.7.1":
+"d3-array@npm:>=2.5":
   version: 2.7.1
   resolution: "d3-array@npm:2.7.1"
   checksum: 1bc3325583069f7b889c3fc72dea53c0c9057f1bb45a70bb4c932672616751f0fd6cf09187276b84b305f02a828f23f272226b6888df410ed4b275a5b1dce9cc

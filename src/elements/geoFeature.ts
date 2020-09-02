@@ -1,4 +1,4 @@
-import { Element, Rectangle, IRectangleOptions, IVisualElement, IPoint } from '@sgratzl/chartjs-esm-facade';
+import { Element, Rectangle, IRectangleOptions, IVisualElement, IPoint } from 'chart.js';
 import { geoContains, GeoProjection } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 

@@ -26,7 +26,8 @@
     "paths": {
       "@": ["./src"],
       "*": ["*", "node_modules/*"]
-    }
+    },
+    "skipLibCheck": true // TODO till chart.js bug is fixed
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

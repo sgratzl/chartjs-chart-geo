@@ -23,7 +23,7 @@ works great with https://github.com/chartjs/chartjs-plugin-datalabels
 ## Install
 
 ```bash
-npm install --save chart.js@next @sgratzl/chartjs-esm-facade@next chartjs-chart-geo@next
+npm install --save chart.js@next chartjs-chart-geo@next
 ```
 
 ## Usage

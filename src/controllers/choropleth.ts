@@ -1,6 +1,5 @@
 import {
   Chart,
-  merge,
   UpdateMode,
   IScriptableContext,
   ITooltipItem,
@@ -11,7 +10,8 @@ import {
   IChartConfiguration,
   ChartItem,
   IPointOptions,
-} from '@sgratzl/chartjs-esm-facade';
+} from 'chart.js';
+import { merge } from 'chart.js/helpers/core';
 import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint } from './geo';
 import { GeoFeature, IGeoFeatureOptions, IGeoFeatureProps } from '../elements';
 import {
@@ -24,6 +24,10 @@ import {
 import patchController from './patchController';
 
 export class ChoroplethController extends GeoController<GeoFeature> {
+  initialize() {
+    super.initialize();
+    this.enableOptionSharing = true;
+  }
   linkScales() {
     super.linkScales();
     const dataset = this.getGeoDataset();
@@ -49,9 +53,10 @@ export class ChoroplethController extends GeoController<GeoFeature> {
 
   updateElements(elems: GeoFeature[], start: number, mode: UpdateMode) {
     const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(mode, elems[start], firstOpts);
+    const sharedOptions = this.getSharedOptions(firstOpts);
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
     for (let i = 0; i < elems.length; i++) {
       const index = start + i;
@@ -65,11 +70,10 @@ export class ChoroplethController extends GeoController<GeoFeature> {
         y: center.y,
       };
       if (includeOptions) {
-        properties.options = this.resolveDataElementOptions(index, mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(index, mode);
       }
       this.updateElement(elem, index, properties, mode);
     }
-    this.updateSharedOptions(sharedOptions, mode);
   }
 
   indexToColor(index: number) {

@@ -46,7 +46,6 @@
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^3.1.1",
     "@rollup/plugin-commonjs": "^15.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-replace": "^2.3.3",
@@ -105,10 +104,5 @@
     "prepare": "npm run build",
     "release": "release-it --disable-metrics --npm.skipChecks",
     "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
-  },
-  "dependenciesMeta": {
-    "d3-geo": {
-      "unplugged": true
-    }
   }
 }

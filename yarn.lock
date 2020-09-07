@@ -844,17 +844,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-alias@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "@rollup/plugin-alias@npm:3.1.1"
-  dependencies:
-    slash: ^3.0.0
-  peerDependencies:
-    rollup: ^1.20.0||^2.0.0
-  checksum: 785d8a4283e59bbd76447e2ea5128e34c9ebf59b626841a82d5c8366687439c2fe7d0690be04e73e51ada5264d1efdfd4de8ec2528f4f9428f9541040311262c
-  languageName: node
-  linkType: hard
-
 "@rollup/plugin-commonjs@npm:^15.0.0":
   version: 15.0.0
   resolution: "@rollup/plugin-commonjs@npm:15.0.0"
@@ -2354,7 +2343,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "chartjs-chart-geo@workspace:."
   dependencies:
-    "@rollup/plugin-alias": ^3.1.1
     "@rollup/plugin-commonjs": ^15.0.0
     "@rollup/plugin-node-resolve": ^9.0.0
     "@rollup/plugin-replace": ^2.3.3
@@ -2401,9 +2389,6 @@ __metadata:
     world-atlas: ^2.0.2
   peerDependencies:
     chart.js: ^3.0.0-beta
-  dependenciesMeta:
-    d3-geo:
-      unplugged: true
   languageName: unknown
   linkType: soft
 

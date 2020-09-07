@@ -4,7 +4,7 @@
     <title>Chart</title>
   </head>
   <body>
-    <div id="container" style="width: 75%;">
+    <div id="container" style="width: 75%">
       <canvas id="canvas"></canvas>
     </div>
     <script defer src="https://unpkg.com/es-module-shims"></script>
@@ -12,7 +12,9 @@
       {
         "imports": {
           "chart.js": "https://unpkg.com/chart.js@3.0.0-beta?module",
-          "chartjs-chart-geo": "../dist/chartgeo.esm.js",
+          "chart.js/helpers/core": "https://unpkg.com/chart.js@3.0.0-beta/helpers/core.js?module",
+          "chart.js/helpers/canvas": "https://unpkg.com/chart.js@3.0.0-beta/helpers/canvas.js?module",
+          "chartjs-chart-geo": "../build/index.esm.js",
           "d3-geo": "https://unpkg.com/d3-geo?module",
           "d3-scale-chromatic": "https://unpkg.com/d3-scale-chromatic?module",
           "topojson-client": "https://unpkg.com/topojson-client?module"

@@ -5,10 +5,8 @@ import dts from 'rollup-plugin-dts';
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
-import alias from '@rollup/plugin-alias';
 
 import fs from 'fs';
-import path from 'path';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
@@ -45,7 +43,11 @@ export default (options) => {
     external: (v) => isDependency(v) || isPeerDependency(v),
     plugins: [
       typescript(),
-      resolve(),
+      resolve({
+        mainFields: ['module', 'main'],
+        extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
+        modulesOnly: true,
+      }),
       commonjs(),
       replace({
         // eslint-disable-next-line no-undef
@@ -76,13 +78,9 @@ export default (options) => {
         format: 'cjs',
       },
       plugins: [
-        alias({
-          entries: [
-            {
-              find: /(.*)chartjs-helpers(.*)/,
-              replacement: '$1chartjs-helpers$2/index.js',
-            },
-          ],
+        replace({
+          'chartjs-helpers/core': 'chartjs-helpers/core/index.js',
+          'chartjs-helpers/canvas': 'chartjs-helpers/canvas/index.js',
         }),
         ...base.plugins,
       ],
@@ -107,13 +105,9 @@ export default (options) => {
       ].filter(Boolean),
       external: (v) => isPeerDependency(v),
       plugins: [
-        alias({
-          entries: [
-            {
-              find: /(.*)chartjs-helpers(.*)/,
-              replacement: '$1chartjs-helpers$2/index.js',
-            },
-          ],
+        replace({
+          'chartjs-helpers/core': 'chartjs-helpers/core/index.js',
+          'chartjs-helpers/canvas': 'chartjs-helpers/canvas/index.js',
         }),
         ...base.plugins,
       ],

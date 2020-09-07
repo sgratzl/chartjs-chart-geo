@@ -1,2 +1,5 @@
 /* eslint-env node */
-module.exports = require('chart.js').helpers;
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const chart = require('chart.js');
+
+module.exports = chart.helpers;

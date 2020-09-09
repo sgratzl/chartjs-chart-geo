@@ -28,7 +28,7 @@
       "*": ["*", "node_modules/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/__tests__/chartjsFlatHelpers.js"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
 
   "typedocOptions": {
     "name": "TSLibrary",

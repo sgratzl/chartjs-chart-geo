@@ -2,14 +2,14 @@ import {
   defaults,
   LinearScale,
   LogarithmicScale,
-  merge,
-  drawPoint,
   Scale,
   IPointOptions,
   ILinearScaleOptions,
   ILogarithmicScaleOptions,
   DeepPartial,
-} from '@sgratzl/chartjs-esm-facade';
+} from 'chart.js';
+import { merge } from '../../chartjs-helpers/core';
+import { drawPoint } from '../../chartjs-helpers/canvas';
 import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
 
 export interface ISizeScaleOptions extends ILegendScaleOptions {

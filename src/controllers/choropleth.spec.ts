@@ -11,7 +11,7 @@ import createChart from '../__tests__/createChart';
 import states10m from 'us-atlas/states-10m.json';
 import countries50m from 'world-atlas/countries-50m.json';
 import rnd from 'seedrandom';
-import { registry, DeepPartial } from '@sgratzl/chartjs-esm-facade';
+import { registry, DeepPartial } from 'chart.js';
 import { GeoFeature } from '../elements';
 import { IGeoDataPoint } from './geo';
 

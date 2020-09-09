@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 /// <reference types="node" />
 
-import { Chart, IChartConfiguration, defaults } from '@sgratzl/chartjs-esm-facade';
+import { Chart, IChartConfiguration, defaults } from 'chart.js';
 import { toMatchImageSnapshot, MatchImageSnapshotOptions } from 'jest-image-snapshot';
 
 expect.extend({ toMatchImageSnapshot });

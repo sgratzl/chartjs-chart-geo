@@ -1,10 +1,1 @@
-packageExtensions:
-  'tsdx@*':
-    dependencies:
-      'babel-jest': '^25.5.1'
-  'eslint-config-react-app@*':
-    dependencies:
-      'babel-eslint': '*'
-  'eslint-plugin-prettier@*':
-    dependencies:
-      'eslint-config-prettier': '*'
+# packageExtensions:

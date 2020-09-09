@@ -1,3 +1,6 @@
+/* eslint-env node */
+
 module.exports = {
-  testEnvironment: require.resolve('jest-environment-jsdom-sixteen'),
+  preset: 'ts-jest',
+  testRegex: '((\\.|/)(test|spec))\\.[jt]sx?$',
 };

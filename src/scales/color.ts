@@ -1,12 +1,12 @@
 import {
-  merge,
   LinearScale,
   LogarithmicScale,
   ILinearScaleOptions,
   Scale,
   ILogarithmicScaleOptions,
   DeepPartial,
-} from '@sgratzl/chartjs-esm-facade';
+} from 'chart.js';
+import { merge } from '../../chartjs-helpers/core';
 import {
   interpolateBlues,
   interpolateBrBG,

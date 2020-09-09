@@ -1,4 +1,4 @@
-import { Scale, IPadding, IChartArea, ICartesianScaleOptions } from '@sgratzl/chartjs-esm-facade';
+import { Scale, IPadding, IChartArea, ICartesianScaleOptions } from 'chart.js';
 
 export interface ILegendScaleOptions extends ICartesianScaleOptions {
   /**

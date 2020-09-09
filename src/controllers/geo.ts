@@ -1,14 +1,13 @@
 import {
   DatasetController,
-  clipArea,
-  unclipArea,
-  valueOrDefault,
   IChartDataset,
   ScriptableAndArrayOptions,
   UpdateMode,
   Element,
   IVisualElement,
-} from '@sgratzl/chartjs-esm-facade';
+} from 'chart.js';
+import { valueOrDefault } from '../../chartjs-helpers/core';
+import { clipArea, unclipArea } from '../../chartjs-helpers/canvas';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
@@ -100,13 +99,14 @@ export class GeoController<E extends Element & IVisualElement> extends DatasetCo
       }
       elem.projectionScale = scale;
       if (mode !== 'resize') {
+        const options = patchDatasetElementOptions(this.resolveDatasetElementOptions(active));
         const properties = {
           feature: this.resolveOutline(),
-          options: patchDatasetElementOptions(this.resolveDatasetElementOptions(active)),
+          options,
         };
         this.updateElement(elem, undefined, properties, mode);
         if (this.getGraticule()) {
-          (meta as any).graticule = properties.options;
+          (meta as any).graticule = options;
         }
       }
     } else if (this.getGraticule() && mode !== 'resize') {
@@ -133,7 +133,8 @@ export class GeoController<E extends Element & IVisualElement> extends DatasetCo
 
   showGraticule() {
     const g = this.getGraticule();
-    if (!g) {
+    const options = (this.getMeta() as any).graticule;
+    if (!g || !options) {
       return;
     }
     const ctx = this.chart.ctx;
@@ -158,7 +159,6 @@ export class GeoController<E extends Element & IVisualElement> extends DatasetCo
       path(geo());
     }
 
-    const options = (this.getMeta() as any).graticule;
     ctx.strokeStyle = options.graticuleBorderColor;
     ctx.lineWidth = options.graticuleBorderWidth;
     ctx.stroke();

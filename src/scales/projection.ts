@@ -1,4 +1,4 @@
-import { Scale, IScaleOptions, DeepPartial } from '@sgratzl/chartjs-esm-facade';
+import { Scale, IScaleOptions, DeepPartial } from 'chart.js';
 import {
   geoPath,
   geoAzimuthalEqualArea,

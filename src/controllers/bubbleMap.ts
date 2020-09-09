@@ -10,17 +10,21 @@ import {
   IPointProps,
   IScriptableContext,
   ITooltipItem,
-  merge,
   Point,
   ScriptableAndArrayOptions,
   UpdateMode,
-} from '@sgratzl/chartjs-esm-facade';
+} from 'chart.js';
+import { merge } from '../../chartjs-helpers/core';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 import { ILogarithmicSizeScaleType, ISizeScaleType, ProjectionScale, SizeScale, IProjectionScaleType } from '../scales';
 import { GeoController, geoDefaults, IGeoChartOptions } from './geo';
 import patchController from './patchController';
 
 export class BubbleMapController extends GeoController<Point> {
+  initialize() {
+    super.initialize();
+    this.enableOptionSharing = true;
+  }
   linkScales() {
     super.linkScales();
     const dataset = this.getGeoDataset();
@@ -50,11 +54,13 @@ export class BubbleMapController extends GeoController<Point> {
   updateElements(elems: Point[], start: number, mode: UpdateMode) {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(mode, elems[start], firstOpts);
+    const sharedOptions = this.getSharedOptions(firstOpts);
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();
 
     (this.getMeta().rScale! as SizeScale)._model = firstOpts; // for legend rendering styling
+
+    this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
     for (let i = 0; i < elems.length; i++) {
       const index = start + i;
@@ -67,14 +73,13 @@ export class BubbleMapController extends GeoController<Point> {
         skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
       };
       if (includeOptions) {
-        properties.options = this.resolveDataElementOptions(index, mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(index, mode);
         if (reset) {
           properties.options!.radius = 0;
         }
       }
       this.updateElement(elem, index, properties, mode);
     }
-    this.updateSharedOptions(sharedOptions, mode);
   }
 
   indexToRadius(index: number) {

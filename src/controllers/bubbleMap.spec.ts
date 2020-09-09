@@ -1,4 +1,4 @@
-import { registry } from '@sgratzl/chartjs-esm-facade';
+import { registry } from 'chart.js';
 import rnd from 'seedrandom';
 import { feature } from 'topojson-client';
 import states10m from 'us-atlas/states-10m.json';

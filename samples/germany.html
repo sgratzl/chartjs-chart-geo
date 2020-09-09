@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/chart.js@3.0.0-alpha.2/dist/chart.js"></script>
-    <script src="https://unpkg.com/@sgratzl/chartjs-esm-facade@3.0.0-alpha.21"></script>
-    <script src="../dist/chartgeo.umd.development.js"></script>
+    <script src="https://unpkg.com/chart.js@3.0.0-beta/dist/chart.js"></script>
+    <script src="../build/index.umd.js"></script>
   </head>
 
   <body>
-    <div style="width: 75%;">
-      <canvas id="canvas" style="border: 1px solid black;"></canvas>
+    <div style="width: 75%">
+      <canvas id="canvas" style="border: 1px solid black"></canvas>
     </div>
     <script>
       const country = fetch(

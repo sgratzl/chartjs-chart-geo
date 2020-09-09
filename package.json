@@ -1,7 +1,7 @@
 {
   "name": "chartjs-chart-geo",
   "description": "Chart.js module for charting maps",
-  "version": "3.0.0-alpha.20",
+  "version": "3.0.0-beta.0",
   "author": {
     "name": "Samuel Gratzl",
     "email": "sam@sgratzl.com",
@@ -103,6 +103,7 @@
     "docs": "typedoc",
     "prepare": "npm run build",
     "release": "release-it --disable-metrics --npm.skipChecks",
-    "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
+    "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next",
+    "release:beta": "release-it --disable-metrics --npm.skipChecks --preRelease=beta --npm.tag=next"
   }
 }

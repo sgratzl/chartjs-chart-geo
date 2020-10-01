@@ -25,7 +25,7 @@ export default function createChart<
   TYPE extends IChartType,
   DATA extends unknown[] = DefaultDataPoint<TYPE>,
   LABEL = string
->(config: IChartConfiguration<TYPE, DATA, LABEL>, width = 300, height = 300) {
+>(config: IChartConfiguration<TYPE, DATA, LABEL>, width = 800, height = 600) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;

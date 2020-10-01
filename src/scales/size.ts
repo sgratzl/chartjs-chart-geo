@@ -6,10 +6,9 @@ import {
   IPointOptions,
   ILinearScaleOptions,
   ILogarithmicScaleOptions,
-  DeepPartial,
 } from 'chart.js';
-import { merge } from '../../chartjs-helpers/core';
-import { drawPoint } from '../../chartjs-helpers/canvas';
+import { merge } from 'chart.js/helpers';
+import { drawPoint } from 'chart.js/helpers';
 import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
 
 export interface ISizeScaleOptions extends ILegendScaleOptions {
@@ -223,9 +222,18 @@ export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & ILog
   static readonly defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
 }
 
-export interface ISizeScaleType extends DeepPartial<ISizeScaleOptions & ILinearScaleOptions> {
-  type: 'size';
-}
-export interface ILogarithmicSizeScaleType extends DeepPartial<ISizeScaleOptions & ILogarithmicScaleOptions> {
-  type: 'sizeLogarithmic';
+declare module 'chart.js' {
+  export enum ScaleTypeEnum {
+    size = 'size',
+    sizeLogarithmic = 'sizeLogarithmic',
+  }
+
+  export interface IScaleTypeRegistry {
+    size: {
+      options: ISizeScaleOptions & ILinearScaleOptions;
+    };
+    sizeLogarithmic: {
+      options: ISizeScaleOptions & ILogarithmicScaleOptions;
+    };
+  }
 }

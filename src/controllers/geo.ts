@@ -6,8 +6,8 @@ import {
   Element,
   IVisualElement,
 } from 'chart.js';
-import { valueOrDefault } from '../../chartjs-helpers/core';
-import { clipArea, unclipArea } from '../../chartjs-helpers/canvas';
+import { valueOrDefault } from 'chart.js/helpers';
+import { clipArea, unclipArea } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
@@ -51,7 +51,7 @@ function patchDatasetElementOptions(options: any) {
 
 export class GeoController<E extends Element & IVisualElement> extends DatasetController<E, GeoFeature> {
   getGeoDataset() {
-    return (super.getDataset() as unknown) as IChartDataset<any, IGeoControllerDatasetOptions>;
+    return (super.getDataset() as unknown) as IChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
   }
   getGeoOptions() {
     return (this.chart.options as unknown) as IGeoChartOptions;
@@ -113,7 +113,7 @@ export class GeoController<E extends Element & IVisualElement> extends DatasetCo
       (meta as any).graticule = patchDatasetElementOptions(this.resolveDatasetElementOptions(active));
     }
 
-    this.updateElements(meta.data, 0, mode);
+    this.updateElements(meta.data, 0, meta.data.length, mode);
     if (dirtyCache) {
       meta.data.forEach((elem) => delete (elem as any).cache);
     }

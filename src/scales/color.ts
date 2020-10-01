@@ -1,12 +1,5 @@
-import {
-  LinearScale,
-  LogarithmicScale,
-  ILinearScaleOptions,
-  Scale,
-  ILogarithmicScaleOptions,
-  DeepPartial,
-} from 'chart.js';
-import { merge } from '../../chartjs-helpers/core';
+import { LinearScale, LogarithmicScale, Scale, ILogarithmicScaleOptions, ILinearScaleOptions } from 'chart.js';
+import { merge } from 'chart.js/helpers';
 import {
   interpolateBlues,
   interpolateBrBG,
@@ -274,9 +267,18 @@ export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & 
   static readonly defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
 }
 
-export interface IColorScaleType extends DeepPartial<IColorScaleOptions & ILinearScaleOptions> {
-  type: 'color';
-}
-export interface ILogarithmicColorScaleType extends DeepPartial<IColorScaleOptions & ILogarithmicScaleOptions> {
-  type: 'colorLogarithmic';
+declare module 'chart.js' {
+  export enum ScaleTypeEnum {
+    color = 'color',
+    colorLogarithmic = 'colorLogarithmic',
+  }
+
+  export interface IScaleTypeRegistry {
+    color: {
+      options: IColorScaleOptions & ILinearScaleOptions;
+    };
+    colorLogarithmic: {
+      options: IColorScaleOptions & ILogarithmicScaleOptions;
+    };
+  }
 }

@@ -3,7 +3,6 @@ import {
   Chart,
   ChartItem,
   IChartConfiguration,
-  IChartDataset,
   ICommonHoverOptions,
   IControllerDatasetOptions,
   IPointOptions,
@@ -14,9 +13,9 @@ import {
   ScriptableAndArrayOptions,
   UpdateMode,
 } from 'chart.js';
-import { merge } from '../../chartjs-helpers/core';
+import { merge } from 'chart.js/helpers';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
-import { ILogarithmicSizeScaleType, ISizeScaleType, ProjectionScale, SizeScale, IProjectionScaleType } from '../scales';
+import { ProjectionScale, SizeScale } from '../scales';
 import { GeoController, geoDefaults, IGeoChartOptions } from './geo';
 import patchController from './patchController';
 
@@ -51,7 +50,7 @@ export class BubbleMapController extends GeoController<Point> {
     }
   }
 
-  updateElements(elems: Point[], start: number, mode: UpdateMode) {
+  updateElements(elems: Point[], start: number, _count: number, mode: UpdateMode) {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts);
@@ -140,37 +139,35 @@ export interface IBubbleMapDataPoint {
   value: number;
 }
 
-export interface IBubbleMapChartOptions extends IGeoChartOptions {
-  scales: {
-    xy: IProjectionScaleType;
-    r: ISizeScaleType | ILogarithmicSizeScaleType;
-  };
-}
-
 export interface IBubbleMapControllerDatasetOptions
   extends IControllerDatasetOptions,
     IGeoChartOptions,
     ScriptableAndArrayOptions<IGeoFeatureOptions>,
     ScriptableAndArrayOptions<ICommonHoverOptions> {}
 
-export type IBubbleMapControllerDataset<T = IBubbleMapDataPoint> = IChartDataset<T, IBubbleMapControllerDatasetOptions>;
+declare module 'chart.js' {
+  export enum ChartTypeEnum {
+    bubbleMap = 'bubbleMap',
+  }
 
-export type IBubbleMapControllerConfiguration<T = IBubbleMapDataPoint, L = string> = IChartConfiguration<
+  export interface IChartTypeRegistry {
+    bubbleMap: {
+      chartOptions: IGeoChartOptions;
+      datasetOptions: IBubbleMapControllerDatasetOptions;
+      defaultDataPoint: IBubbleMapDataPoint[];
+      scales: keyof IScaleTypeRegistry;
+    };
+  }
+}
+
+export class BubbleMapChart<DATA extends unknown[] = IBubbleMapDataPoint[], LABEL = string> extends Chart<
   'bubbleMap',
-  T,
-  L,
-  IBubbleMapControllerDataset<T>,
-  IBubbleMapChartOptions
->;
-
-export class BubbleMapChart<T = IBubbleMapDataPoint, L = string> extends Chart<
-  T,
-  L,
-  IBubbleMapControllerConfiguration<T, L>
+  DATA,
+  LABEL
 > {
   static id = BubbleMapController.id;
 
-  constructor(item: ChartItem, config: Omit<IBubbleMapControllerConfiguration<T, L>, 'type'>) {
+  constructor(item: ChartItem, config: Omit<IChartConfiguration<'bubbleMap', DATA, LABEL>, 'type'>) {
     super(item, patchController('bubbleMap', config, BubbleMapController, GeoFeature, [SizeScale, ProjectionScale]));
   }
 }

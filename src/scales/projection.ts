@@ -1,4 +1,4 @@
-import { Scale, IScaleOptions, DeepPartial } from 'chart.js';
+import { Scale, ICoreScaleOptions } from 'chart.js';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -46,7 +46,7 @@ Object.keys(lookup).forEach((key) => {
   lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
 });
 
-export interface IProjectionScaleOptions extends IScaleOptions {
+export interface IProjectionScaleOptions extends ICoreScaleOptions {
   /**
    * projection method used
    * @default albersUsa
@@ -155,6 +155,14 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   };
 }
 
-export interface IProjectionScaleType extends DeepPartial<IProjectionScaleOptions> {
-  type: 'projection';
+declare module 'chart.js' {
+  export enum ScaleTypeEnum {
+    projection = 'projection',
+  }
+
+  export interface IScaleTypeRegistry {
+    projection: {
+      options: IProjectionScaleOptions;
+    };
+  }
 }

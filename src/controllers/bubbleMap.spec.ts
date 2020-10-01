@@ -9,10 +9,9 @@ import {
   SizeScale,
   ISizeScaleOptions,
   IProjectionScaleOptions,
-  ILogarithmicSizeScaleType,
 } from '../scales';
 import createChart from '../__tests__/createChart';
-import { BubbleMapController, IBubbleMapControllerConfiguration, IBubbleMapDataPoint } from './bubbleMap';
+import { BubbleMapController } from './bubbleMap';
 import data from './__tests__/data';
 
 describe('bubbleMap', () => {
@@ -27,7 +26,7 @@ describe('bubbleMap', () => {
     const us = states10m as any;
     const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
+    const chart = createChart({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -65,7 +64,7 @@ describe('bubbleMap', () => {
     const us = states10m as any;
     const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
+    const chart = createChart({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -104,7 +103,7 @@ describe('bubbleMap', () => {
     const us = states10m as any;
     const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
+    const chart = createChart({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -143,7 +142,7 @@ describe('bubbleMap', () => {
     const us = states10m as any;
     const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart<IBubbleMapDataPoint, string, IBubbleMapControllerConfiguration>({
+    const chart = createChart({
       type: BubbleMapController.id,
       data: {
         labels: data.map((d) => d.description),
@@ -170,7 +169,7 @@ describe('bubbleMap', () => {
             ticks: {
               display: false,
             },
-          } as ILogarithmicSizeScaleType,
+          },
         },
       },
     });

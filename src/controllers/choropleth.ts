@@ -6,21 +6,14 @@ import {
   ICommonHoverOptions,
   ScriptableAndArrayOptions,
   IControllerDatasetOptions,
-  IChartDataset,
   IChartConfiguration,
   ChartItem,
   IPointOptions,
 } from 'chart.js';
-import { merge } from '../../chartjs-helpers/core';
+import { merge } from 'chart.js/helpers';
 import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint } from './geo';
 import { GeoFeature, IGeoFeatureOptions, IGeoFeatureProps } from '../elements';
-import {
-  ColorScale,
-  ProjectionScale,
-  IColorScaleType,
-  ILogarithmicColorScaleType,
-  IProjectionScaleType,
-} from '../scales';
+import { ColorScale, ProjectionScale } from '../scales';
 import patchController from './patchController';
 
 export class ChoroplethController extends GeoController<GeoFeature> {
@@ -51,7 +44,7 @@ export class ChoroplethController extends GeoController<GeoFeature> {
     }
   }
 
-  updateElements(elems: GeoFeature[], start: number, mode: UpdateMode) {
+  updateElements(elems: GeoFeature[], start: number, _count: number, mode: UpdateMode) {
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts);
     const includeOptions = this.includeOptions(mode, sharedOptions);
@@ -128,31 +121,29 @@ export interface IChoroplethControllerDatasetOptions
     ScriptableAndArrayOptions<IGeoFeatureOptions>,
     ScriptableAndArrayOptions<ICommonHoverOptions> {}
 
-export type IChoroplethControllerDataset<T = IGeoDataPoint> = IChartDataset<T, IChoroplethControllerDatasetOptions>;
+declare module 'chart.js' {
+  export enum ChartTypeEnum {
+    choropleth = 'choropleth',
+  }
 
-export interface IChoroplethChartOptions extends IGeoChartOptions {
-  scales: {
-    xy: IProjectionScaleType;
-    color: IColorScaleType | ILogarithmicColorScaleType;
-  };
+  export interface IChartTypeRegistry {
+    choropleth: {
+      chartOptions: IGeoChartOptions;
+      datasetOptions: IChoroplethControllerDatasetOptions;
+      defaultDataPoint: IGeoDataPoint[];
+      scales: keyof IScaleTypeRegistry;
+    };
+  }
 }
 
-export type IChoroplethControllerConfiguration<T = IGeoDataPoint, L = string> = IChartConfiguration<
+export class ChoroplethChart<DATA extends unknown[] = IGeoDataPoint[], LABEL = string> extends Chart<
   'choropleth',
-  T,
-  L,
-  IChoroplethControllerDataset<T>,
-  IChoroplethChartOptions
->;
-
-export class ChoroplethChart<T = IGeoDataPoint, L = string> extends Chart<
-  T,
-  L,
-  IChoroplethControllerConfiguration<T, L>
+  DATA,
+  LABEL
 > {
   static id = ChoroplethController.id;
 
-  constructor(item: ChartItem, config: Omit<IChoroplethControllerConfiguration<T, L>, 'type'>) {
+  constructor(item: ChartItem, config: Omit<IChartConfiguration<'choropleth', DATA, LABEL>, 'type'>) {
     super(item, patchController('choropleth', config, ChoroplethController, GeoFeature, [ColorScale, ProjectionScale]));
   }
 }

@@ -1,4 +1,4 @@
-import { ChoroplethController, IChoroplethControllerConfiguration } from './choropleth';
+import { ChoroplethController } from './choropleth';
 import {
   ColorLogarithmicScale,
   ColorScale,
@@ -13,7 +13,6 @@ import countries50m from 'world-atlas/countries-50m.json';
 import rnd from 'seedrandom';
 import { registry, DeepPartial } from 'chart.js';
 import { GeoFeature } from '../elements';
-import { IGeoDataPoint } from './geo';
 
 describe('choropleth', () => {
   beforeAll(() => {
@@ -28,7 +27,7 @@ describe('choropleth', () => {
     const nation = (feature(us, us.objects.nation) as any).features[0];
     const states = (feature(us, us.objects.states) as any).features as any[];
 
-    const chart = createChart<IGeoDataPoint, string, IChoroplethControllerConfiguration>({
+    const chart = createChart({
       type: ChoroplethController.id,
       data: {
         labels: states.map((d) => d.properties.name),
@@ -74,7 +73,7 @@ describe('choropleth', () => {
     const nation = (feature(us, us.objects.nation) as any).features[0];
     const states = (feature(us, us.objects.states) as any).features;
 
-    const chart = createChart<IGeoDataPoint, string, IChoroplethControllerConfiguration>({
+    const chart = createChart({
       type: ChoroplethController.id,
       data: {
         labels: states.map((d: any) => d.properties.name),
@@ -120,7 +119,7 @@ describe('choropleth', () => {
     const data = countries50m as any;
     const countries = (feature(data, data.objects.countries) as any).features as any[];
 
-    const chart = createChart<IGeoDataPoint, string, IChoroplethControllerConfiguration>({
+    const chart = createChart({
       type: ChoroplethController.id,
       data: {
         labels: countries.map((d) => d.properties.name),

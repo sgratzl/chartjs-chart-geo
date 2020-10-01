@@ -10,6 +10,7 @@ import {
   IScriptableContext,
   ITooltipItem,
   Point,
+  Scale,
   ScriptableAndArrayOptions,
   UpdateMode,
 } from 'chart.js';
@@ -36,6 +37,11 @@ export class BubbleMapController extends GeoController<Point> {
     meta.iAxisID = dataset.iAxisID = meta.xAxisID!;
   }
 
+  _getOtherScale(scale: Scale) {
+    // for strange get min max with other scale
+    return scale;
+  }
+
   parse(start: number, count: number) {
     const rScale = this.getMeta().rScale!;
     const data = (this.getDataset().data as unknown) as IBubbleMapDataPoint[];
@@ -50,7 +56,7 @@ export class BubbleMapController extends GeoController<Point> {
     }
   }
 
-  updateElements(elems: Point[], start: number, _count: number, mode: UpdateMode) {
+  updateElements(elems: Point[], start: number, count: number, mode: UpdateMode) {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts);
@@ -61,8 +67,7 @@ export class BubbleMapController extends GeoController<Point> {
 
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
-    for (let i = 0; i < elems.length; i++) {
-      const index = start + i;
+    for (let i = start; i < start + count; i++) {
       const elem = elems[i];
       const parsed = this.getParsed(i);
       const xy = scale.projection!([parsed.x, parsed.y]);
@@ -72,12 +77,12 @@ export class BubbleMapController extends GeoController<Point> {
         skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
       };
       if (includeOptions) {
-        properties.options = sharedOptions || this.resolveDataElementOptions(index, mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(i, mode);
         if (reset) {
           properties.options!.radius = 0;
         }
       }
-      this.updateElement(elem, index, properties, mode);
+      this.updateElement(elem, i, properties, mode);
     }
   }
 

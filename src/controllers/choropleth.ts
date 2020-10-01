@@ -9,6 +9,7 @@ import {
   IChartConfiguration,
   ChartItem,
   IPointOptions,
+  Scale,
 } from 'chart.js';
 import { merge } from 'chart.js/helpers';
 import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint } from './geo';
@@ -33,6 +34,11 @@ export class ChoroplethController extends GeoController<GeoFeature> {
     meta.iAxisID = dataset.iAxisID = meta.xAxisID!;
   }
 
+  _getOtherScale(scale: Scale) {
+    // for strange get min max with other scale
+    return scale;
+  }
+
   parse(start: number, count: number) {
     const rScale = this.getMeta().rScale!;
     const data = this.getDataset().data;
@@ -44,15 +50,14 @@ export class ChoroplethController extends GeoController<GeoFeature> {
     }
   }
 
-  updateElements(elems: GeoFeature[], start: number, _count: number, mode: UpdateMode) {
+  updateElements(elems: GeoFeature[], start: number, count: number, mode: UpdateMode) {
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts);
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
-    for (let i = 0; i < elems.length; i++) {
-      const index = start + i;
+    for (let i = start; i < start + count; i++) {
       const elem = elems[i];
       elem.projectionScale = scale;
       elem.feature = (this as any)._data[i].feature;
@@ -63,9 +68,9 @@ export class ChoroplethController extends GeoController<GeoFeature> {
         y: center.y,
       };
       if (includeOptions) {
-        properties.options = sharedOptions || this.resolveDataElementOptions(index, mode);
+        properties.options = sharedOptions || this.resolveDataElementOptions(i, mode);
       }
-      this.updateElement(elem, index, properties, mode);
+      this.updateElement(elem, i, properties, mode);
     }
   }
 

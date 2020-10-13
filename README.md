@@ -1,4 +1,4 @@
-# Chart.js Graphs
+# Chart.js Geo
 
 [![NPM Package][npm-image]][npm-url] [![Github Actions][github-actions-image]][github-actions-url]
 

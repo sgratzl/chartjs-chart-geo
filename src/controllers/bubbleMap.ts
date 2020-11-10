@@ -2,14 +2,14 @@ import {
   BubbleController,
   Chart,
   ChartItem,
-  IChartConfiguration,
-  ICommonHoverOptions,
-  IControllerDatasetOptions,
-  IPointOptions,
-  IPointProps,
-  IScriptableContext,
-  ITooltipItem,
-  Point,
+  ChartConfiguration,
+  CommonHoverOptions,
+  ControllerDatasetOptions,
+  PointOptions,
+  PointProps,
+  ScriptableContext,
+  TooltipItem,
+  PointElement,
   Scale,
   ScriptableAndArrayOptions,
   UpdateMode,
@@ -20,7 +20,7 @@ import { ProjectionScale, SizeScale } from '../scales';
 import { GeoController, geoDefaults, IGeoChartOptions } from './geo';
 import patchController from './patchController';
 
-export class BubbleMapController extends GeoController<Point> {
+export class BubbleMapController extends GeoController<PointElement> {
   initialize() {
     super.initialize();
     this.enableOptionSharing = true;
@@ -56,7 +56,7 @@ export class BubbleMapController extends GeoController<Point> {
     }
   }
 
-  updateElements(elems: Point[], start: number, count: number, mode: UpdateMode) {
+  updateElements(elems: PointElement[], start: number, count: number, mode: UpdateMode) {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts);
@@ -71,7 +71,7 @@ export class BubbleMapController extends GeoController<Point> {
       const elem = elems[i];
       const parsed = this.getParsed(i);
       const xy = scale.projection!([parsed.x, parsed.y]);
-      const properties: IPointProps & { options?: IPointOptions; skip: boolean } = {
+      const properties: PointProps & { options?: PointOptions; skip: boolean } = {
         x: xy ? xy[0] : 0,
         y: xy ? xy[1] : 0,
         skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
@@ -96,7 +96,7 @@ export class BubbleMapController extends GeoController<Point> {
   static readonly defaults: any = merge({}, [
     geoDefaults,
     {
-      dataElementType: Point.id,
+      dataElementType: PointElement.id,
       dataElementOptions: BubbleController.defaults.dataElementOptions,
       datasetElementType: GeoFeature.id,
       showOutline: true,
@@ -107,7 +107,7 @@ export class BubbleMapController extends GeoController<Point> {
             // Title doesn't make sense for scatter since we format the data as a point
             return '';
           },
-          label(item: ITooltipItem) {
+          label(item: TooltipItem) {
             if (item.formattedValue == null) {
               return item.chart.data.labels[item.dataIndex];
             }
@@ -122,7 +122,7 @@ export class BubbleMapController extends GeoController<Point> {
       },
       elements: {
         point: {
-          radius(context: IScriptableContext) {
+          radius(context: ScriptableContext) {
             if (context.dataIndex == null) {
               return null;
             }
@@ -145,17 +145,13 @@ export interface IBubbleMapDataPoint {
 }
 
 export interface IBubbleMapControllerDatasetOptions
-  extends IControllerDatasetOptions,
+  extends ControllerDatasetOptions,
     IGeoChartOptions,
     ScriptableAndArrayOptions<IGeoFeatureOptions>,
-    ScriptableAndArrayOptions<ICommonHoverOptions> {}
+    ScriptableAndArrayOptions<CommonHoverOptions> {}
 
 declare module 'chart.js' {
-  export enum ChartTypeEnum {
-    bubbleMap = 'bubbleMap',
-  }
-
-  export interface IChartTypeRegistry {
+  export interface ChartTypeRegistry {
     bubbleMap: {
       chartOptions: IGeoChartOptions;
       datasetOptions: IBubbleMapControllerDatasetOptions;
@@ -172,7 +168,7 @@ export class BubbleMapChart<DATA extends unknown[] = IBubbleMapDataPoint[], LABE
 > {
   static id = BubbleMapController.id;
 
-  constructor(item: ChartItem, config: Omit<IChartConfiguration<'bubbleMap', DATA, LABEL>, 'type'>) {
+  constructor(item: ChartItem, config: Omit<ChartConfiguration<'bubbleMap', DATA, LABEL>, 'type'>) {
     super(item, patchController('bubbleMap', config, BubbleMapController, GeoFeature, [SizeScale, ProjectionScale]));
   }
 }

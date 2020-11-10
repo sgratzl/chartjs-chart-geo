@@ -1,11 +1,11 @@
-import { registry, IDatasetControllerChartComponent, IChartComponent } from 'chart.js';
+import { registry, DatasetControllerChartComponent, ChartComponent } from 'chart.js';
 
 export default function patchController<T, TYPE>(
   type: TYPE,
   config: T,
-  controller: IDatasetControllerChartComponent,
-  elements: IChartComponent | IChartComponent[] = [],
-  scales: IChartComponent | IChartComponent[] = []
+  controller: DatasetControllerChartComponent,
+  elements: ChartComponent | ChartComponent[] = [],
+  scales: ChartComponent | ChartComponent[] = []
 ): T & { type: TYPE } {
   registry.addControllers(controller);
   if (Array.isArray(elements)) {

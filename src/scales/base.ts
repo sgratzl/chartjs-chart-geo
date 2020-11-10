@@ -1,6 +1,6 @@
-import { Scale, IPadding, IChartArea, ICartesianScaleOptions } from 'chart.js';
+import { Scale, ChartArea, CartesianScaleOptions } from 'chart.js';
 
-export interface ILegendScaleOptions extends ICartesianScaleOptions {
+export interface ILegendScaleOptions extends CartesianScaleOptions {
   /**
    * whether to render a color legend
    * @default false (for compatibility reasons)
@@ -58,7 +58,7 @@ export interface ILegendScaleOptions extends ICartesianScaleOptions {
      * margin pixels such that it doesn't stick to the edge of the chart
      * @default 8
      */
-    margin: number | IPadding;
+    margin: number | ChartArea;
   };
 }
 
@@ -122,7 +122,7 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       return { left, top, right, bottom };
     }
 
-    _getLegendPosition(chartArea: IChartArea) {
+    _getLegendPosition(chartArea: ChartArea) {
       const indicatorWidth = this.options.legend.indicatorWidth;
       const axisPos = this.options.legend.align;
       const isHor = this.isHorizontal();
@@ -155,7 +155,7 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       return [pos.x, pos.y];
     }
 
-    update(maxWidth: number, maxHeight: number, margins: IChartArea) {
+    update(maxWidth: number, maxHeight: number, margins: ChartArea) {
       const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
       const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
 
@@ -176,7 +176,7 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       this.width = Math.min(w, this.width);
     }
 
-    draw(chartArea: IChartArea) {
+    draw(chartArea: ChartArea) {
       if (!(this as any)._isVisible()) {
         return;
       }

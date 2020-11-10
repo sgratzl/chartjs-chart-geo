@@ -1,10 +1,10 @@
 import {
   DatasetController,
-  IChartDataset,
+  ChartDataset,
   ScriptableAndArrayOptions,
   UpdateMode,
   Element,
-  IVisualElement,
+  VisualElement,
 } from 'chart.js';
 import { clipArea, unclipArea, valueOrDefault } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
@@ -48,9 +48,9 @@ function patchDatasetElementOptions(options: any) {
   return r;
 }
 
-export class GeoController<E extends Element & IVisualElement> extends DatasetController<E, GeoFeature> {
+export class GeoController<E extends Element & VisualElement> extends DatasetController<E, GeoFeature> {
   getGeoDataset() {
-    return (super.getDataset() as unknown) as IChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
+    return (super.getDataset() as unknown) as ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
   }
   getGeoOptions() {
     return (this.chart.options as unknown) as IGeoChartOptions;

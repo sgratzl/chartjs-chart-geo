@@ -1,4 +1,4 @@
-import { Scale, ICoreScaleOptions } from 'chart.js';
+import { Scale, CoreScaleOptions } from 'chart.js';
 import {
   geoPath,
   geoAzimuthalEqualArea,
@@ -46,7 +46,7 @@ Object.keys(lookup).forEach((key) => {
   lookup[`${key.charAt(3).toLowerCase()}${key.slice(4)}`] = lookup[key];
 });
 
-export interface IProjectionScaleOptions extends ICoreScaleOptions {
+export interface IProjectionScaleOptions extends CoreScaleOptions {
   /**
    * projection method used
    * @default albersUsa

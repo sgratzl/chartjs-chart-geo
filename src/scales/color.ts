@@ -1,4 +1,4 @@
-import { LinearScale, LogarithmicScale, Scale, ILogarithmicScaleOptions, ILinearScaleOptions } from 'chart.js';
+import { LinearScale, LogarithmicScale, Scale, LogarithmicScaleOptions, LinearScaleOptions } from 'chart.js';
 import { merge } from 'chart.js/helpers';
 import {
   interpolateBlues,
@@ -248,12 +248,12 @@ const colorScaleDefaults = {
   quantize: 0,
 };
 
-export class ColorScale extends ColorScaleMixin<IColorScaleOptions & ILinearScaleOptions>(LinearScale) {
+export class ColorScale extends ColorScaleMixin<IColorScaleOptions & LinearScaleOptions>(LinearScale) {
   static readonly id = 'color';
   static readonly defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 }
 
-export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & ILogarithmicScaleOptions>(
+export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & LogarithmicScaleOptions>(
   LogarithmicScale
 ) {
   _getNormalizedValue(v: number) {
@@ -275,10 +275,10 @@ declare module 'chart.js' {
 
   export interface IScaleTypeRegistry {
     color: {
-      options: IColorScaleOptions & ILinearScaleOptions;
+      options: IColorScaleOptions & LinearScaleOptions;
     };
     colorLogarithmic: {
-      options: IColorScaleOptions & ILogarithmicScaleOptions;
+      options: IColorScaleOptions & LogarithmicScaleOptions;
     };
   }
 }

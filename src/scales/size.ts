@@ -3,9 +3,9 @@ import {
   LinearScale,
   LogarithmicScale,
   Scale,
-  IPointOptions,
-  ILinearScaleOptions,
-  ILogarithmicScaleOptions,
+  PointOptions,
+  LinearScaleOptions,
+  LogarithmicScaleOptions,
 } from 'chart.js';
 import { merge } from 'chart.js/helpers';
 import { drawPoint } from 'chart.js/helpers';
@@ -90,7 +90,7 @@ export interface ISizeScaleOptions extends ILegendScaleOptions {
 
 function SizeSaleMixin<O extends ISizeScaleOptions>(superClass: { new (...args: any[]): Scale<O> }) {
   return class extends BaseMixin(superClass) {
-    _model: IPointOptions | null = null;
+    _model: PointOptions | null = null;
 
     getSizeForValue(value: number) {
       const v = this._getNormalizedValue(value);
@@ -203,14 +203,12 @@ const scaleDefaults = {
   },
 };
 
-export class SizeScale extends SizeSaleMixin<ISizeScaleOptions & ILinearScaleOptions>(LinearScale) {
+export class SizeScale extends SizeSaleMixin<ISizeScaleOptions & LinearScaleOptions>(LinearScale) {
   static readonly id = 'size';
   static readonly defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 }
 
-export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & ILogarithmicScaleOptions>(
-  LogarithmicScale
-) {
+export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & LogarithmicScaleOptions>(LogarithmicScale) {
   _getNormalizedValue(v: number) {
     if (v == null || Number.isNaN(v)) {
       return null;
@@ -230,10 +228,10 @@ declare module 'chart.js' {
 
   export interface IScaleTypeRegistry {
     size: {
-      options: ISizeScaleOptions & ILinearScaleOptions;
+      options: ISizeScaleOptions & LinearScaleOptions;
     };
     sizeLogarithmic: {
-      options: ISizeScaleOptions & ILogarithmicScaleOptions;
+      options: ISizeScaleOptions & LogarithmicScaleOptions;
     };
   }
 }

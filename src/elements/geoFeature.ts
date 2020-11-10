@@ -1,8 +1,8 @@
-import { Element, Rectangle, IRectangleOptions, IVisualElement, IPoint } from 'chart.js';
+import { Element, BarElement, BarOptions, VisualElement, Point } from 'chart.js';
 import { geoContains, GeoProjection } from 'd3-geo';
 import { ProjectionScale } from '../scales';
 
-export interface IGeoFeatureOptions extends IRectangleOptions {
+export interface IGeoFeatureOptions extends BarOptions {
   /**
    * background color for the outline
    * @default null
@@ -38,10 +38,10 @@ export interface IGeoFeatureProps {
   y: number;
 }
 
-export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> implements IVisualElement {
+export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> implements VisualElement {
   cache?:
     | {
-        center?: IPoint;
+        center?: Point;
         bounds?: {
           x: number;
           y: number;
@@ -173,7 +173,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   static id = 'geoFeature';
-  static defaults = /*#__PURE__*/ Object.assign({}, Rectangle.defaults, {
+  static defaults = /*#__PURE__*/ Object.assign({}, BarElement.defaults, {
     outlineBackgroundColor: null,
     outlineBorderWidth: 0,
 
@@ -184,6 +184,6 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     {
       outlineBorderColor: 'color',
     },
-    Rectangle.defaultRoutes || {}
+    BarElement.defaultRoutes || {}
   );
 }

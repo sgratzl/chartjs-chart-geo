@@ -1,7 +1,7 @@
 /// <reference types="jest" />
 /// <reference types="node" />
 
-import { Chart, IChartConfiguration, defaults, IChartType, DefaultDataPoint } from 'chart.js';
+import { Chart, ChartConfiguration, defaults, ChartType, DefaultDataPoint } from 'chart.js';
 import { toMatchImageSnapshot, MatchImageSnapshotOptions } from 'jest-image-snapshot';
 
 expect.extend({ toMatchImageSnapshot });
@@ -22,10 +22,10 @@ export async function expectMatchSnapshot(canvas: HTMLCanvasElement) {
 }
 
 export default function createChart<
-  TYPE extends IChartType,
+  TYPE extends ChartType,
   DATA extends unknown[] = DefaultDataPoint<TYPE>,
   LABEL = string
->(config: IChartConfiguration<TYPE, DATA, LABEL>, width = 800, height = 600) {
+>(config: ChartConfiguration<TYPE, DATA, LABEL>, width = 800, height = 600) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;

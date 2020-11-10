@@ -1,14 +1,14 @@
 import {
   Chart,
   UpdateMode,
-  IScriptableContext,
-  ITooltipItem,
-  ICommonHoverOptions,
+  ScriptableContext,
+  TooltipItem,
+  CommonHoverOptions,
   ScriptableAndArrayOptions,
-  IControllerDatasetOptions,
-  IChartConfiguration,
+  ControllerDatasetOptions,
+  ChartConfiguration,
   ChartItem,
-  IPointOptions,
+  PointOptions,
   Scale,
 } from 'chart.js';
 import { merge } from 'chart.js/helpers';
@@ -63,7 +63,7 @@ export class ChoroplethController extends GeoController<GeoFeature> {
       elem.feature = (this as any)._data[i].feature;
       const center = elem.getCenterPoint();
 
-      const properties: IGeoFeatureProps & { options?: IPointOptions } = {
+      const properties: IGeoFeatureProps & { options?: PointOptions } = {
         x: center.x,
         y: center.y,
       };
@@ -92,7 +92,7 @@ export class ChoroplethController extends GeoController<GeoFeature> {
             // Title doesn't make sense for scatter since we format the data as a point
             return '';
           },
-          label(item: ITooltipItem) {
+          label(item: TooltipItem) {
             if (item.formattedValue == null) {
               return item.chart.data.labels[item.dataIndex];
             }
@@ -107,7 +107,7 @@ export class ChoroplethController extends GeoController<GeoFeature> {
       },
       elements: {
         geoFeature: {
-          backgroundColor(context: IScriptableContext) {
+          backgroundColor(context: ScriptableContext) {
             if (context.dataIndex == null) {
               return null;
             }
@@ -121,17 +121,13 @@ export class ChoroplethController extends GeoController<GeoFeature> {
 }
 
 export interface IChoroplethControllerDatasetOptions
-  extends IControllerDatasetOptions,
+  extends ControllerDatasetOptions,
     IGeoChartOptions,
     ScriptableAndArrayOptions<IGeoFeatureOptions>,
-    ScriptableAndArrayOptions<ICommonHoverOptions> {}
+    ScriptableAndArrayOptions<CommonHoverOptions> {}
 
 declare module 'chart.js' {
-  export enum ChartTypeEnum {
-    choropleth = 'choropleth',
-  }
-
-  export interface IChartTypeRegistry {
+  export interface ChartTypeRegistry {
     choropleth: {
       chartOptions: IGeoChartOptions;
       datasetOptions: IChoroplethControllerDatasetOptions;
@@ -148,7 +144,7 @@ export class ChoroplethChart<DATA extends unknown[] = IGeoDataPoint[], LABEL = s
 > {
   static id = ChoroplethController.id;
 
-  constructor(item: ChartItem, config: Omit<IChartConfiguration<'choropleth', DATA, LABEL>, 'type'>) {
+  constructor(item: ChartItem, config: Omit<ChartConfiguration<'choropleth', DATA, LABEL>, 'type'>) {
     super(item, patchController('choropleth', config, ChoroplethController, GeoFeature, [ColorScale, ProjectionScale]));
   }
 }

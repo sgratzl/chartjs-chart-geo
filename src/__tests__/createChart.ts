@@ -35,11 +35,13 @@ export default function createChart<
     {
       responsive: false,
       animation: false,
-      legend: {
-        display: false,
-      },
-      title: {
-        display: false,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
       },
     },
     config.options || {}

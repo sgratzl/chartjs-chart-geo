@@ -40,9 +40,6 @@ describe('bubbleMap', () => {
         ],
       },
       options: {
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'albersUsa',
@@ -78,9 +75,6 @@ describe('bubbleMap', () => {
         ],
       },
       options: {
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'albersUsa',
@@ -117,9 +111,6 @@ describe('bubbleMap', () => {
         ],
       },
       options: {
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'albersUsa',
@@ -156,9 +147,6 @@ describe('bubbleMap', () => {
         ],
       },
       options: {
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'albersUsa',

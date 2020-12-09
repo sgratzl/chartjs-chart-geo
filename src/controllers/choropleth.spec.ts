@@ -43,9 +43,6 @@ describe('choropleth', () => {
         ],
       },
       options: {
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'albersUsa',
@@ -89,9 +86,6 @@ describe('choropleth', () => {
         ],
       },
       options: {
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'albersUsa',
@@ -136,9 +130,6 @@ describe('choropleth', () => {
       options: {
         showOutline: true,
         showGraticule: true,
-        legend: {
-          display: false,
-        },
         scales: {
           xy: {
             projection: 'equalEarth',

@@ -182,7 +182,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   });
   static defaultRoutes = /*#__PURE__*/ Object.assign(
     {
-      outlineBorderColor: 'color',
+      outlineBorderColor: 'borderColor',
     },
     BarElement.defaultRoutes || {}
   );

@@ -86,17 +86,19 @@ export class ChoroplethController extends GeoController<GeoFeature> {
       datasetElementType: GeoFeature.id,
       dataElementType: GeoFeature.id,
       dataElementOptions: ['backgroundColor', 'borderColor', 'borderWidth'],
-      tooltips: {
-        callbacks: {
-          title() {
-            // Title doesn't make sense for scatter since we format the data as a point
-            return '';
-          },
-          label(item: TooltipItem) {
-            if (item.formattedValue == null) {
-              return item.chart.data.labels[item.dataIndex];
-            }
-            return `${item.chart.data.labels[item.dataIndex]}: ${item.formattedValue}`;
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title() {
+              // Title doesn't make sense for scatter since we format the data as a point
+              return '';
+            },
+            label(item: TooltipItem) {
+              if (item.formattedValue == null) {
+                return item.chart.data.labels[item.dataIndex];
+              }
+              return `${item.chart.data.labels[item.dataIndex]}: ${item.formattedValue}`;
+            },
           },
         },
       },

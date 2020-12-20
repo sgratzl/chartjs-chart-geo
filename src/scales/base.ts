@@ -66,7 +66,11 @@ export const baseDefaults = {
   position: 'chartArea',
   property: 'value',
   gridLines: {
+    z: 1,
     drawOnChartArea: false,
+  },
+  ticks: {
+    z: 1,
   },
   legend: {
     align: 'right',

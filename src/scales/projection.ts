@@ -68,6 +68,9 @@ export interface IProjectionScaleOptions extends CoreScaleOptions {
     | 'mercator'
     | 'transverseMercator'
     | 'naturalEarth1';
+
+  projectionScale: number;
+  projectionOffset: [number, number];
 }
 
 export class ProjectionScale extends Scale<IProjectionScaleOptions> {
@@ -142,7 +145,11 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     // this.mapScale = scale;
     // this.mapTranslate = {x, y};
 
-    this.projection.scale(bb.refScale * scale).translate([scale * bb.refX + x, scale * bb.refY + y]);
+    const o = this.options;
+
+    this.projection
+      .scale(bb.refScale * scale * o.projectionScale)
+      .translate([scale * bb.refX + x + o.projectionOffset[0], scale * bb.refY + y + o.projectionOffset[1]]);
 
     return (
       !bak || bak.chartWidth !== this.oldChartBounds.chartWidth || bak.chartHeight !== this.oldChartBounds.chartHeight
@@ -152,6 +159,8 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   static id = 'projection';
   static defaults: Partial<IProjectionScaleOptions> = {
     projection: 'albersUsa',
+    projectionScale: 1,
+    projectionOffset: [0, 0],
   };
 }
 

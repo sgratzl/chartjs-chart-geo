@@ -136,8 +136,8 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     const viewWidth = bb.width * scale;
     const viewHeight = bb.height * scale;
 
-    const x = (chartWidth - viewWidth) * 0.5;
-    const y = (chartHeight - viewHeight) * 0.5;
+    const x = (chartWidth - viewWidth) * 0.5 + area.left;
+    const y = (chartHeight - viewHeight) * 0.5 + area.top;
 
     // this.mapScale = scale;
     // this.mapTranslate = {x, y};

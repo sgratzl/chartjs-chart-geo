@@ -5,6 +5,7 @@ import {
   UpdateMode,
   Element,
   VisualElement,
+  ScriptableContext,
 } from 'chart.js';
 import { clipArea, unclipArea, valueOrDefault } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
@@ -49,7 +50,7 @@ function patchDatasetElementOptions(options: any) {
 }
 
 export class GeoController<E extends Element & VisualElement> extends DatasetController<E, GeoFeature> {
-  getGeoDataset() {
+  getGeoDataset(): ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions {
     return (super.getDataset() as unknown) as ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
   }
   getGeoOptions() {
@@ -240,7 +241,9 @@ export interface IGeoChartOptions {
   clipMap: boolean | 'outline' | 'graticule' | 'outline+graticule' | 'items';
 }
 
-export interface IGeoControllerDatasetOptions extends IGeoChartOptions, ScriptableAndArrayOptions<IGeoFeatureOptions> {
+export interface IGeoControllerDatasetOptions
+  extends IGeoChartOptions,
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext> {
   xAxisID?: string;
   yAxisID?: string;
   rAxisID?: string;

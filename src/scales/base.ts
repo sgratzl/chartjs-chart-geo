@@ -66,7 +66,11 @@ export const baseDefaults = {
   position: 'chartArea',
   property: 'value',
   gridLines: {
+    z: 1,
     drawOnChartArea: false,
+  },
+  ticks: {
+    z: 1,
   },
   legend: {
     align: 'right',
@@ -155,7 +159,7 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       return [pos.x, pos.y];
     }
 
-    update(maxWidth: number, maxHeight: number, margins: ChartArea) {
+    update(maxWidth: number, maxHeight: number, margins: ChartArea): number {
       const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
       const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
 
@@ -170,10 +174,11 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
 
       const bak = (this.options as IPositionOption).position;
       (this.options as IPositionOption).position = this.options.legend.align;
-      super.update(w, h, margins);
+      const r = super.update(w, h, margins);
       (this.options as IPositionOption).position = bak;
       this.height = Math.min(h, this.height);
       this.width = Math.min(w, this.width);
+      return r;
     }
 
     draw(chartArea: ChartArea) {

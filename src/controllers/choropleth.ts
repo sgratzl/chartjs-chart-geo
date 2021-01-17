@@ -125,8 +125,8 @@ export class ChoroplethController extends GeoController<GeoFeature> {
 export interface IChoroplethControllerDatasetOptions
   extends ControllerDatasetOptions,
     IGeoChartOptions,
-    ScriptableAndArrayOptions<IGeoFeatureOptions>,
-    ScriptableAndArrayOptions<CommonHoverOptions> {}
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext>,
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext> {}
 
 declare module 'chart.js' {
   export interface ChartTypeRegistry {

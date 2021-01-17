@@ -26,7 +26,7 @@
                   outline: nation,
                   data: states.map((d) => ({
                     feature: d,
-                    value: Math.random() * 1000,
+                    value: Math.random() * 10,
                   })),
                 },
               ],
@@ -34,7 +34,7 @@
             options: {
               plugins: {
                 legend: {
-                  display: false,
+                  display: true,
                 },
               },
               scales: {
@@ -42,7 +42,7 @@
                   projection: 'albersUsa',
                 },
                 color: {
-                  type: 'colorLogarithmic',
+                  quantize: 5,
                   legend: {
                     position: 'bottom-right',
                     align: 'right',

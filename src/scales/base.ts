@@ -174,10 +174,11 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
 
       const bak = (this.options as IPositionOption).position;
       (this.options as IPositionOption).position = this.options.legend.align;
-      super.update(w, h, margins);
+      const r = super.update(w, h, margins);
       (this.options as IPositionOption).position = bak;
       this.height = Math.min(h, this.height);
       this.width = Math.min(w, this.width);
+      return r;
     }
 
     draw(chartArea: ChartArea) {

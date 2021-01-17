@@ -149,8 +149,8 @@ export interface IBubbleMapDataPoint {
 export interface IBubbleMapControllerDatasetOptions
   extends ControllerDatasetOptions,
     IGeoChartOptions,
-    ScriptableAndArrayOptions<IGeoFeatureOptions>,
-    ScriptableAndArrayOptions<CommonHoverOptions> {}
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext>,
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext> {}
 
 declare module 'chart.js' {
   export interface ChartTypeRegistry {

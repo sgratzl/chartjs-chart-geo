@@ -5,6 +5,7 @@ import {
   UpdateMode,
   Element,
   VisualElement,
+  ScriptableContext,
 } from 'chart.js';
 import { clipArea, unclipArea, valueOrDefault } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
@@ -240,7 +241,9 @@ export interface IGeoChartOptions {
   clipMap: boolean | 'outline' | 'graticule' | 'outline+graticule' | 'items';
 }
 
-export interface IGeoControllerDatasetOptions extends IGeoChartOptions, ScriptableAndArrayOptions<IGeoFeatureOptions> {
+export interface IGeoControllerDatasetOptions
+  extends IGeoChartOptions,
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext> {
   xAxisID?: string;
   yAxisID?: string;
   rAxisID?: string;

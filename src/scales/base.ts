@@ -159,7 +159,7 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       return [pos.x, pos.y];
     }
 
-    update(maxWidth: number, maxHeight: number, margins: ChartArea) {
+    update(maxWidth: number, maxHeight: number, margins: ChartArea): number {
       const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
       const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
 

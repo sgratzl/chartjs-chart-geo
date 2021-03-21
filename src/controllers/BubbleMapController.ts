@@ -171,8 +171,8 @@ declare module 'chart.js' {
       chartOptions: IGeoChartOptions;
       datasetOptions: IBubbleMapControllerDatasetOptions;
       defaultDataPoint: IBubbleMapDataPoint;
-      scales: keyof IScaleTypeRegistry;
       parsedDataType: { r: number; x: number; y: number };
+      scales: keyof (ProjectionScaleTypeRegistry & SizeScaleTypeRegistry);
     };
   }
 }

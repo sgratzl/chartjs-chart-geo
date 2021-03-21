@@ -176,13 +176,11 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
 }
 
 declare module 'chart.js' {
-  export enum ScaleTypeEnum {
-    projection = 'projection',
-  }
-
-  export interface IScaleTypeRegistry {
+  export interface ProjectionScaleTypeRegistry {
     projection: {
       options: IProjectionScaleOptions;
     };
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface ScaleTypeRegistry extends ProjectionScaleTypeRegistry {}
 }

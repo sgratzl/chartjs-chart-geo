@@ -150,7 +150,7 @@ declare module 'chart.js' {
       datasetOptions: IChoroplethControllerDatasetOptions;
       defaultDataPoint: IGeoDataPoint & { value: number };
       parsedDataType: { r: number };
-      scales: keyof IScaleTypeRegistry;
+      scales: keyof (ProjectionScaleTypeRegistry & ColorScaleTypeRegistry);
     };
   }
 }

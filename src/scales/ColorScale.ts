@@ -1,4 +1,4 @@
-import { LinearScale, LogarithmicScale, Scale, LogarithmicScaleOptions, LinearScaleOptions } from 'chart.js';
+import { LinearScale, LogarithmicScale, LogarithmicScaleOptions, LinearScaleOptions } from 'chart.js';
 import { merge } from 'chart.js/helpers';
 import {
   interpolateBlues,
@@ -40,7 +40,7 @@ import {
   interpolateYlOrBr,
   interpolateYlOrRd,
 } from 'd3-scale-chromatic';
-import { baseDefaults, BaseMixin, ILegendScaleOptions } from './BaseMixin';
+import { baseDefaults, LegendScale, LogarithmicLegendScale, ILegendScaleOptions } from './LegendScale';
 
 const lookup: { [key: string]: (normalizedValue: number) => string } = {
   interpolateBlues,
@@ -171,110 +171,123 @@ export interface IColorScaleOptions extends ILegendScaleOptions {
   quantize: number;
 }
 
-function ColorScaleMixin<O extends IColorScaleOptions>(superClass: { new (...args: any[]): Scale<O> }) {
-  return class extends BaseMixin(superClass) {
-    private interpolate = (v: number) => `rgb(${v},${v},${v})`;
-
-    init(options: O) {
-      super.init(options);
-      if (typeof options.interpolate === 'function') {
-        this.interpolate = options.interpolate;
-      } else {
-        this.interpolate = lookup[options.interpolate] || lookup.blues;
-      }
-    }
-
-    getColorForValue(value: number) {
-      const v = this._getNormalizedValue(value);
-      if (v == null || Number.isNaN(v)) {
-        return this.options.missing;
-      }
-      return this.getColor(v);
-    }
-
-    getColor(normalized: number) {
-      let v = normalized;
-      if (this.options.quantize > 0) {
-        v = quantize(v, this.options.quantize);
-      }
-      return this.interpolate(v);
-    }
-
-    _drawIndicator() {
-      const w = this.width;
-      const h = this.height;
-      const indicatorSize = this.options.legend.indicatorWidth;
-      const reverse = (this as any)._reversePixels;
-
-      if (this.isHorizontal()) {
-        if (this.options.quantize > 0) {
-          const stepWidth = w / this.options.quantize;
-          const offset = !reverse ? (i: number) => i : (i: number) => w - stepWidth - i;
-          for (let i = 0; i < w; i += stepWidth) {
-            const v = (i + stepWidth / 2) / w;
-            this.ctx.fillStyle = this.getColor(v);
-            this.ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
-          }
-        } else {
-          const offset = !reverse ? (i: number) => i : (i: number) => w - 1 - i;
-          for (let i = 0; i < w; i += 1) {
-            this.ctx.fillStyle = this.getColor((i + 0.5) / w);
-            this.ctx.fillRect(offset(i), 0, 1, indicatorSize);
-          }
-        }
-      } else if (this.options.quantize > 0) {
-        const stepWidth = h / this.options.quantize;
-        const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;
-        for (let i = 0; i < h; i += stepWidth) {
-          const v = (i + stepWidth / 2) / h;
-          this.ctx.fillStyle = this.getColor(v);
-          this.ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
-        }
-      } else {
-        const offset = !reverse ? (i: number) => i : (i: number) => h - 1 - i;
-        for (let i = 0; i < h; i += 1) {
-          this.ctx.fillStyle = this.getColor((i + 0.5) / h);
-          this.ctx.fillRect(0, offset(i), indicatorSize, 1);
-        }
-      }
-    }
-  };
-}
-
 const colorScaleDefaults = {
   interpolate: 'blues',
   missing: 'transparent',
   quantize: 0,
 };
 
-export class ColorScale extends ColorScaleMixin<IColorScaleOptions & LinearScaleOptions>(LinearScale) {
+export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOptions> {
+  private interpolate = (v: number) => `rgb(${v},${v},${v})`;
+
+  init(options: IColorScaleOptions & LinearScaleOptions): void {
+    super.init(options);
+    if (typeof options.interpolate === 'function') {
+      this.interpolate = options.interpolate;
+    } else {
+      this.interpolate = lookup[options.interpolate] || lookup.blues;
+    }
+  }
+
+  getColorForValue(value: number): string {
+    const v = this._getNormalizedValue(value);
+    if (v == null || Number.isNaN(v)) {
+      return this.options.missing;
+    }
+    return this.getColor(v);
+  }
+
+  getColor(normalized: number): string {
+    let v = normalized;
+    if (this.options.quantize > 0) {
+      v = quantize(v, this.options.quantize);
+    }
+    return this.interpolate(v);
+  }
+
+  _drawIndicator(): void {
+    const w = this.width;
+    const h = this.height;
+    const indicatorSize = this.options.legend.indicatorWidth;
+    const reverse = (this as any)._reversePixels;
+
+    if (this.isHorizontal()) {
+      if (this.options.quantize > 0) {
+        const stepWidth = w / this.options.quantize;
+        const offset = !reverse ? (i: number) => i : (i: number) => w - stepWidth - i;
+        for (let i = 0; i < w; i += stepWidth) {
+          const v = (i + stepWidth / 2) / w;
+          this.ctx.fillStyle = this.getColor(v);
+          this.ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
+        }
+      } else {
+        const offset = !reverse ? (i: number) => i : (i: number) => w - 1 - i;
+        for (let i = 0; i < w; i += 1) {
+          this.ctx.fillStyle = this.getColor((i + 0.5) / w);
+          this.ctx.fillRect(offset(i), 0, 1, indicatorSize);
+        }
+      }
+    } else if (this.options.quantize > 0) {
+      const stepWidth = h / this.options.quantize;
+      const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;
+      for (let i = 0; i < h; i += stepWidth) {
+        const v = (i + stepWidth / 2) / h;
+        this.ctx.fillStyle = this.getColor(v);
+        this.ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
+      }
+    } else {
+      const offset = !reverse ? (i: number) => i : (i: number) => h - 1 - i;
+      for (let i = 0; i < h; i += 1) {
+        this.ctx.fillStyle = this.getColor((i + 0.5) / h);
+        this.ctx.fillRect(0, offset(i), indicatorSize, 1);
+      }
+    }
+  }
+
   static readonly id = 'color';
 
-  static readonly defaults = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
+  static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 }
 
-export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & LogarithmicScaleOptions>(
-  LogarithmicScale
-) {
-  _getNormalizedValue(v: number): number | null {
-    if (v == null || Number.isNaN(v)) {
-      return null;
+export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOptions & LogarithmicScaleOptions> {
+  private interpolate = (v: number) => `rgb(${v},${v},${v})`;
+
+  init(options: IColorScaleOptions & LinearScaleOptions): void {
+    super.init(options);
+    if (typeof options.interpolate === 'function') {
+      this.interpolate = options.interpolate;
+    } else {
+      this.interpolate = lookup[options.interpolate] || lookup.blues;
     }
-    return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
+  }
+
+  getColorForValue(value: number): string {
+    return ColorScale.prototype.getColorForValue.call(this, value);
+  }
+
+  getColor(normalized: number): string {
+    let v = normalized;
+    if (this.options.quantize > 0) {
+      v = quantize(v, this.options.quantize);
+    }
+    return this.interpolate(v);
+  }
+
+  protected _drawIndicator(): void {
+    return ColorScale.prototype._drawIndicator.call(this);
   }
 
   static readonly id = 'colorLogarithmic';
 
-  static readonly defaults = /* #__PURE__ */ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
+  static readonly defaults: any = /* #__PURE__ */ merge({}, [
+    LogarithmicScale.defaults,
+    baseDefaults,
+    colorScaleDefaults,
+  ]);
 }
 
 declare module 'chart.js' {
-  export enum ScaleTypeEnum {
-    color = 'color',
-    colorLogarithmic = 'colorLogarithmic',
-  }
-
-  export interface IScaleTypeRegistry {
+  export interface ColorScaleTypeRegistry {
     color: {
       options: IColorScaleOptions & LinearScaleOptions;
     };
@@ -282,4 +295,7 @@ declare module 'chart.js' {
       options: IColorScaleOptions & LogarithmicScaleOptions;
     };
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface ScaleTypeRegistry extends ColorScaleTypeRegistry {}
 }

@@ -144,7 +144,13 @@ export class BubbleMapController extends GeoController<'bubbleMap', PointElement
             const controller = context.chart.getDatasetMeta(context.datasetIndex).controller as BubbleMapController;
             return controller.indexToRadius(context.dataIndex);
           },
-          hoverRadius: undefined,
+          hoverRadius(context: ScriptableContext<'bubbleMap'>) {
+            if (context.dataIndex == null) {
+              return null;
+            }
+            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller as BubbleMapController;
+            return controller.indexToRadius(context.dataIndex) + 1;
+          },
         },
       },
     },

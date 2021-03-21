@@ -32,7 +32,7 @@ export const geoOverrides = {
 function patchDatasetElementOptions(options: any) {
   // patch the options by removing the `outline` or `hoverOutline` option;
   // see https://github.com/chartjs/Chart.js/issues/7362
-  const r: any = {};
+  const r: any = { ...options };
   Object.keys(options).forEach((key) => {
     let targetKey = key;
     if (key.startsWith('outline')) {
@@ -40,7 +40,10 @@ function patchDatasetElementOptions(options: any) {
       targetKey = sub[0].toLowerCase() + sub.slice(1);
     } else if (key.startsWith('hoverOutline')) {
       targetKey = `hover${key.slice('hoverOutline'.length)}`;
+    } else {
+      return;
     }
+    delete r[key];
     r[targetKey] = options[key];
   });
   return r;

@@ -135,7 +135,7 @@ function SizeSaleMixin<O extends ISizeScaleOptions>(superClass: { new (...args: 
 
         ctx.beginPath();
 
-        if (this.options.gridLines.drawTicks) {
+        if (this.options.grid.drawTicks) {
           switch (this.options.legend.align) {
             case 'left':
               ctx.moveTo(0, item.ty1);
@@ -206,7 +206,7 @@ export class SizeScale extends SizeSaleMixin<ISizeScaleOptions & LinearScaleOpti
 }
 
 export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & LogarithmicScaleOptions>(LogarithmicScale) {
-  _getNormalizedValue(v: number) {
+  _getNormalizedValue(v: number): number | null {
     if (v == null || Number.isNaN(v)) {
       return null;
     }

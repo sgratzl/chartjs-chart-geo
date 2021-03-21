@@ -54,7 +54,9 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
         canvas?: HTMLCanvasElement;
       }
     | undefined = undefined;
+
   projectionScale!: ProjectionScale;
+
   feature!: Feature;
 
   inRange(mouseX: number, mouseY: number) {
@@ -90,7 +92,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       x: centroid[0],
       y: centroid[1],
     };
-    this.cache = Object.assign({}, this.cache || {}, { center });
+    this.cache = { ...(this.cache || {}), center };
     return center;
   }
 
@@ -107,7 +109,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       width: bb[1][0] - bb[0][0],
       height: bb[1][1] - bb[0][1],
     };
-    this.cache = Object.assign({}, this.cache || {}, { bounds });
+    this.cache = { ...(this.cache || {}), bounds };
     return bounds;
   }
 
@@ -127,20 +129,17 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     this._drawImpl(ctx);
     ctx.restore();
 
-    this.cache = Object.assign({}, this.cache || {}, {
-      canvas,
-      canvasKey: this._optionsToKey(),
-    });
+    this.cache = { ...(this.cache || {}), canvas, canvasKey: this._optionsToKey() };
   }
 
   _optionsToKey() {
-    const options = this.options;
+    const { options } = this;
     return `${options.backgroundColor};${options.borderColor};${options.borderWidth}`;
   }
 
   _drawImpl(ctx: CanvasRenderingContext2D) {
-    const feature = this.feature;
-    const options = this.options;
+    const { feature } = this;
+    const { options } = this;
     ctx.beginPath();
     this.projectionScale.geoPath.context(ctx)(feature);
     if (options.backgroundColor) {
@@ -155,7 +154,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   draw(ctx: CanvasRenderingContext2D) {
-    const feature = this.feature;
+    const { feature } = this;
     if (!feature) {
       return;
     }
@@ -173,17 +172,18 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   static id = 'geoFeature';
-  static defaults = /*#__PURE__*/ Object.assign({}, BarElement.defaults, {
+
+  static defaults = /* #__PURE__ */ {
+    ...BarElement.defaults,
     outlineBackgroundColor: null,
     outlineBorderWidth: 0,
 
     graticuleBorderColor: '#CCCCCC',
     graticuleBorderWidth: 0,
-  });
-  static defaultRoutes = /*#__PURE__*/ Object.assign(
-    {
-      outlineBorderColor: 'borderColor',
-    },
-    BarElement.defaultRoutes || {}
-  );
+  };
+
+  static defaultRoutes = /* #__PURE__ */ {
+    outlineBorderColor: 'borderColor',
+    ...(BarElement.defaultRoutes || {}),
+  };
 }

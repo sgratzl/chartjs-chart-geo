@@ -2,7 +2,7 @@ import { feature } from 'topojson-client';
 import states10m from 'us-atlas/states-10m.json';
 import countries50m from 'world-atlas/countries-50m.json';
 import rnd from 'seedrandom';
-import { registry, DeepPartial } from 'chart.js';
+import { registry } from 'chart.js';
 import createChart from '../__tests__/createChart';
 import {
   ColorLogarithmicScale,
@@ -100,7 +100,7 @@ describe('choropleth', () => {
               position: 'bottom-right',
               align: 'right',
             },
-          } as DeepPartial<IColorScaleOptions>,
+          },
         },
       },
     });
@@ -138,7 +138,7 @@ describe('choropleth', () => {
             ticks: {
               display: false,
             },
-          } as DeepPartial<IColorScaleOptions>,
+          } as Partial<IColorScaleOptions>,
         },
       },
     });

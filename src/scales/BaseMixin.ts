@@ -65,7 +65,7 @@ export interface ILegendScaleOptions extends CartesianScaleOptions {
 export const baseDefaults = {
   position: 'chartArea',
   property: 'value',
-  gridLines: {
+  grid: {
     z: 1,
     drawOnChartArea: false,
   },
@@ -86,12 +86,14 @@ interface IPositionOption {
   position?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...args: any[]): Scale<O> }) {
   return class extends superClass {
     legendSize: { w: number; h: number } = { w: 0, h: 0 };
 
-    init(options: O) {
-      (options as IPositionOption).position = 'chartArea';
+    init(options: O): void {
+      // eslint-disable-next-line no-param-reassign
+      ((options as unknown) as IPositionOption).position = 'chartArea';
       super.init(options);
       this.axis = 'r';
     }
@@ -115,9 +117,9 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
     }
 
     _getLegendMargin() {
-      const indicatorWidth = this.options.legend.indicatorWidth;
+      const { indicatorWidth } = this.options.legend;
       const pos = this.options.legend.align;
-      const margin = this.options.legend.margin;
+      const { margin } = this.options.legend;
 
       const left = (typeof margin === 'number' ? margin : margin.left) + (pos === 'right' ? indicatorWidth : 0);
       const top = (typeof margin === 'number' ? margin : margin.top) + (pos === 'bottom' ? indicatorWidth : 0);
@@ -127,7 +129,7 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
     }
 
     _getLegendPosition(chartArea: ChartArea) {
-      const indicatorWidth = this.options.legend.indicatorWidth;
+      const { indicatorWidth } = this.options.legend;
       const axisPos = this.options.legend.align;
       const isHor = this.isHorizontal();
       const w = (axisPos === 'left' ? this.legendSize.w : this.width) + (isHor ? indicatorWidth : 0);
@@ -169,8 +171,10 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       const w = Math.min(cw, factor(isHor ? l.length : l.width, cw)) - (!isHor ? l.indicatorWidth : 0);
       const h = Math.min(ch, factor(!isHor ? l.length : l.width, ch)) - (isHor ? l.indicatorWidth : 0);
       this.legendSize = { w, h };
-      this.bottom = this.height = h;
-      this.right = this.width = w;
+      this.bottom = h;
+      this.height = h;
+      this.right = w;
+      this.width = w;
 
       const bak = (this.options as IPositionOption).position;
       (this.options as IPositionOption).position = this.options.legend.align;
@@ -187,20 +191,15 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       }
       const pos = this._getLegendPosition(chartArea);
       /** @type {CanvasRenderingContext2D} */
-      const ctx = this.ctx;
+      const { ctx } = this;
       ctx.save();
       ctx.translate(pos[0], pos[1]);
 
       const bak = (this.options as IPositionOption).position;
       (this.options as IPositionOption).position = this.options.legend.align;
-      super.draw(
-        Object.assign({}, chartArea, {
-          bottom: this.height,
-          right: this.width,
-        })
-      );
+      super.draw({ ...chartArea, bottom: this.height, right: this.width });
       (this.options as IPositionOption).position = bak;
-      const indicatorWidth = this.options.legend.indicatorWidth;
+      const { indicatorWidth } = this.options.legend;
       switch (this.options.legend.align) {
         case 'left':
           ctx.translate(this.legendSize.w, 0);
@@ -219,7 +218,8 @@ export function BaseMixin<O extends ILegendScaleOptions>(superClass: { new (...a
       ctx.restore();
     }
 
-    _drawIndicator() {
+    // eslint-disable-next-line class-methods-use-this
+    _drawIndicator(): void {
       // hook
     }
   };

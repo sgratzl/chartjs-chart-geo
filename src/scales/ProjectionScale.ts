@@ -75,7 +75,9 @@ export interface IProjectionScaleOptions extends CoreScaleOptions {
 
 export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   readonly geoPath: GeoPath<any, GeoPermissibleObjects>;
+
   projection!: GeoProjection;
+
   private outlineBounds: {
     refX: number;
     refY: number;
@@ -84,20 +86,23 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     height: number;
     aspectRatio: number;
   } | null = null;
+
   private oldChartBounds: { chartWidth: number; chartHeight: number } | null = null;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(cfg: any) {
     super(cfg);
     this.geoPath = geoPath();
   }
 
-  init(options: IProjectionScaleOptions) {
+  init(options: IProjectionScaleOptions): void {
+    // eslint-disable-next-line no-param-reassign
     (options as any).position = 'chartArea';
     super.init(options);
     if (typeof options.projection === 'function') {
       this.projection = options.projection;
     } else {
-      this.projection = (lookup[options.projection] || lookup['albersUsa']!)();
+      this.projection = (lookup[options.projection] || lookup.albersUsa)();
     }
     this.geoPath.projection(this.projection);
   }
@@ -106,7 +111,8 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   computeBounds(outline: ExtendedFeatureCollection): void;
   computeBounds(outline: GeoGeometryObjects): void;
   computeBounds(outline: ExtendedGeometryCollection): void;
-  computeBounds(outline: any) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  computeBounds(outline: any): void {
     const bb = geoPath(this.projection.fitWidth(1000, outline)).bounds(outline);
     const bHeight = Math.ceil(bb[1][1] - bb[0][1]);
     const bWidth = Math.ceil(bb[1][0] - bb[0][0]);
@@ -122,9 +128,13 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     };
   }
 
-  updateBounds() {
+  updateBounds(): boolean {
     const area = this.chart.chartArea;
-    const bb = this.outlineBounds!;
+    const bb = this.outlineBounds;
+
+    if (!bb) {
+      return false;
+    }
 
     const chartWidth = area.right - area.left;
     const chartHeight = area.bottom - area.top;
@@ -157,6 +167,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   }
 
   static id = 'projection';
+
   static defaults: Partial<IProjectionScaleOptions> = {
     projection: 'albersUsa',
     projectionScale: 1,

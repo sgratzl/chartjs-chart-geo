@@ -1,5 +1,4 @@
 import {
-  BubbleController,
   Chart,
   ChartItem,
   ChartConfiguration,
@@ -20,7 +19,7 @@ import { ProjectionScale, SizeScale } from '../scales';
 import { GeoController, geoDefaults, geoOverrides, IGeoChartOptions } from './GeoController';
 import patchController from './patchController';
 
-export class BubbleMapController extends GeoController<PointElement> {
+export class BubbleMapController extends GeoController<'bubbleMap', PointElement> {
   initialize(): void {
     super.initialize();
     this.enableOptionSharing = true;
@@ -37,7 +36,9 @@ export class BubbleMapController extends GeoController<PointElement> {
     meta.rScale = this.getScaleForId('r');
     meta.vScale = meta.rScale;
     meta.iScale = meta.xScale;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     meta.iAxisID = meta.xAxisID!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dataset.iAxisID = meta.xAxisID!;
   }
 
@@ -48,6 +49,7 @@ export class BubbleMapController extends GeoController<PointElement> {
   }
 
   parse(start: number, count: number): void {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rScale = this.getMeta().rScale!;
     const data = (this.getDataset().data as unknown) as IBubbleMapDataPoint[];
     const meta = this._cachedMeta;
@@ -64,36 +66,37 @@ export class BubbleMapController extends GeoController<PointElement> {
   updateElements(elems: PointElement[], start: number, count: number, mode: UpdateMode): void {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
-    const sharedOptions = this.getSharedOptions(firstOpts);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const sharedOptions = this.getSharedOptions(firstOpts)!;
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();
 
-    (this.getMeta().rScale! as SizeScale)._model = firstOpts; // for legend rendering styling
+    ((this.getMeta().rScale as unknown) as SizeScale)._model = (firstOpts as unknown) as PointOptions; // for legend rendering styling
 
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
     for (let i = start; i < start + count; i += 1) {
       const elem = elems[i];
       const parsed = this.getParsed(i);
-      const xy = scale.projection!([parsed.x, parsed.y]);
+      const xy = scale.projection([parsed.x, parsed.y]);
       const properties: PointProps & { options?: PointOptions; skip: boolean } = {
         x: xy ? xy[0] : 0,
         y: xy ? xy[1] : 0,
         skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
       };
       if (includeOptions) {
-        properties.options = sharedOptions || this.resolveDataElementOptions(i, mode);
+        properties.options = ((sharedOptions || this.resolveDataElementOptions(i, mode)) as unknown) as PointOptions;
         if (reset) {
-          properties.options!.radius = 0;
+          properties.options.radius = 0;
         }
       }
-      this.updateElement(elem, i, properties, mode);
+      this.updateElement(elem, i, (properties as unknown) as Record<string, unknown>, mode);
     }
   }
 
   indexToRadius(index: number): number {
     const rScale = this.getMeta().rScale as SizeScale;
-    return rScale.getSizeForValue(this.getParsed(index)[rScale.axis]);
+    return rScale.getSizeForValue(this.getParsed(index)[rScale.axis as 'r']);
   }
 
   static readonly id = 'bubbleMap';
@@ -118,11 +121,11 @@ export class BubbleMapController extends GeoController<PointElement> {
               // Title doesn't make sense for scatter since we format the data as a point
               return '';
             },
-            label(item: TooltipItem) {
+            label(item: TooltipItem<'bubbleMap'>) {
               if (item.formattedValue == null) {
-                return item.chart.data.labels[item.dataIndex];
+                return item.chart.data?.labels?.[item.dataIndex];
               }
-              return `${item.chart.data.labels[item.dataIndex]}: ${item.formattedValue}`;
+              return `${item.chart.data?.labels?.[item.dataIndex]}: ${item.formattedValue}`;
             },
           },
         },
@@ -134,7 +137,7 @@ export class BubbleMapController extends GeoController<PointElement> {
       },
       elements: {
         point: {
-          radius(context: ScriptableContext) {
+          radius(context: ScriptableContext<'bubbleMap'>) {
             if (context.dataIndex == null) {
               return null;
             }
@@ -159,16 +162,17 @@ export interface IBubbleMapDataPoint {
 export interface IBubbleMapControllerDatasetOptions
   extends ControllerDatasetOptions,
     IGeoChartOptions,
-    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext>,
-    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext> {}
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext<'bubbleMap'>>,
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'bubbleMap'>> {}
 
 declare module 'chart.js' {
   export interface ChartTypeRegistry {
     bubbleMap: {
       chartOptions: IGeoChartOptions;
       datasetOptions: IBubbleMapControllerDatasetOptions;
-      defaultDataPoint: IBubbleMapDataPoint[];
+      defaultDataPoint: IBubbleMapDataPoint;
       scales: keyof IScaleTypeRegistry;
+      parsedDataType: { r: number; x: number; y: number };
     };
   }
 }

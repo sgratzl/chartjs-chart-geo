@@ -23,5 +23,9 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
-  "liveServer.settings.port": 5503
+  "liveServer.settings.port": 5503,
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  }
 }

@@ -11,3 +11,4 @@
 /yarn.lock
 /.vscode
 *.png
+*.tsbuildinfo

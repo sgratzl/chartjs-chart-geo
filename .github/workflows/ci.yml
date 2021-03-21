@@ -7,15 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2.1.5
         with:
-          node-version: '12.x'
+          node-version: 14
       - run: npm i -g yarn
       - run: yarn set version 2
       - run: cat .yarnrc_patch.yml >> .yarnrc.yml
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.4
         with:
           path: ./.yarn
           key: ${{ runner.os }}-yarn2-${{ hashFiles('**/yarn.lock') }}

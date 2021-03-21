@@ -6,6 +6,7 @@ import {
   Element,
   VisualElement,
   ScriptableContext,
+  ChartTypeRegistry,
 } from 'chart.js';
 import { clipArea, unclipArea, valueOrDefault } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
@@ -13,16 +14,12 @@ import { ProjectionScale } from '../scales';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 
 export const geoDefaults = {
-  datasetElementOptions: [
-    'outlineBackgroundColor',
-    'outlineBorderColor',
-    'outlineBorderWidth',
-    'graticuleBorderColor',
-    'graticuleBorderWidth',
-  ],
   showOutline: false,
   showGraticule: false,
   clipMap: true,
+};
+
+export const geoOverrides = {
   scales: {
     xy: {
       type: ProjectionScale.id,
@@ -35,71 +32,81 @@ export const geoDefaults = {
 function patchDatasetElementOptions(options: any) {
   // patch the options by removing the `outline` or `hoverOutline` option;
   // see https://github.com/chartjs/Chart.js/issues/7362
-  const r: any = {};
+  const r: any = { ...options };
   Object.keys(options).forEach((key) => {
     let targetKey = key;
     if (key.startsWith('outline')) {
       const sub = key.slice('outline'.length);
       targetKey = sub[0].toLowerCase() + sub.slice(1);
     } else if (key.startsWith('hoverOutline')) {
-      targetKey = 'hover' + key.slice('hoverOutline'.length);
+      targetKey = `hover${key.slice('hoverOutline'.length)}`;
+    } else {
+      return;
     }
+    delete r[key];
     r[targetKey] = options[key];
   });
   return r;
 }
 
-export class GeoController<E extends Element & VisualElement> extends DatasetController<E, GeoFeature> {
+export class GeoController<
+  TYPE extends keyof ChartTypeRegistry,
+  TElement extends Element & VisualElement
+> extends DatasetController<TYPE, TElement, GeoFeature> {
   getGeoDataset(): ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions {
     return (super.getDataset() as unknown) as ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
   }
-  getGeoOptions() {
+
+  getGeoOptions(): IGeoChartOptions {
     return (this.chart.options as unknown) as IGeoChartOptions;
   }
-  getProjectionScale() {
+
+  getProjectionScale(): ProjectionScale {
     return this.getScaleForId('xy') as ProjectionScale;
   }
 
-  linkScales() {
+  linkScales(): void {
     const dataset = this.getGeoDataset();
     const meta = this.getMeta();
-    meta.xAxisID = dataset.xAxisID = 'xy';
-    meta.yAxisID = dataset.yAxisID = 'xy';
+    meta.xAxisID = 'xy';
+    dataset.xAxisID = 'xy';
+    meta.yAxisID = 'xy';
+    dataset.yAxisID = 'xy';
     meta.xScale = this.getScaleForId('xy');
     meta.yScale = this.getScaleForId('xy');
 
     this.getProjectionScale().computeBounds(this.resolveOutline());
   }
 
-  showOutline() {
+  showOutline(): IGeoChartOptions['showOutline'] {
     return valueOrDefault(this.getGeoDataset().showOutline, this.getGeoOptions().showOutline);
   }
 
-  clipMap() {
+  clipMap(): IGeoChartOptions['clipMap'] {
     return valueOrDefault(this.getGeoDataset().clipMap, this.getGeoOptions().clipMap);
   }
 
-  getGraticule() {
+  getGraticule(): IGeoChartOptions['showGraticule'] {
     return valueOrDefault(this.getGeoDataset().showGraticule, this.getGeoOptions().showGraticule);
   }
 
-  update(mode: UpdateMode) {
+  update(mode: UpdateMode): void {
     super.update(mode);
 
-    const active = mode === 'active';
     const meta = this.getMeta();
 
     const scale = this.getProjectionScale();
     const dirtyCache = scale.updateBounds();
 
     if (this.showOutline()) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const elem = meta.dataset!;
       if (dirtyCache) {
         delete elem.cache;
       }
       elem.projectionScale = scale;
       if (mode !== 'resize') {
-        const options = patchDatasetElementOptions(this.resolveDatasetElementOptions(active));
+        const options = patchDatasetElementOptions(this.resolveDatasetElementOptions(mode));
         const properties = {
           feature: this.resolveOutline(),
           options,
@@ -110,11 +117,12 @@ export class GeoController<E extends Element & VisualElement> extends DatasetCon
         }
       }
     } else if (this.getGraticule() && mode !== 'resize') {
-      (meta as any).graticule = patchDatasetElementOptions(this.resolveDatasetElementOptions(active));
+      (meta as any).graticule = patchDatasetElementOptions(this.resolveDatasetElementOptions(mode));
     }
 
     this.updateElements(meta.data, 0, meta.data.length, mode);
     if (dirtyCache) {
+      // eslint-disable-next-line no-param-reassign
       meta.data.forEach((elem) => delete (elem as any).cache);
     }
   }
@@ -131,13 +139,13 @@ export class GeoController<E extends Element & VisualElement> extends DatasetCon
     return outline;
   }
 
-  showGraticule() {
+  showGraticule(): void {
     const g = this.getGraticule();
     const options = (this.getMeta() as any).graticule;
     if (!g || !options) {
       return;
     }
-    const ctx = this.chart.ctx;
+    const { ctx } = this.chart;
     const scale = this.getProjectionScale();
     const path = scale.geoPath.context(ctx);
 
@@ -165,8 +173,8 @@ export class GeoController<E extends Element & VisualElement> extends DatasetCon
     ctx.restore();
   }
 
-  draw() {
-    const chart = this.chart;
+  draw(): void {
+    const { chart } = this;
 
     const clipMap = this.clipMap();
 
@@ -178,7 +186,7 @@ export class GeoController<E extends Element & VisualElement> extends DatasetCon
     }
 
     if (this.showOutline()) {
-      this.getMeta().dataset!.draw(chart.ctx);
+      this.getMeta().dataset?.draw(chart.ctx);
     }
 
     if (clipMap === true || clipMap === 'graticule' || clipMap === 'outline+graticule') {
@@ -243,7 +251,7 @@ export interface IGeoChartOptions {
 
 export interface IGeoControllerDatasetOptions
   extends IGeoChartOptions,
-    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext> {
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext<'choropleth' | 'bubbleMap'>> {
   xAxisID?: string;
   yAxisID?: string;
   rAxisID?: string;

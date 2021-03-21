@@ -54,16 +54,18 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
         canvas?: HTMLCanvasElement;
       }
     | undefined = undefined;
+
   projectionScale!: ProjectionScale;
+
   feature!: Feature;
 
-  inRange(mouseX: number, mouseY: number) {
+  inRange(mouseX: number, mouseY: number): boolean {
     const bb = this.getBounds();
     const r =
       (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
 
-    const projection = this.projectionScale.geoPath.projection()! as GeoProjection;
+    const projection = (this.projectionScale.geoPath.projection() as unknown) as GeoProjection;
     if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
       // test for real if within the bounds
       const longlat = projection.invert([mouseX, mouseY]);
@@ -73,15 +75,15 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     return r;
   }
 
-  inXRange(mouseX: number) {
+  inXRange(mouseX: number): boolean {
     return this.inRange(mouseX, Number.NaN);
   }
 
-  inYRange(mouseY: number) {
+  inYRange(mouseY: number): boolean {
     return this.inRange(Number.NaN, mouseY);
   }
 
-  getCenterPoint() {
+  getCenterPoint(): { x: number; y: number } {
     if (this.cache && this.cache.center) {
       return this.cache.center;
     }
@@ -90,11 +92,11 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       x: centroid[0],
       y: centroid[1],
     };
-    this.cache = Object.assign({}, this.cache || {}, { center });
+    this.cache = { ...(this.cache || {}), center };
     return center;
   }
 
-  getBounds() {
+  getBounds(): { x: number; y: number; x2: number; y2: number; width: number; height: number } {
     if (this.cache && this.cache.bounds) {
       return this.cache.bounds;
     }
@@ -107,11 +109,11 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       width: bb[1][0] - bb[0][0],
       height: bb[1][1] - bb[0][1],
     };
-    this.cache = Object.assign({}, this.cache || {}, { bounds });
+    this.cache = { ...(this.cache || {}), bounds };
     return bounds;
   }
 
-  _drawInCache(doc: Document) {
+  _drawInCache(doc: Document): void {
     const bounds = this.getBounds();
     if (!Number.isFinite(bounds.x)) {
       return;
@@ -120,27 +122,26 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     canvas.width = Math.max(Math.ceil(bounds.width), 1);
     canvas.height = Math.max(Math.ceil(bounds.height), 1);
 
-    const ctx = canvas.getContext('2d')!;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.save();
-    ctx.translate(-bounds.x, -bounds.y);
-    this._drawImpl(ctx);
-    ctx.restore();
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.translate(-bounds.x, -bounds.y);
+      this._drawImpl(ctx);
+      ctx.restore();
 
-    this.cache = Object.assign({}, this.cache || {}, {
-      canvas,
-      canvasKey: this._optionsToKey(),
-    });
+      this.cache = { ...(this.cache || {}), canvas, canvasKey: this._optionsToKey() };
+    }
   }
 
-  _optionsToKey() {
-    const options = this.options;
+  _optionsToKey(): string {
+    const { options } = this;
     return `${options.backgroundColor};${options.borderColor};${options.borderWidth}`;
   }
 
-  _drawImpl(ctx: CanvasRenderingContext2D) {
-    const feature = this.feature;
-    const options = this.options;
+  _drawImpl(ctx: CanvasRenderingContext2D): void {
+    const { feature } = this;
+    const { options } = this;
     ctx.beginPath();
     this.projectionScale.geoPath.context(ctx)(feature);
     if (options.backgroundColor) {
@@ -154,8 +155,8 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     }
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    const feature = this.feature;
+  draw(ctx: CanvasRenderingContext2D): void {
+    const { feature } = this;
     if (!feature) {
       return;
     }
@@ -173,17 +174,18 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   static id = 'geoFeature';
-  static defaults = /*#__PURE__*/ Object.assign({}, BarElement.defaults, {
+
+  static defaults = /* #__PURE__ */ {
+    ...BarElement.defaults,
     outlineBackgroundColor: null,
     outlineBorderWidth: 0,
 
     graticuleBorderColor: '#CCCCCC',
     graticuleBorderWidth: 0,
-  });
-  static defaultRoutes = /*#__PURE__*/ Object.assign(
-    {
-      outlineBorderColor: 'borderColor',
-    },
-    BarElement.defaultRoutes || {}
-  );
+  };
+
+  static defaultRoutes = /* #__PURE__ */ {
+    outlineBorderColor: 'borderColor',
+    ...(BarElement.defaultRoutes || {}),
+  };
 }

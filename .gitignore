@@ -17,4 +17,5 @@ npm-debug.log*
 *.tgz
 /.vscode/extensions.json
 /docs
+*.tsbuildinfo
 __diff_output__

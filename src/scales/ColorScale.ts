@@ -40,7 +40,7 @@ import {
   interpolateYlOrBr,
   interpolateYlOrRd,
 } from 'd3-scale-chromatic';
-import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
+import { baseDefaults, BaseMixin, ILegendScaleOptions } from './BaseMixin';
 
 const lookup: { [key: string]: (normalizedValue: number) => string } = {
   interpolateBlues,
@@ -201,7 +201,6 @@ function ColorScaleMixin<O extends IColorScaleOptions>(superClass: { new (...arg
     }
 
     _drawIndicator() {
-      const ctx = this.ctx;
       const w = this.width;
       const h = this.height;
       const indicatorSize = this.options.legend.indicatorWidth;
@@ -213,14 +212,14 @@ function ColorScaleMixin<O extends IColorScaleOptions>(superClass: { new (...arg
           const offset = !reverse ? (i: number) => i : (i: number) => w - stepWidth - i;
           for (let i = 0; i < w; i += stepWidth) {
             const v = (i + stepWidth / 2) / w;
-            ctx.fillStyle = this.getColor(v);
-            ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
+            this.ctx.fillStyle = this.getColor(v);
+            this.ctx.fillRect(offset(i), 0, stepWidth, indicatorSize);
           }
         } else {
           const offset = !reverse ? (i: number) => i : (i: number) => w - 1 - i;
-          for (let i = 0; i < w; ++i) {
-            ctx.fillStyle = this.getColor((i + 0.5) / w);
-            ctx.fillRect(offset(i), 0, 1, indicatorSize);
+          for (let i = 0; i < w; i += 1) {
+            this.ctx.fillStyle = this.getColor((i + 0.5) / w);
+            this.ctx.fillRect(offset(i), 0, 1, indicatorSize);
           }
         }
       } else if (this.options.quantize > 0) {
@@ -228,14 +227,14 @@ function ColorScaleMixin<O extends IColorScaleOptions>(superClass: { new (...arg
         const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;
         for (let i = 0; i < h; i += stepWidth) {
           const v = (i + stepWidth / 2) / h;
-          ctx.fillStyle = this.getColor(v);
-          ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
+          this.ctx.fillStyle = this.getColor(v);
+          this.ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
         }
       } else {
         const offset = !reverse ? (i: number) => i : (i: number) => h - 1 - i;
-        for (let i = 0; i < h; ++i) {
-          ctx.fillStyle = this.getColor((i + 0.5) / h);
-          ctx.fillRect(0, offset(i), indicatorSize, 1);
+        for (let i = 0; i < h; i += 1) {
+          this.ctx.fillStyle = this.getColor((i + 0.5) / h);
+          this.ctx.fillRect(0, offset(i), indicatorSize, 1);
         }
       }
     }
@@ -250,13 +249,14 @@ const colorScaleDefaults = {
 
 export class ColorScale extends ColorScaleMixin<IColorScaleOptions & LinearScaleOptions>(LinearScale) {
   static readonly id = 'color';
-  static readonly defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
+
+  static readonly defaults = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 }
 
 export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & LogarithmicScaleOptions>(
   LogarithmicScale
 ) {
-  _getNormalizedValue(v: number) {
+  _getNormalizedValue(v: number): number | null {
     if (v == null || Number.isNaN(v)) {
       return null;
     }
@@ -264,7 +264,8 @@ export class ColorLogarithmicScale extends ColorScaleMixin<IColorScaleOptions & 
   }
 
   static readonly id = 'colorLogarithmic';
-  static readonly defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
+
+  static readonly defaults = /* #__PURE__ */ merge({}, [LogarithmicScale.defaults, baseDefaults, colorScaleDefaults]);
 }
 
 declare module 'chart.js' {

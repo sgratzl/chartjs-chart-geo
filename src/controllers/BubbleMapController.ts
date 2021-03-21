@@ -17,36 +17,41 @@ import {
 import { merge } from 'chart.js/helpers';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
 import { ProjectionScale, SizeScale } from '../scales';
-import { GeoController, geoDefaults, IGeoChartOptions } from './geo';
+import { GeoController, geoDefaults, geoOverrides, IGeoChartOptions } from './GeoController';
 import patchController from './patchController';
 
 export class BubbleMapController extends GeoController<PointElement> {
-  initialize() {
+  initialize(): void {
     super.initialize();
     this.enableOptionSharing = true;
   }
-  linkScales() {
+
+  linkScales(): void {
     super.linkScales();
     const dataset = this.getGeoDataset();
     const meta = this.getMeta();
-    meta.vAxisID = meta.rAxisID = 'r';
-    dataset.vAxisID = dataset.rAxisID = 'r';
+    meta.vAxisID = 'r';
+    meta.rAxisID = 'r';
+    dataset.vAxisID = 'r';
+    dataset.rAxisID = 'r';
     meta.rScale = this.getScaleForId('r');
     meta.vScale = meta.rScale;
     meta.iScale = meta.xScale;
-    meta.iAxisID = dataset.iAxisID = meta.xAxisID!;
+    meta.iAxisID = meta.xAxisID!;
+    dataset.iAxisID = meta.xAxisID!;
   }
 
-  _getOtherScale(scale: Scale) {
+  // eslint-disable-next-line class-methods-use-this
+  _getOtherScale(scale: Scale): Scale {
     // for strange get min max with other scale
     return scale;
   }
 
-  parse(start: number, count: number) {
+  parse(start: number, count: number): void {
     const rScale = this.getMeta().rScale!;
     const data = (this.getDataset().data as unknown) as IBubbleMapDataPoint[];
     const meta = this._cachedMeta;
-    for (let i = start; i < start + count; ++i) {
+    for (let i = start; i < start + count; i += 1) {
       const d = data[i];
       meta._parsed[i] = {
         x: d.longitude == null ? d.x : d.longitude,
@@ -56,7 +61,7 @@ export class BubbleMapController extends GeoController<PointElement> {
     }
   }
 
-  updateElements(elems: PointElement[], start: number, count: number, mode: UpdateMode) {
+  updateElements(elems: PointElement[], start: number, count: number, mode: UpdateMode): void {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
     const sharedOptions = this.getSharedOptions(firstOpts);
@@ -67,7 +72,7 @@ export class BubbleMapController extends GeoController<PointElement> {
 
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
-    for (let i = start; i < start + count; i++) {
+    for (let i = start; i < start + count; i += 1) {
       const elem = elems[i];
       const parsed = this.getParsed(i);
       const xy = scale.projection!([parsed.x, parsed.y]);
@@ -86,21 +91,26 @@ export class BubbleMapController extends GeoController<PointElement> {
     }
   }
 
-  indexToRadius(index: number) {
+  indexToRadius(index: number): number {
     const rScale = this.getMeta().rScale as SizeScale;
     return rScale.getSizeForValue(this.getParsed(index)[rScale.axis]);
   }
 
   static readonly id = 'bubbleMap';
 
-  static readonly defaults: any = merge({}, [
+  static readonly defaults: any = /* #__PURE__ */ merge({}, [
     geoDefaults,
     {
       dataElementType: PointElement.id,
-      dataElementOptions: BubbleController.defaults.dataElementOptions,
       datasetElementType: GeoFeature.id,
       showOutline: true,
       clipMap: 'outline+graticule',
+    },
+  ]);
+
+  static readonly overrides: any = /* #__PURE__ */ merge({}, [
+    geoOverrides,
+    {
       plugins: {
         tooltip: {
           callbacks: {

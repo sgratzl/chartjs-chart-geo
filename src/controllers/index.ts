@@ -1,3 +1,3 @@
-export { GeoController, IGeoChartOptions, IGeoControllerDatasetOptions, IGeoDataPoint } from './geo';
-export * from './choropleth';
-export * from './bubbleMap';
+export { GeoController, IGeoChartOptions, IGeoControllerDatasetOptions, IGeoDataPoint } from './GeoController';
+export * from './ChoroplethController';
+export * from './BubbleMapController';

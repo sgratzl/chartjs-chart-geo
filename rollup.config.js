@@ -51,9 +51,12 @@ export default (options) => {
       }),
       commonjs(),
       replace({
-        // eslint-disable-next-line no-undef
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) || 'production',
-        __VERSION__: JSON.stringify(pkg.version),
+        preventAssignment: true,
+        values: {
+          // eslint-disable-next-line no-undef
+          'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV) || 'production',
+          __VERSION__: JSON.stringify(pkg.version),
+        }
       }),
       cleanup({
         comments: ['some', 'ts', 'ts3s'],

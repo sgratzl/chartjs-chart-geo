@@ -11,7 +11,7 @@ import {
   IProjectionScaleOptions,
 } from '../scales';
 import createChart from '../__tests__/createChart';
-import { BubbleMapController } from './bubbleMap';
+import { BubbleMapController } from './BubbleMapController';
 import data from './__tests__/data';
 
 describe('bubbleMap', () => {

@@ -1,3 +1,3 @@
-export * from './projection';
-export * from './color';
-export * from './size';
+export * from './ProjectionScale';
+export * from './ColorScale';
+export * from './SizeScale';

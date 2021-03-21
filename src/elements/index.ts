@@ -1,1 +1,1 @@
-export * from './geoFeature';
+export * from './GeoFeature';

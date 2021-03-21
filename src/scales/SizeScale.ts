@@ -7,9 +7,9 @@ import {
   LinearScaleOptions,
   LogarithmicScaleOptions,
 } from 'chart.js';
-import { merge } from 'chart.js/helpers';
-import { drawPoint } from 'chart.js/helpers';
-import { baseDefaults, BaseMixin, ILegendScaleOptions } from './base';
+import { merge, drawPoint } from 'chart.js/helpers';
+
+import { baseDefaults, BaseMixin, ILegendScaleOptions } from './BaseMixin';
 
 export interface ISizeScaleOptions extends ILegendScaleOptions {
   // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
@@ -115,7 +115,7 @@ function SizeSaleMixin<O extends ISizeScaleOptions>(superClass: { new (...args: 
 
     _drawIndicator() {
       /** @type {CanvasRenderingContext2D} */
-      const ctx = this.ctx;
+      const { ctx } = this;
       const shift = this.options.legend.indicatorWidth / 2;
 
       const isHor = this.isHorizontal();
@@ -174,16 +174,12 @@ function SizeSaleMixin<O extends ISizeScaleOptions>(superClass: { new (...args: 
         const radius = this.getSizeForValue(v.value);
         const x = isHor ? pos.x : shift;
         const y = isHor ? shift : pos.y;
-        const renderOptions = Object.assign(
-          {
-            pointStyle: 'circle' as const,
-            borderWidth: 0,
-          },
-          this._model || {},
-          {
-            radius,
-          }
-        );
+        const renderOptions = {
+          pointStyle: 'circle' as const,
+          borderWidth: 0,
+          ...(this._model || {}),
+          radius,
+        };
         drawPoint(ctx, renderOptions, x, y);
       });
     }
@@ -205,7 +201,8 @@ const scaleDefaults = {
 
 export class SizeScale extends SizeSaleMixin<ISizeScaleOptions & LinearScaleOptions>(LinearScale) {
   static readonly id = 'size';
-  static readonly defaults = /*#__PURE__*/ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
+
+  static readonly defaults = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 }
 
 export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & LogarithmicScaleOptions>(LogarithmicScale) {
@@ -217,7 +214,8 @@ export class SizeLogarithmicScale extends SizeSaleMixin<ISizeScaleOptions & Loga
   }
 
   static readonly id = 'sizeLogarithmic';
-  static readonly defaults = /*#__PURE__*/ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
+
+  static readonly defaults = /* #__PURE__ */ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
 }
 
 declare module 'chart.js' {

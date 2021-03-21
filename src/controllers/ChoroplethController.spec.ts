@@ -1,4 +1,9 @@
-import { ChoroplethController } from './choropleth';
+import { feature } from 'topojson-client';
+import states10m from 'us-atlas/states-10m.json';
+import countries50m from 'world-atlas/countries-50m.json';
+import rnd from 'seedrandom';
+import { registry, DeepPartial } from 'chart.js';
+import createChart from '../__tests__/createChart';
 import {
   ColorLogarithmicScale,
   ColorScale,
@@ -6,12 +11,7 @@ import {
   IProjectionScaleOptions,
   IColorScaleOptions,
 } from '../scales';
-import { feature } from 'topojson-client';
-import createChart from '../__tests__/createChart';
-import states10m from 'us-atlas/states-10m.json';
-import countries50m from 'world-atlas/countries-50m.json';
-import rnd from 'seedrandom';
-import { registry, DeepPartial } from 'chart.js';
+import { ChoroplethController } from './ChoroplethController';
 import { GeoFeature } from '../elements';
 
 describe('choropleth', () => {

@@ -36,7 +36,7 @@
     "src/**/*.ts"
   ],
   "peerDependencies": {
-    "chart.js": "^3.0.0-rc"
+    "chart.js": "^3.0.0-rc.2"
   },
   "dependencies": {
     "@types/d3-geo": "^2.0.0",
@@ -60,7 +60,7 @@
     "@yarnpkg/pnpify": "^2.4.0",
     "canvas": "^2.7.0",
     "canvas-5-polyfill": "^0.1.5",
-    "chart.js": "^3.0.0-rc",
+    "chart.js": "^3.0.0-rc.2",
     "eslint": "^7.22.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-prettier": "^8.1.0",

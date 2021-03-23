@@ -2345,10 +2345,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chart.js@npm:^3.0.0-rc":
-  version: 3.0.0-rc
-  resolution: "chart.js@npm:3.0.0-rc"
-  checksum: f1d1ed7c21841ca3742124280268992a0205abb3149f7f1aea4ca3ac854e72c38a0763c355f22ba18fb3542b5b47fc0bbcbcfbc812d96ea42096ddfbd72fdd28
+"chart.js@npm:^3.0.0-rc.2":
+  version: 3.0.0-rc.2
+  resolution: "chart.js@npm:3.0.0-rc.2"
+  checksum: 4f2d6ccf65d6159b2dcc0ed07ab2865d0450ab14b1cfc05055306615abc6eb0fcec712806e3816b29905f3862444d77578da761744937b8bba8dda41e3c440a1
   languageName: node
   linkType: hard
 
@@ -2372,7 +2372,7 @@ __metadata:
     "@yarnpkg/pnpify": ^2.4.0
     canvas: ^2.7.0
     canvas-5-polyfill: ^0.1.5
-    chart.js: ^3.0.0-rc
+    chart.js: ^3.0.0-rc.2
     d3-geo: ^2.0.1
     d3-scale-chromatic: ^2.0.0
     eslint: ^7.22.0
@@ -2403,7 +2403,7 @@ __metadata:
     us-atlas: ^3.0.0
     world-atlas: ^2.0.2
   peerDependencies:
-    chart.js: ^3.0.0-rc
+    chart.js: ^3.0.0-rc.2
   languageName: unknown
   linkType: soft
 

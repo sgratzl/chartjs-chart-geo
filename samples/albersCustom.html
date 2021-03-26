@@ -10,28 +10,28 @@
       <canvas id="canvas" style="border: 1px solid black"></canvas>
     </div>
     <script>
-      fetch('https://unpkg.com/world-atlas/countries-50m.json')
+      fetch('https://unpkg.com/us-atlas/states-10m.json')
         .then((r) => r.json())
-        .then((data) => {
-          const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
+        .then((us) => {
+          const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
+          const states = ChartGeo.topojson.feature(us, us.objects.states).features;
 
           const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
             type: 'choropleth',
             data: {
-              labels: countries.map((d) => d.properties.name),
+              labels: states.map((d) => d.properties.name),
               datasets: [
                 {
-                  label: 'Countries',
-                  data: countries.map((d) => ({
+                  label: 'States',
+                  outline: nation,
+                  data: states.map((d) => ({
                     feature: d,
-                    value: Math.random(),
+                    value: Math.random() * 10,
                   })),
                 },
               ],
             },
             options: {
-              showOutline: true,
-              showGraticule: true,
               plugins: {
                 legend: {
                   display: false,
@@ -39,7 +39,14 @@
               },
               scales: {
                 xy: {
-                  projection: 'equalEarth',
+                  projection: 'albersUsa',
+                },
+                color: {
+                  interpolate: (v) => v < 0.5 ? 'green' : 'red',
+                  legend: {
+                    position: 'bottom-right',
+                    align: 'right',
+                  },
                 },
               },
             },

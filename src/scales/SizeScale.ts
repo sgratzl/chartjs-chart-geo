@@ -197,6 +197,11 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
   static readonly id = 'size';
 
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
+
+  static readonly descriptors = /* #__PURE__ */ {
+    _scriptable: true,
+    _indexable: (name: string): boolean => name !== 'range',
+  };
 }
 
 export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptions & LogarithmicScaleOptions> {

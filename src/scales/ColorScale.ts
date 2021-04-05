@@ -247,6 +247,11 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   static readonly id = 'color';
 
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
+
+  static readonly descriptors = /* #__PURE__ */ {
+    _scriptable: (name: string): boolean => name !== 'interpolate',
+    _indexable: false,
+  };
 }
 
 export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOptions & LogarithmicScaleOptions> {

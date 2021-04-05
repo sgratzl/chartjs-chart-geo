@@ -1,6 +1,6 @@
 import { Element, BarElement, BarOptions, VisualElement, Point } from 'chart.js';
 import { geoContains, GeoProjection } from 'd3-geo';
-import { ProjectionScale } from '../scales';
+import type { ProjectionScale } from '../scales';
 
 export interface IGeoFeatureOptions extends BarOptions {
   /**

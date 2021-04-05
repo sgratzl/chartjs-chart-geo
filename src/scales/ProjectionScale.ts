@@ -166,12 +166,17 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     );
   }
 
-  static id = 'projection';
+  static readonly id = 'projection';
 
-  static defaults: Partial<IProjectionScaleOptions> = {
+  static readonly defaults: Partial<IProjectionScaleOptions> = {
     projection: 'albersUsa',
     projectionScale: 1,
     projectionOffset: [0, 0],
+  };
+
+  static readonly descriptors = /* #__PURE__ */ {
+    _scriptable: (name: keyof IProjectionScaleOptions): boolean => name !== 'projection',
+    _indexable: (name: keyof IProjectionScaleOptions): boolean => name !== 'projectionOffset',
   };
 }
 

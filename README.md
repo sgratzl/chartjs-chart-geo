@@ -4,7 +4,7 @@
 
 Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
 
-**Works only with Chart.js >= 3.0.0-alpha.2**
+**Works only with Chart.js >= 3.0.0**
 
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
@@ -23,7 +23,7 @@ works great with https://github.com/chartjs/chartjs-plugin-datalabels
 ## Install
 
 ```bash
-npm install --save chart.js@next chartjs-chart-geo@next
+npm install --save chart.js chartjs-chart-geo
 ```
 
 ## Usage

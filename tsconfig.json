@@ -8,7 +8,7 @@
     "declaration": false,
     "sourceMap": true,
     "strict": true,
-    "importsNotUsedAsValues": "remove",
+    "importsNotUsedAsValues": "error",
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "strictBindCallApply": true,

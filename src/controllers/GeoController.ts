@@ -11,7 +11,7 @@ import {
 import { clipArea, unclipArea, valueOrDefault } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
 import { ProjectionScale } from '../scales';
-import { GeoFeature, IGeoFeatureOptions } from '../elements';
+import type { GeoFeature, IGeoFeatureOptions } from '../elements';
 
 export const geoDefaults = {
   showOutline: false,

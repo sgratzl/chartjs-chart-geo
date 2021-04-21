@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
-    "skipLibCheck": true,
-    "target": "ES2020",
+    "target": "ES2018",
     "module": "ESNext",
     "lib": ["DOM", "ES2020"],
     "importHelpers": false,
     "declaration": false,
     "sourceMap": true,
     "strict": true,
+    "removeComments": true,
     "importsNotUsedAsValues": "error",
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
@@ -34,13 +34,10 @@
   "typedocOptions": {
     "name": "TSLibrary",
     "out": "./docs",
-    "mode": "library",
-    "theme": "minimal",
-    "excludeNotExported": true,
+    "theme": "default",
     "excludeExternals": true,
     "excludePrivate": true,
     "includeVersion": true,
-    "hideGenerator": true,
-    "entryPoint": "\"index\""
+    "hideGenerator": true
   }
 }

@@ -206,11 +206,11 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   }
 
   _drawIndicator(): void {
-    const { indicatorWidth: indicatorSize, padding } = this.options.legend;
+    const { indicatorWidth: indicatorSize } = this.options.legend;
     const reverse = (this as any)._reversePixels;
 
     if (this.isHorizontal()) {
-      const w = this.width - padding;
+      const w = this.width;
       if (this.options.quantize > 0) {
         const stepWidth = w / this.options.quantize;
         const offset = !reverse ? (i: number) => i : (i: number) => w - stepWidth - i;
@@ -227,7 +227,7 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
         }
       }
     } else {
-      const h = this.height - padding;
+      const h = this.height;
       if (this.options.quantize > 0) {
         const stepWidth = h / this.options.quantize;
         const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;

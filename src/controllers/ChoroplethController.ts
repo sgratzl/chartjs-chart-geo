@@ -77,14 +77,14 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
         y: center.y,
       };
       if (includeOptions) {
-        properties.options = ((sharedOptions || this.resolveDataElementOptions(i, mode)) as unknown) as PointOptions;
+        properties.options = (sharedOptions || this.resolveDataElementOptions(i, mode)) as unknown as PointOptions;
       }
-      this.updateElement(elem, i, (properties as unknown) as Record<string, unknown>, mode);
+      this.updateElement(elem, i, properties as unknown as Record<string, unknown>, mode);
     }
   }
 
   indexToColor(index: number): string {
-    const rScale = (this.getMeta().rScale as unknown) as ColorScale;
+    const rScale = this.getMeta().rScale as unknown as ColorScale;
     return rScale.getColorForValue(this.getParsed(index)[rScale.axis as 'r']);
   }
 

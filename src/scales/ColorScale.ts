@@ -206,12 +206,11 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   }
 
   _drawIndicator(): void {
-    const w = this.width;
-    const h = this.height;
-    const indicatorSize = this.options.legend.indicatorWidth;
+    const { indicatorWidth: indicatorSize } = this.options.legend;
     const reverse = (this as any)._reversePixels;
 
     if (this.isHorizontal()) {
+      const w = this.width;
       if (this.options.quantize > 0) {
         const stepWidth = w / this.options.quantize;
         const offset = !reverse ? (i: number) => i : (i: number) => w - stepWidth - i;
@@ -227,19 +226,22 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
           this.ctx.fillRect(offset(i), 0, 1, indicatorSize);
         }
       }
-    } else if (this.options.quantize > 0) {
-      const stepWidth = h / this.options.quantize;
-      const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;
-      for (let i = 0; i < h; i += stepWidth) {
-        const v = (i + stepWidth / 2) / h;
-        this.ctx.fillStyle = this.getColor(v);
-        this.ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
-      }
     } else {
-      const offset = !reverse ? (i: number) => i : (i: number) => h - 1 - i;
-      for (let i = 0; i < h; i += 1) {
-        this.ctx.fillStyle = this.getColor((i + 0.5) / h);
-        this.ctx.fillRect(0, offset(i), indicatorSize, 1);
+      const h = this.height;
+      if (this.options.quantize > 0) {
+        const stepWidth = h / this.options.quantize;
+        const offset = !reverse ? (i: number) => i : (i: number) => h - stepWidth - i;
+        for (let i = 0; i < h; i += stepWidth) {
+          const v = (i + stepWidth / 2) / h;
+          this.ctx.fillStyle = this.getColor(v);
+          this.ctx.fillRect(0, offset(i), indicatorSize, stepWidth);
+        }
+      } else {
+        const offset = !reverse ? (i: number) => i : (i: number) => h - 1 - i;
+        for (let i = 0; i < h; i += 1) {
+          this.ctx.fillStyle = this.getColor((i + 0.5) / h);
+          this.ctx.fillRect(0, offset(i), indicatorSize, 1);
+        }
       }
     }
   }

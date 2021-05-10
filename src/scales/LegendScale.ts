@@ -10,7 +10,7 @@ import {
 export interface ILegendScaleOptions extends CartesianScaleOptions {
   /**
    * whether to render a color legend
-   * @default false (for compatibility reasons)
+   * @default true
    */
   display: boolean;
 
@@ -93,9 +93,12 @@ interface IPositionOption {
   position?: string;
 }
 
-function computeLegendMargin(
-  legend: ILegendScaleOptions['legend']
-): { left: number; top: number; right: number; bottom: number } {
+function computeLegendMargin(legend: ILegendScaleOptions['legend']): {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+} {
   const { indicatorWidth, align: pos, margin } = legend;
 
   const left = (typeof margin === 'number' ? margin : margin.left) + (pos === 'right' ? indicatorWidth : 0);
@@ -147,7 +150,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
 
   init(options: O): void {
     // eslint-disable-next-line no-param-reassign
-    ((options as unknown) as IPositionOption).position = 'chartArea';
+    (options as unknown as IPositionOption).position = 'chartArea';
     super.init(options);
     this.axis = 'r';
   }
@@ -195,6 +198,11 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     return r;
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _computeLabelArea(): void {
+    return undefined;
+  }
+
   draw(chartArea: ChartArea): void {
     if (!(this as any)._isVisible()) {
       return;
@@ -207,7 +215,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
 
     const bak = (this.options as IPositionOption).position;
     (this.options as IPositionOption).position = this.options.legend.align;
-    super.draw({ ...chartArea, bottom: this.height, right: this.width });
+    super.draw({ ...chartArea, bottom: this.height + 10, right: this.width });
     (this.options as IPositionOption).position = bak;
     const { indicatorWidth } = this.options.legend;
     switch (this.options.legend.align) {

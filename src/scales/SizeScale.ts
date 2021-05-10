@@ -14,12 +14,6 @@ export interface ISizeScaleOptions extends ILegendScaleOptions {
   // e.g. for tick manipulation, ...
 
   /**
-   * whether to render a color legend
-   * @default false (for compatibility reasons)
-   */
-  display: boolean;
-
-  /**
    * radius range in pixel, the minimal data value will be mapped to the
    * first entry,  the maximal one to the second and a linear interpolation
    * for all values in between.
@@ -40,50 +34,6 @@ export interface ISizeScaleOptions extends ILegendScaleOptions {
    * @default 1
    */
   missing: number;
-
-  /**
-   * the property name that stores the value in the data elements
-   * @default value
-   */
-  property: string;
-
-  legend: {
-    /**
-     * location of the legend on the chart area
-     * @default bottom-right
-     */
-    position: 'left' | 'right' | 'top' | 'bottom' | 'top-left' | 'top-right' | 'top-right' | 'bottom-right';
-    /**
-     * alignment of the scale, e.g., `right` means that it is a vertical scale
-     * with the ticks on the right side
-     * @default bottom
-     */
-    align: 'left' | 'right' | 'top' | 'bottom';
-    /**
-     * length of the legend, i.e., for a horizontal scale the width
-     * if a value < 1 is given, is it assume to be a ratio of the corresponding
-     * chart area
-     * @default 90
-     */
-    length: number;
-    /**
-     * how wide the scale is, i.e., for a horizontal scale the height
-     * if a value < 1 is given, is it assume to be a ratio of the corresponding
-     * chart area
-     * @default 70
-     */
-    width: number;
-    /**
-     * how many pixels should be used for the color bar
-     * @default 42
-     */
-    indicatorWidth: number;
-    /**
-     * margin pixels such that it doesn't stick to the edge of the chart
-     * @default 8
-     */
-    margin: number;
-  };
 }
 
 const scaleDefaults = {

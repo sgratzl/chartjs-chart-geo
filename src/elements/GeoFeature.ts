@@ -65,7 +65,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
       (Number.isNaN(mouseY) || (mouseY >= bb.y && mouseY <= bb.y2));
 
-    const projection = (this.projectionScale.geoPath.projection() as unknown) as GeoProjection;
+    const projection = this.projectionScale.geoPath.projection() as unknown as GeoProjection;
     if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
       // test for real if within the bounds
       const longlat = projection.invert([mouseX, mouseY]);

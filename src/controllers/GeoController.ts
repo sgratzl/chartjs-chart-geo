@@ -54,11 +54,11 @@ export class GeoController<
   TElement extends Element & VisualElement
 > extends DatasetController<TYPE, TElement, GeoFeature> {
   getGeoDataset(): ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions {
-    return (super.getDataset() as unknown) as ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
+    return super.getDataset() as unknown as ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;
   }
 
   getGeoOptions(): IGeoChartOptions {
-    return (this.chart.options as unknown) as IGeoChartOptions;
+    return this.chart.options as unknown as IGeoChartOptions;
   }
 
   getProjectionScale(): ProjectionScale {
@@ -159,10 +159,10 @@ export class GeoController<
     } else {
       const geo = geoGraticule();
       if (g.stepMajor) {
-        geo.stepMajor((g.stepMajor as unknown) as [number, number]);
+        geo.stepMajor(g.stepMajor as unknown as [number, number]);
       }
       if (g.stepMinor) {
-        geo.stepMinor((g.stepMinor as unknown) as [number, number]);
+        geo.stepMinor(g.stepMinor as unknown as [number, number]);
       }
       path(geo());
     }

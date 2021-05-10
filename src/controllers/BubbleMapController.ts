@@ -51,7 +51,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', PointElement
   parse(start: number, count: number): void {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rScale = this.getMeta().rScale!;
-    const data = (this.getDataset().data as unknown) as IBubbleMapDataPoint[];
+    const data = this.getDataset().data as unknown as IBubbleMapDataPoint[];
     const meta = this._cachedMeta;
     for (let i = start; i < start + count; i += 1) {
       const d = data[i];
@@ -71,7 +71,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', PointElement
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();
 
-    ((this.getMeta().rScale as unknown) as SizeScale)._model = (firstOpts as unknown) as PointOptions; // for legend rendering styling
+    (this.getMeta().rScale as unknown as SizeScale)._model = firstOpts as unknown as PointOptions; // for legend rendering styling
 
     this.updateSharedOptions(sharedOptions, mode, firstOpts);
 
@@ -85,12 +85,12 @@ export class BubbleMapController extends GeoController<'bubbleMap', PointElement
         skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
       };
       if (includeOptions) {
-        properties.options = ((sharedOptions || this.resolveDataElementOptions(i, mode)) as unknown) as PointOptions;
+        properties.options = (sharedOptions || this.resolveDataElementOptions(i, mode)) as unknown as PointOptions;
         if (reset) {
           properties.options.radius = 0;
         }
       }
-      this.updateElement(elem, i, (properties as unknown) as Record<string, unknown>, mode);
+      this.updateElement(elem, i, properties as unknown as Record<string, unknown>, mode);
     }
   }
 

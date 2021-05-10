@@ -10,7 +10,7 @@ import {
 export interface ILegendScaleOptions extends CartesianScaleOptions {
   /**
    * whether to render a color legend
-   * @default false (for compatibility reasons)
+   * @default true
    */
   display: boolean;
 
@@ -66,6 +66,12 @@ export interface ILegendScaleOptions extends CartesianScaleOptions {
      * @default 8
      */
     margin: number | ChartArea;
+
+    /**
+     * padding top/bottom or left/right to add to avoid hitting cropping labels
+     * @default 10
+     */
+    padding: number;
   };
 }
 
@@ -86,6 +92,7 @@ export const baseDefaults = {
     width: 50,
     margin: 8,
     indicatorWidth: 10,
+    padding: 10,
   },
 };
 
@@ -93,9 +100,12 @@ interface IPositionOption {
   position?: string;
 }
 
-function computeLegendMargin(
-  legend: ILegendScaleOptions['legend']
-): { left: number; top: number; right: number; bottom: number } {
+function computeLegendMargin(legend: ILegendScaleOptions['legend']): {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+} {
   const { indicatorWidth, align: pos, margin } = legend;
 
   const left = (typeof margin === 'number' ? margin : margin.left) + (pos === 'right' ? indicatorWidth : 0);
@@ -112,10 +122,10 @@ function computeLegendPosition(
   height: number,
   legendSize: { w: number; h: number }
 ): [number, number] {
-  const { indicatorWidth, align: axisPos, position: pos } = legend;
+  const { indicatorWidth, align: axisPos, position: pos, padding } = legend;
   const isHor = axisPos === 'top' || axisPos === 'bottom';
-  const w = (axisPos === 'left' ? legendSize.w : width) + (isHor ? indicatorWidth : 0);
-  const h = (axisPos === 'top' ? legendSize.h : height) + (!isHor ? indicatorWidth : 0);
+  const w = (axisPos === 'left' ? legendSize.w : width) + (isHor ? indicatorWidth : padding * 2);
+  const h = (axisPos === 'top' ? legendSize.h : height) + (!isHor ? indicatorWidth : padding * 2);
   const margin = computeLegendMargin(legend);
 
   if (typeof pos === 'string') {
@@ -147,7 +157,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
 
   init(options: O): void {
     // eslint-disable-next-line no-param-reassign
-    ((options as unknown) as IPositionOption).position = 'chartArea';
+    (options as unknown as IPositionOption).position = 'chartArea';
     super.init(options);
     this.axis = 'r';
   }
@@ -178,8 +188,8 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     const l = this.options.legend;
     const isHor = this.isHorizontal();
     const factor = (v: number, full: number) => (v < 1 ? full * v : v);
-    const w = Math.min(cw, factor(isHor ? l.length : l.width, cw)) - (!isHor ? l.indicatorWidth : 0);
-    const h = Math.min(ch, factor(!isHor ? l.length : l.width, ch)) - (isHor ? l.indicatorWidth : 0);
+    const w = Math.min(cw, factor(isHor ? l.length : l.width, cw)) - (!isHor ? l.indicatorWidth : l.padding * 2);
+    const h = Math.min(ch, factor(!isHor ? l.length : l.width, ch)) - (isHor ? l.indicatorWidth : l.padding * 2);
     this.legendSize = { w, h };
     this.bottom = h;
     this.height = h;
@@ -190,6 +200,11 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     (this.options as IPositionOption).position = this.options.legend.align;
     const r = super.update(w, h, margins);
     (this.options as IPositionOption).position = bak;
+    // if (isHor) {
+    //   this.left = l.padding;
+    // } else {
+    //   this.top = l.padding;
+    // }
     this.height = Math.min(h, this.height);
     this.width = Math.min(w, this.width);
     return r;
@@ -209,19 +224,19 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     (this.options as IPositionOption).position = this.options.legend.align;
     super.draw({ ...chartArea, bottom: this.height, right: this.width });
     (this.options as IPositionOption).position = bak;
-    const { indicatorWidth } = this.options.legend;
+    const { indicatorWidth, padding } = this.options.legend;
     switch (this.options.legend.align) {
       case 'left':
-        ctx.translate(this.legendSize.w, 0);
+        ctx.translate(this.legendSize.w, padding);
         break;
       case 'top':
-        ctx.translate(0, this.legendSize.h);
+        ctx.translate(padding, this.legendSize.h);
         break;
       case 'bottom':
-        ctx.translate(0, -indicatorWidth);
+        ctx.translate(padding, -indicatorWidth);
         break;
       default:
-        ctx.translate(-indicatorWidth, 0);
+        ctx.translate(-indicatorWidth, padding);
         break;
     }
     this._drawIndicator();

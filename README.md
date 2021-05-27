@@ -4,8 +4,6 @@
 
 Chart.js module for charting maps with legends. Adding new chart types: `choropleth` and `bubbleMap`.
 
-**Works only with Chart.js >= 3.0.0**
-
 ![Choropleth](https://user-images.githubusercontent.com/4129778/78821942-8b974700-79da-11ea-988d-142f7788ffe6.png)
 
 [![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/gOaBQep)
@@ -19,6 +17,17 @@ Chart.js module for charting maps with legends. Adding new chart types: `choropl
 [![Open in CodePen][codepen]](https://codepen.io/sgratzl/pen/YzyJRvm)
 
 works great with https://github.com/chartjs/chartjs-plugin-datalabels
+
+## Related Plugins
+
+Check out also my other chart.js plugins:
+ * [chartjs-chart-boxplot](https://github.com/sgratzl/chartjs-chart-boxplot) for rendering boxplots and violin plots
+ * [chartjs-chart-error-bars](https://github.com/sgratzl/chartjs-chart-error-bars) for rendering errors bars to bars and line charts
+ * [chartjs-chart-graph](https://github.com/sgratzl/chartjs-chart-graph) for rendering graphs, trees, and networks
+ * [chartjs-chart-pcp](https://github.com/sgratzl/chartjs-chart-pcp) for rendering parallel coordinate plots
+ * [chartjs-chart-venn](https://github.com/sgratzl/chartjs-chart-venn) for rendering venn and euler diagrams
+ * [chartjs-chart-wordcloud](https://github.com/sgratzl/chartjs-chart-wordcloud) for rendering word clouds
+ * [chartjs-plugin-hierarchical](https://github.com/sgratzl/chartjs-plugin-hierarchical) for rendering hierarchical categorical axes which can be expanded and collapsed
 
 ## Install
 

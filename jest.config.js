@@ -3,5 +3,6 @@
 module.exports = {
   testEnvironment: 'jsdom',
   preset: 'ts-jest',
+  rootDir: './src',
   testRegex: '((\\.|/)(test|spec))\\.tsx?$',
 };

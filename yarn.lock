@@ -2326,7 +2326,8 @@ __metadata:
     canvas: ^2.8.0
     canvas-5-polyfill: ^0.1.5
     chart.js: 3.0.0-rc.3
-    d3-geo: ^3.0.0
+    d3-array: ^2.12.0
+    d3-geo: ^2.0.1
     d3-scale-chromatic: ^2.0.0
     eslint: ^7.28.0
     eslint-config-airbnb-typescript: ^12.3.1
@@ -2673,12 +2674,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-array@npm:2.5.0 - 3":
-  version: 3.0.0
-  resolution: "d3-array@npm:3.0.0"
+"d3-array@npm:^2.12.0":
+  version: 2.12.1
+  resolution: "d3-array@npm:2.12.1"
   dependencies:
-    internmap: 1 - 2
-  checksum: 81c0127e5e065466cd1943c2e610e7ef69fe23dfa8560ca5aaee68140639de86f3c94af3990acd882e9cb9f8141f588475ab3c439b0e11de7893bc691da39b9b
+    internmap: ^1.0.0
+  checksum: 3f7282474dcd2961abc3359eb45db8a1a0bcc379bbf2c5acd7efcbc772faccf55790f98569847d821b21f576b450bc826a762274a9ba64ec0f191fd1a652aedc
   languageName: node
   linkType: hard
 
@@ -2689,12 +2690,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"d3-geo@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "d3-geo@npm:3.0.0"
+"d3-geo@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "d3-geo@npm:2.0.1"
   dependencies:
-    d3-array: 2.5.0 - 3
-  checksum: 26957929b029107259cad1c38482b4955eefe6c2da33425a129f5851d87c2bfb3e4f8e41465cb3a51f0af641804f0b333a3de1b6620c3a6ea5016fd88d0dc20f
+    d3-array: ">=2.5"
+  checksum: 62c9953e654d84316b57e3b6079604be40a6ee5a107bbf37c2e3802791bea91eff46bc886ef89b9e34a38f17146f9a061000c6d438fee2e36e96d800d5f4a611
   languageName: node
   linkType: hard
 
@@ -4446,10 +4447,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"internmap@npm:1 - 2":
-  version: 2.0.0
-  resolution: "internmap@npm:2.0.0"
-  checksum: ec3614d05e42e4d1a229506155582348637c95512b132b0e97b41331cd7942fc34f9980b9e29cd2499ed31b3cbe3258da6ce904e6179182d6520eddc4ff13c5e
+"internmap@npm:^1.0.0":
+  version: 1.0.1
+  resolution: "internmap@npm:1.0.1"
+  checksum: 5d1b68dcf5d5cf2b01bc23015e9559d825da5718301c33bb4c2f6d84e43402520901e9794ace2a9d243352bcfcf1b2ad2337ff9527d266afd6a06c6405d9b920
   languageName: node
   linkType: hard
 

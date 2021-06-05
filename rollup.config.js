@@ -10,11 +10,22 @@ import fs from 'fs';
 
 const pkg = JSON.parse(fs.readFileSync('./package.json'));
 
+function resolveYear() {
+  // Extract copyrights from the LICENSE.
+  const license = fs.readFileSync("./LICENSE", "utf-8").toString();
+  const matches = Array.from(license.matchAll(/\(c\) (\d+)/gm));
+  if (!matches || matches.length === 0) {
+    return 2021;
+  }
+  return matches[matches.length - 1][1];
+}
+const year = resolveYear();
+
 const banner = `/**
  * ${pkg.name}
  * ${pkg.homepage}
  *
- * Copyright (c) ${new Date().getFullYear()} ${pkg.author.name} <${pkg.author.email}>
+ * Copyright (c) ${year} ${pkg.author.name} <${pkg.author.email}>
  */
 `;
 

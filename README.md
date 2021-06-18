@@ -121,7 +121,7 @@ const config = {
 
 The styling of the new element `GeoFeature` is based on [Bar Element](https://www.chartjs.org/docs/latest/configuration/elements.html#bar-configuration) with some additional options for the outline and graticule.
 
-see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/elements/GeoFeature.ts#L5
+see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/elements/GeoFeature.ts#L41
 
 ### Legend and Color Scale
 
@@ -129,8 +129,8 @@ The coloring of the nodes will be done with a special color scale. The scale its
 
 see
 
-- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/LegendScale.ts#L10
-- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/ColorScale.ts#L107
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/LegendScale.ts#L148
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/ColorScale.ts#L180
 
 ## Bubble Map
 
@@ -164,8 +164,8 @@ Similar to the choropleth chart a new `radiusScale` is used to map the values to
 
 see
 
-- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/LegendScale.ts#L10
-- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/SizeScale.ts#L12
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/LegendScale.ts#L148
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/SizeScale.ts#L52
 
 ## Scales
 

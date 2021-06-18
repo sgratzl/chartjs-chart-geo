@@ -50,7 +50,7 @@ CodePens
 
 The option can be set globally or per dataset
 
-see https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/controllers/geo.ts#L213
+see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/controllers/GeoController.ts#L221
 
 ## Choropleth
 
@@ -119,9 +119,9 @@ const config = {
 
 ### Styling
 
-The styling of the new element `GeoFeature` is based on [Rectangle Element](https://www.chartjs.org/docs/latest/configuration/elements.html#rectangle-configuration) with some additional options for the outline and graticule.
+The styling of the new element `GeoFeature` is based on [Bar Element](https://www.chartjs.org/docs/latest/configuration/elements.html#bar-configuration) with some additional options for the outline and graticule.
 
-see https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/elements/geoFeature.ts#L5
+see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/elements/GeoFeature.ts#L41
 
 ### Legend and Color Scale
 
@@ -129,8 +129,8 @@ The coloring of the nodes will be done with a special color scale. The scale its
 
 see
 
-- https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/scales/base.ts#L3
-- https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/scales/color.ts#L114
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/LegendScale.ts#L148
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/ColorScale.ts#L180
 
 ## Bubble Map
 
@@ -164,14 +164,14 @@ Similar to the choropleth chart a new `radiusScale` is used to map the values to
 
 see
 
-- https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/scales/base.ts#L3
-- https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/scales/size.ts#L15
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/LegendScale.ts#L148
+- https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/SizeScale.ts#L52
 
 ## Scales
 
 A new scale `projection` is registered and used by default by Choropleth and BubbleMap. It provides just one option to specify the projection method. The available methods are the one from https://github.com/d3/d3-geo#projections. Just remove the `geo` prefix. Alternatively, the projection method instance can be directly given.
 
-see https://github.com/sgratzl/chartjs-chart-geo/blob/develop/src/scales/projection.ts#L49
+see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/ProjectionScale.ts#L76
 
 ### ESM and Tree Shaking
 

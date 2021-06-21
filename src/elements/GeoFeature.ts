@@ -28,7 +28,7 @@ export interface IGeoFeatureOptions extends BarOptions {
    * border width for the graticule
    * @default 0
    */
-  graticuleBorderWidth: string;
+  graticuleBorderWidth: number;
 }
 
 export type Feature = any;

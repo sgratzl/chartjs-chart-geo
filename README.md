@@ -134,7 +134,7 @@ see
 
 ## Bubble Map
 
-A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render maps with dots that are scaled according to some numerical value. It is based on a regular `bubble` chart where the positioning is done using latitude and longtitude with an additional `radiusScale` to create a legend for the different radi.
+A Bubble Map (chart type: `bubbleMap`) aka Proportional Symbol is used to render maps with dots that are scaled according to some numerical value. It is based on a regular `bubble` chart where the positioning is done using latitude and longitude with an additional `sizeScale` to create a legend for the different radi.
 
 ![Bubble Map](https://user-images.githubusercontent.com/4129778/78821935-89cd8380-79da-11ea-81bf-842fcbd3eff4.png)
 
@@ -152,7 +152,7 @@ interface IBubbleMapPoint {
 }
 ```
 
-**Note**: instead of using the `r` attribute as in a regular bubble chart, the `value` attribute is used, which is picked up by the `radiusScale` to convert it to an actual pixel radius value.
+**Note**: instead of using the `r` attribute as in a regular bubble chart, the `value` attribute is used, which is picked up by the `sizeScale` to convert it to an actual pixel radius value.
 
 ### Styling
 
@@ -160,7 +160,7 @@ A regular point is used and thus supports the [Point Element](https://www.chartj
 
 ### Legend
 
-Similar to the choropleth chart a new `radiusScale` is used to map the values to symbol radius size. The scale itself is based on a linear scale.
+Similar to the choropleth chart a new `sizeScale` is used to map the values to symbol radius size. The scale itself is based on a linear scale.
 
 see
 
@@ -169,7 +169,7 @@ see
 
 ## Scales
 
-A new scale `projection` is registered and used by default by Choropleth and BubbleMap. It provides just one option to specify the projection method. The available methods are the one from https://github.com/d3/d3-geo#projections. Just remove the `geo` prefix. Alternatively, the projection method instance can be directly given.
+A new scale `projection` is registered and used by default by Choropleth and BubbleMap. The available methods are the one from https://github.com/d3/d3-geo#projections. Just remove the `geo` prefix. Alternatively, the projection method instance can be directly given.
 
 see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/scales/ProjectionScale.ts#L76
 

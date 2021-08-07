@@ -185,8 +185,9 @@ export class GeoController<
       clipArea(chart.ctx, chart.chartArea);
     }
 
-    if (this.showOutline()) {
-      this.getMeta().dataset?.draw(chart.ctx);
+    if (this.showOutline() && this.getMeta().dataset) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      (this.getMeta().dataset!.draw.call as any)(this.getMeta().dataset!, chart.ctx, chart.chartArea);
     }
 
     if (clipMap === true || clipMap === 'graticule' || clipMap === 'outline+graticule') {
@@ -209,7 +210,7 @@ export class GeoController<
       unclipArea(chart.ctx);
     }
 
-    this.getMeta().data.forEach((elem) => elem.draw(chart.ctx));
+    this.getMeta().data.forEach((elem) => (elem.draw.call as any)(elem, chart.ctx, chart.chartArea));
 
     if (enabled) {
       enabled = false;

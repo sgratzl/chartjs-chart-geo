@@ -80,9 +80,9 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
 
     const isHor = this.isHorizontal();
     const values = this.ticks;
-    const positions = (this as any)._labelItems ? 
-      (this as any)._labelItems.map((el: any) => ({ [isHor ? 'x' : 'y']: el.translation[isHor ? 0 : 1] })) : 
-      values.map((_, i) => ({ [isHor ? 'x' : 'y']: this.getPixelForTick(i) }));
+    const positions = (this as any)._labelItems
+      ? (this as any)._labelItems.map((el: any) => ({ [isHor ? 'x' : 'y']: el.translation[isHor ? 0 : 1] }))
+      : values.map((_, i) => ({ [isHor ? 'x' : 'y']: this.getPixelForTick(i) }));
 
     ((this as any)._gridLineItems || []).forEach((item: any) => {
       ctx.save();

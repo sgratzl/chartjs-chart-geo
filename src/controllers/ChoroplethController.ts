@@ -149,8 +149,9 @@ declare module 'chart.js' {
       chartOptions: IGeoChartOptions;
       datasetOptions: IChoroplethControllerDatasetOptions;
       defaultDataPoint: IGeoDataPoint & { value: number };
-      parsedDataType: { r: number };
       scales: keyof (ProjectionScaleTypeRegistry & ColorScaleTypeRegistry);
+      metaExtensions: Record<string, never>;
+      parsedDataType: { r: number };
     };
   }
 }

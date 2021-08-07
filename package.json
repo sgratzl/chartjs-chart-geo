@@ -75,7 +75,6 @@
     "jest": "^27.0.6",
     "jest-image-snapshot": "^4.5.1",
     "prettier": "^2.3.2",
-    "release-it": "^14.10.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.56.0",
     "rollup-plugin-cleanup": "^3.2.1",
@@ -109,9 +108,7 @@
     "eslint": "eslint src --ext .ts,.tsx",
     "eslint:fix": "yarn run eslint --fix",
     "docs": "typedoc src/index.ts",
-    "prepare": "yarn run build",
-    "release": "release-it --disable-metrics --npm.skipChecks",
-    "release:pre": "release-it --disable-metrics --npm.skipChecks --preRelease=alpha --npm.tag=next"
+    "prepare": "yarn run build"
   },
   "packageManager": "yarn@3.0.0"
 }

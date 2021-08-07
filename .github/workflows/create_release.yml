@@ -1,0 +1,37 @@
+name: Create Release
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: 'Semantic Version Number (i.e., 5.5.0 or patch, minor, major, prepatch, preminor, premajor, prerelease)'
+        required: true
+        default: patch
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          ssh-key: ${{ secrets.PRIVATE_SSH_KEY }}
+      - name: Reset main branch
+        run: |
+          git fetch origin dev:dev
+          git reset --hard origin/dev
+      - name: Change version number
+        id: version
+        run: |
+          echo -n "::set-output name=next_tag::"
+          npm version --no-git-tag-version ${{ github.event.inputs.versionName }}
+      - name: Create pull request into main
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: release/${{ steps.version.outputs.next_tag }}
+          commit-message: 'chore: release ${{ steps.version.outputs.next_tag }}'
+          base: main
+          title: Release ${{ steps.version.outputs.next_tag }}
+          labels: chore
+          assignees: sgratzl
+          body: |
+            Releasing ${{ steps.version.outputs.next_tag }}.

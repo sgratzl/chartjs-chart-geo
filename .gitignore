@@ -8,7 +8,7 @@ npm-debug.log*
 .npm
 /.yarnrc.yml
 /.yarn
-/.pnp.js
+/.pnp.*
 
 # Build files
 /.tmp

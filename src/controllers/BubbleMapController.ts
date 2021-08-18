@@ -19,7 +19,9 @@ import { ProjectionScale, SizeScale } from '../scales';
 import { GeoController, geoDefaults, geoOverrides, IGeoChartOptions } from './GeoController';
 import patchController from './patchController';
 
-export class BubbleMapController extends GeoController<'bubbleMap', PointElement> {
+export type MyPointElement = PointElement<PointProps, PointOptions & Record<string, unknown>>;
+
+export class BubbleMapController extends GeoController<'bubbleMap', MyPointElement> {
   initialize(): void {
     super.initialize();
     this.enableOptionSharing = true;
@@ -63,7 +65,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', PointElement
     }
   }
 
-  updateElements(elems: PointElement[], start: number, count: number, mode: UpdateMode): void {
+  updateElements(elems: MyPointElement[], start: number, count: number, mode: UpdateMode): void {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -141,14 +143,16 @@ export class BubbleMapController extends GeoController<'bubbleMap', PointElement
             if (context.dataIndex == null) {
               return null;
             }
-            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller as BubbleMapController;
+            const controller = (context.chart as Chart<'bubbleMap'>).getDatasetMeta(context.datasetIndex)
+              .controller as BubbleMapController;
             return controller.indexToRadius(context.dataIndex);
           },
           hoverRadius(context: ScriptableContext<'bubbleMap'>) {
             if (context.dataIndex == null) {
               return null;
             }
-            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller as BubbleMapController;
+            const controller = (context.chart as Chart<'bubbleMap'>).getDatasetMeta(context.datasetIndex)
+              .controller as BubbleMapController;
             return controller.indexToRadius(context.dataIndex) + 1;
           },
         },

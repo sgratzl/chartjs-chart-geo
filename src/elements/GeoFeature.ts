@@ -2,7 +2,7 @@ import { Element, BarElement, BarOptions, VisualElement, Point } from 'chart.js'
 import { geoContains, GeoProjection } from 'd3-geo';
 import type { ProjectionScale } from '../scales';
 
-export interface IGeoFeatureOptions extends BarOptions {
+export interface IGeoFeatureOptions extends BarOptions, Record<string, unknown> {
   /**
    * background color for the outline
    * @default null

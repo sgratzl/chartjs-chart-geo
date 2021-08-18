@@ -174,7 +174,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     return (v - (this as any)._startValue) / (this as any)._valueRange;
   }
 
-  update(maxWidth: number, maxHeight: number, margins: ChartArea): number {
+  update(maxWidth: number, maxHeight: number, margins: ChartArea): void {
     const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
     const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
 
@@ -267,7 +267,7 @@ export class LogarithmicLegendScale<
     return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
   }
 
-  update(maxWidth: number, maxHeight: number, margins: ChartArea): number {
+  update(maxWidth: number, maxHeight: number, margins: ChartArea): void {
     return LegendScale.prototype.update.call(this, maxWidth, maxHeight, margins);
   }
 

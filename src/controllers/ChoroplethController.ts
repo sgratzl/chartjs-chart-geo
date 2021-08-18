@@ -128,7 +128,8 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
             if (context.dataIndex == null) {
               return null;
             }
-            const controller = context.chart.getDatasetMeta(context.datasetIndex).controller as ChoroplethController;
+            const controller = (context.chart as Chart<'choropleth'>).getDatasetMeta(context.datasetIndex)
+              .controller as ChoroplethController;
             return controller.indexToColor(context.dataIndex);
           },
         },

@@ -1,4 +1,0 @@
-packageExtensions:
-  eslint-module-utils@*:
-    dependencies:
-      eslint-import-resolver-node: '*'

@@ -165,7 +165,7 @@ export interface IColorScaleOptions extends ILegendScaleOptions {
   missing: string;
 
   /**
-   * allows to split the colorscale in N quantized equal bins.
+   * allows to split the color scale in N quantized equal bins.
    * @default 0
    */
   quantize: number;
@@ -291,6 +291,11 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
     baseDefaults,
     colorScaleDefaults,
   ]);
+
+  static readonly descriptors = /* #__PURE__ */ {
+    _scriptable: (name: string): boolean => name !== 'interpolate',
+    _indexable: false,
+  };
 }
 
 declare module 'chart.js' {

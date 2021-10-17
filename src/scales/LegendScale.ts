@@ -271,6 +271,11 @@ export class LogarithmicLegendScale<
     return LegendScale.prototype.update.call(this, maxWidth, maxHeight, margins);
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _computeLabelArea(): void {
+    return undefined;
+  }
+
   draw(chartArea: ChartArea): void {
     return LegendScale.prototype.draw.call(this, chartArea);
   }

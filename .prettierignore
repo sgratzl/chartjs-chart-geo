@@ -1,4 +1,4 @@
-/.pnp.cjs
+/.pnp*
 /.yarnrc.yml
 /.yarn
 /build

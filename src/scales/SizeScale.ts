@@ -1,11 +1,4 @@
-import {
-  defaults,
-  LinearScale,
-  LogarithmicScale,
-  PointOptions,
-  LinearScaleOptions,
-  LogarithmicScaleOptions,
-} from 'chart.js';
+import { LinearScale, LogarithmicScale, PointOptions, LinearScaleOptions, LogarithmicScaleOptions } from 'chart.js';
 import { merge, drawPoint } from 'chart.js/helpers';
 import { baseDefaults, ILegendScaleOptions, LegendScale, LogarithmicLegendScale } from './LegendScale';
 
@@ -123,9 +116,9 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
 
     if (this._model) {
       const props = this._model;
-      ctx.strokeStyle = props.borderColor || defaults.color;
+      ctx.strokeStyle = props.borderColor;
       ctx.lineWidth = props.borderWidth || 0;
-      ctx.fillStyle = props.backgroundColor || defaults.color;
+      ctx.fillStyle = props.backgroundColor;
     } else {
       ctx.fillStyle = 'blue';
     }

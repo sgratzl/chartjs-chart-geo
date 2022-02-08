@@ -4,11 +4,14 @@
 const pkg = require('./package.json');
 
 module.exports = {
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: [
+    // '@typescript-eslint',
+    'prettier',
+  ],
   extends: [
-    'airbnb-typescript',
+    // 'airbnb-typescript',
     'react-app',
-    'plugin:@typescript-eslint/recommended',
+    // 'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
     'prettier',
   ],

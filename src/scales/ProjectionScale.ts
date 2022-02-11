@@ -69,8 +69,19 @@ export interface IProjectionScaleOptions extends CoreScaleOptions {
     | 'transverseMercator'
     | 'naturalEarth1';
 
+  /**
+   * extra scale factor applied to projection
+   */
   projectionScale: number;
+  /**
+   * extra offset applied after projection
+   */
   projectionOffset: [number, number];
+  /**
+   * padding applied during auto scaling of the map in pixels
+   * i.e. the chart size is reduce by the padding before fitting the map
+   */
+  padding: number | { top: number; left: number; right: number; bottom: number };
 }
 
 export class ProjectionScale extends Scale<IProjectionScaleOptions> {
@@ -135,9 +146,14 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     if (!bb) {
       return false;
     }
+    const padding = this.options.padding;
+    const paddingTop = typeof padding === 'number' ? padding : padding.top;
+    const paddingLeft = typeof padding === 'number' ? padding : padding.left;
+    const paddingBottom = typeof padding === 'number' ? padding : padding.bottom;
+    const paddingRight = typeof padding === 'number' ? padding : padding.right;
 
-    const chartWidth = area.right - area.left;
-    const chartHeight = area.bottom - area.top;
+    const chartWidth = area.right - area.left - paddingLeft - paddingRight;
+    const chartHeight = area.bottom - area.top - paddingTop - paddingBottom;
 
     const bak = this.oldChartBounds;
     this.oldChartBounds = {
@@ -149,8 +165,8 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     const viewWidth = bb.width * scale;
     const viewHeight = bb.height * scale;
 
-    const x = (chartWidth - viewWidth) * 0.5 + area.left;
-    const y = (chartHeight - viewHeight) * 0.5 + area.top;
+    const x = (chartWidth - viewWidth) * 0.5 + area.left + paddingLeft;
+    const y = (chartHeight - viewHeight) * 0.5 + area.top + paddingTop;
 
     // this.mapScale = scale;
     // this.mapTranslate = {x, y};
@@ -172,6 +188,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     projection: 'albersUsa',
     projectionScale: 1,
     projectionOffset: [0, 0],
+    padding: 0,
   };
 
   static readonly descriptors = /* #__PURE__ */ {

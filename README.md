@@ -181,10 +181,10 @@ Variant A:
 
 ```js
 import { Chart } from 'chart.js';
-import { ChoroplethController } from 'chartjs-chart-geo';
+import { ChoroplethController, GeoFeature, ColorScale, ProjectionScale } from 'chartjs-chart-geo';
 
 // register controller in chart.js and ensure the defaults are set
-ChoroplethController.register();
+Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
 
 const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
   type: ChoroplethController.id,

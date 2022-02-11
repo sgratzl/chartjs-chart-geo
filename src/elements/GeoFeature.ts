@@ -150,7 +150,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     }
     if (options.borderColor) {
       ctx.strokeStyle = options.borderColor;
-      ctx.lineWidth = options.borderWidth;
+      ctx.lineWidth = options.borderWidth as number;
       ctx.stroke();
     }
   }

@@ -10,6 +10,7 @@ import {
   ChartItem,
   PointOptions,
   Scale,
+  AnimationOptions,
 } from 'chart.js';
 import { merge } from 'chart.js/helpers';
 import { geoDefaults, GeoController, IGeoChartOptions, IGeoDataPoint, geoOverrides } from './GeoController';
@@ -142,7 +143,8 @@ export interface IChoroplethControllerDatasetOptions
   extends ControllerDatasetOptions,
     IGeoChartOptions,
     ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext<'choropleth'>>,
-    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'choropleth'>> {}
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'choropleth'>>,
+    AnimationOptions<'choropleth'> {}
 
 declare module 'chart.js' {
   export interface ChartTypeRegistry {

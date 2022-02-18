@@ -12,6 +12,7 @@ import {
   Scale,
   ScriptableAndArrayOptions,
   UpdateMode,
+  AnimationOptions,
 } from 'chart.js';
 import { merge } from 'chart.js/helpers';
 import { GeoFeature, IGeoFeatureOptions } from '../elements';
@@ -173,7 +174,8 @@ export interface IBubbleMapControllerDatasetOptions
   extends ControllerDatasetOptions,
     IGeoChartOptions,
     ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext<'bubbleMap'>>,
-    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'bubbleMap'>> {}
+    ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'bubbleMap'>>,
+    AnimationOptions<'bubbleMap'> {}
 
 declare module 'chart.js' {
   export interface ChartTypeRegistry {

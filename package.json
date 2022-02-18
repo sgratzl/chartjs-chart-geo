@@ -102,6 +102,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --passWithNoTests --watch",
     "test:coverage": "jest --passWithNoTests --coverage",
+    "samples": "yarn tsc samples/type_test.ts",
     "lint": "yarn run eslint && yarn run prettier",
     "fix": "yarn run eslint:fix && yarn run prettier:write",
     "prettier:write": "prettier \"*\" \"*/**\" --write",

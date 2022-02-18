@@ -187,7 +187,7 @@ import { ChoroplethController, GeoFeature, ColorScale, ProjectionScale } from 'c
 Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale);
 
 const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
-  type: ChoroplethController.id,
+  type: 'choropleth',
   data: {
     // ...
   },

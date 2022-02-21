@@ -22,3 +22,5 @@ npm-debug.log*
 /docs
 *.tsbuildinfo
 __diff_output__
+
+/samples/type_test.js

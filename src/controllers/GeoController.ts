@@ -7,6 +7,7 @@ import {
   VisualElement,
   ScriptableContext,
   ChartTypeRegistry,
+  AnimationOptions,
 } from 'chart.js';
 import { clipArea, unclipArea, valueOrDefault } from 'chart.js/helpers';
 import { geoGraticule, geoGraticule10, ExtendedFeature } from 'd3-geo';
@@ -252,7 +253,8 @@ export interface IGeoChartOptions {
 
 export interface IGeoControllerDatasetOptions
   extends IGeoChartOptions,
-    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext<'choropleth' | 'bubbleMap'>> {
+    ScriptableAndArrayOptions<IGeoFeatureOptions, ScriptableContext<'choropleth' | 'bubbleMap'>>,
+    AnimationOptions<'choropleth' | 'bubbleMap'> {
   xAxisID?: string;
   yAxisID?: string;
   rAxisID?: string;

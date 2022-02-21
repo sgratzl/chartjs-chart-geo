@@ -189,3 +189,9 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     ...(BarElement.defaultRoutes || {}),
   };
 }
+
+declare module 'chart.js' {
+  export interface ElementOptionsByType<TType extends ChartType> {
+    geoFeature: ScriptableAndArrayOptions<IGeoFeatureOptions & CommonHoverOptions, ScriptableContext<TType>>;
+  }
+}

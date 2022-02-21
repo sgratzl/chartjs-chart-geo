@@ -11,4 +11,6 @@
 /yarn.lock
 /.vscode
 *.png
+*.tgz
 *.tsbuildinfo
+/samples/type_test.js

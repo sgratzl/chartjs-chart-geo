@@ -3,7 +3,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import cleanup from 'rollup-plugin-cleanup';
 import dts from 'rollup-plugin-dts';
 import typescript from '@rollup/plugin-typescript';
-import { terser } from 'rollup-plugin-terser';
+import { terser } from '@chiogen/rollup-plugin-terser';
 import replace from '@rollup/plugin-replace';
 
 import fs from 'fs';

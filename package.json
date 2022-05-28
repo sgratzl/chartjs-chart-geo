@@ -79,7 +79,7 @@
     "jest-image-snapshot": "^4.5.1",
     "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
-    "rollup": "^2.75.1",
+    "rollup": "~2.74.1",
     "rollup-plugin-cleanup": "^3.2.1",
     "rollup-plugin-dts": "^4.2.2",
     "seedrandom": "^3.0.5",
@@ -115,7 +115,7 @@
   },
   "packageManager": "yarn@3.2.1",
   "dependenciesMeta": {
-    "chart.js@3.7.1": {
+    "chart.js@3.8.0": {
       "unplugged": true
     }
   }

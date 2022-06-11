@@ -178,15 +178,15 @@ const colorScaleDefaults = {
 };
 
 export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOptions> {
-  private interpolate = (v: number) => `rgb(${v},${v},${v})`;
-
-  init(options: IColorScaleOptions & LinearScaleOptions): void {
-    super.init(options);
-    if (typeof options.interpolate === 'function') {
-      this.interpolate = options.interpolate;
-    } else {
-      this.interpolate = lookup[options.interpolate] || lookup.blues;
+  get interpolate(): (v: number) => string {
+    const o = this.options as IColorScaleOptions & LinearScaleOptions;
+    if (!o) {
+      return (v: number) => `rgb(${v},${v},${v})`;
     }
+    if (typeof o.interpolate === 'function') {
+      return o.interpolate;
+    }
+    return lookup[o.interpolate] || lookup.blues;
   }
 
   getColorForValue(value: number): string {

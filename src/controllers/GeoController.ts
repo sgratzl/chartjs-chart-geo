@@ -264,4 +264,8 @@ export interface IGeoControllerDatasetOptions
 
 export interface IGeoDataPoint {
   feature: ExtendedFeature;
+  center?: {
+    longitude: number;
+    latitude: number;
+  };
 }

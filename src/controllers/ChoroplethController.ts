@@ -71,6 +71,7 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
       const elem = elems[i];
       elem.projectionScale = scale;
       elem.feature = (this as any)._data[i].feature;
+      elem.center = (this as any)._data[i].center;
       const center = elem.getCenterPoint();
 
       const properties: IGeoFeatureProps & { options?: PointOptions } = {

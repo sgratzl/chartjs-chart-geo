@@ -59,6 +59,8 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
 
   feature!: Feature;
 
+  center?: { longitude: number; latitude: number };
+
   inRange(mouseX: number, mouseY: number): boolean {
     const bb = this.getBounds();
     const r =
@@ -68,8 +70,8 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     const projection = this.projectionScale.geoPath.projection() as unknown as GeoProjection;
     if (r && !Number.isNaN(mouseX) && !Number.isNaN(mouseY) && typeof projection.invert === 'function') {
       // test for real if within the bounds
-      const longlat = projection.invert([mouseX, mouseY]);
-      return longlat != null && geoContains(this.feature, longlat);
+      const longLat = projection.invert([mouseX, mouseY]);
+      return longLat != null && geoContains(this.feature, longLat);
     }
 
     return r;
@@ -87,11 +89,20 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     if (this.cache && this.cache.center) {
       return this.cache.center;
     }
-    const centroid = this.projectionScale.geoPath.centroid(this.feature);
-    const center = {
-      x: centroid[0],
-      y: centroid[1],
-    };
+    let center: { x: number; y: number };
+    if (this.center) {
+      const p = this.projectionScale.projection([this.center.longitude, this.center.latitude])!;
+      center = {
+        x: p[0]!,
+        y: p[1]!,
+      };
+    } else {
+      const centroid = this.projectionScale.geoPath.centroid(this.feature);
+      center = {
+        x: centroid[0],
+        y: centroid[1],
+      };
+    }
     this.cache = { ...(this.cache || {}), center };
     return center;
   }

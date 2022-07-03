@@ -13,48 +13,50 @@
     <script>
       Promise.all([
         fetch('https://unpkg.com/world-atlas/countries-50m.json').then((r) => r.json()),
-        fetch('https://gist.githubusercontent.com/ofou/df09a6834a8421b4f376c875194915c9/raw/355eb56e164ddc3cd1a9467c524422cb674e71a9/country-capital-lat-long-population.csv').then((r) => r.text())
-    ]).then(([data, info]) => {
-      const rows = Papa.parse(info, { header: true });
-      const lookup = new Map(rows.data.map((r) => [r.Country, {latitude: +r.Latitude, longitude: +r.Longitude}]))
-      const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
+        fetch(
+          'https://gist.githubusercontent.com/ofou/df09a6834a8421b4f376c875194915c9/raw/355eb56e164ddc3cd1a9467c524422cb674e71a9/country-capital-lat-long-population.csv'
+        ).then((r) => r.text()),
+      ]).then(([data, info]) => {
+        const rows = Papa.parse(info, { header: true });
+        const lookup = new Map(rows.data.map((r) => [r.Country, { latitude: +r.Latitude, longitude: +r.Longitude }]));
+        const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
 
-      const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
-        type: 'choropleth',
-        data: {
-          labels: countries.map((d) => d.properties.name),
-          datasets: [
-            {
-              label: 'Countries',
-              data: countries.map((d) => ({
-                feature: d,
-                center: lookup.get(d.properties.name),
-                value: Math.random(),
-              })),
-            },
-          ],
-        },
-        options: {
-          plugins: {
-            legend: {
-              display: false,
-            },
+        const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
+          type: 'choropleth',
+          data: {
+            labels: countries.map((d) => d.properties.name),
+            datasets: [
+              {
+                label: 'Countries',
+                data: countries.map((d) => ({
+                  feature: d,
+                  center: lookup.get(d.properties.name),
+                  value: Math.random(),
+                })),
+              },
+            ],
           },
-          scales: {
-            xy: {
-              projection: 'equalEarth',
-            },
-            color: {
-              quantize: 5,
+          options: {
+            plugins: {
               legend: {
-                position: 'bottom-right',
-                align: 'right',
+                display: false,
+              },
+            },
+            scales: {
+              xy: {
+                projection: 'equalEarth',
+              },
+              color: {
+                quantize: 5,
+                legend: {
+                  position: 'bottom-right',
+                  align: 'right',
+                },
               },
             },
           },
-        },
+        });
       });
-    });
     </script>
   </body>
 </html>

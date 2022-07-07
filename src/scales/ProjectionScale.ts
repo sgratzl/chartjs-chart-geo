@@ -110,6 +110,12 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     // eslint-disable-next-line no-param-reassign
     (options as any).position = 'chartArea';
     super.init(options);
+    if (typeof options.projection === 'function') {
+      this.projection = options.projection;
+    } else {
+      this.projection = (lookup[options.projection] || lookup.albersUsa)();
+    }
+    this.geoPath.projection(this.projection);
   }
 
   computeBounds(outline: ExtendedFeature): void;
@@ -135,13 +141,6 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
 
   updateBounds(): boolean {
     const area = this.chart.chartArea;
-
-    if (typeof this.options.projection === 'function') {
-      this.projection = this.options.projection;
-    } else {
-      this.projection = (lookup[this.options.projection] || lookup.albersUsa)();
-    }
-    this.geoPath.projection(this.projection);
 
     const bb = this.outlineBounds;
 

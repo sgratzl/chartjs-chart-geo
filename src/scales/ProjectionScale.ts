@@ -116,6 +116,9 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
       this.projection = (lookup[options.projection] || lookup.albersUsa)();
     }
     this.geoPath.projection(this.projection);
+
+    this.outlineBounds = null;
+    this.oldChartBounds = null;
   }
 
   computeBounds(outline: ExtendedFeature): void;
@@ -141,6 +144,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
 
   updateBounds(): boolean {
     const area = this.chart.chartArea;
+
     const bb = this.outlineBounds;
 
     if (!bb) {

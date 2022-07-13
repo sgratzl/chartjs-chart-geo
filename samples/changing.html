@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/chart.js@3.8.0/dist/chart.js"></script>
+    <script src="../build/index.umd.js"></script>
+  </head>
+
+  <body>
+    <div style="width: 75%">
+      <canvas id="canvas" style="border: 1px solid black"></canvas>
+    </div>
+    <script>
+      fetch('https://unpkg.com/us-atlas/states-10m.json')
+        .then((r) => r.json())
+        .then((us) => {
+          const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];
+          const states = ChartGeo.topojson.feature(us, us.objects.states).features;
+
+          const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
+            type: 'choropleth',
+            data: {
+              labels: states.map((d) => d.properties.name),
+              datasets: [
+                {
+                  label: 'States',
+                  outline: nation,
+                  data: states.map((d) => ({
+                    feature: d,
+                    value: Math.random() * 11,
+                  })),
+                },
+              ],
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+              scales: {
+                xy: {
+                  projection: 'albersUsa',
+                },
+                color: {
+                  quantize: 5,
+                  legend: {
+                    position: 'bottom-right',
+                    align: 'right',
+                  },
+                },
+              },
+            },
+          });
+
+          setTimeout(() => {
+            chart.options.scales.xy = {
+                projection: 'equalEarth',
+                projectionOffset: [100, 0]
+            }
+            chart.update();
+
+            setTimeout(() => {
+            chart.options.scales.xy = {
+                projection: 'albersUsa',
+                projectionOffset: [-100, 0]
+            }
+            chart.update();
+          }, 1000);
+          }, 1000);
+        });
+    </script>
+  </body>
+</html>

@@ -54,18 +54,18 @@
 
           setTimeout(() => {
             chart.options.scales.xy = {
-                projection: 'equalEarth',
-                projectionOffset: [100, 0]
-            }
+              projection: 'equalEarth',
+              projectionOffset: [100, 0],
+            };
             chart.update();
 
             setTimeout(() => {
-            chart.options.scales.xy = {
+              chart.options.scales.xy = {
                 projection: 'albersUsa',
-                projectionOffset: [-100, 0]
-            }
-            chart.update();
-          }, 1000);
+                projectionOffset: [-100, 0],
+              };
+              chart.update();
+            }, 1000);
           }, 1000);
         });
     </script>

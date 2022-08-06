@@ -61,6 +61,8 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
 
   center?: { longitude: number; latitude: number };
 
+  pixelRatio?: number;
+
   inRange(mouseX: number, mouseY: number): boolean {
     const bb = this.getBounds();
     const r =
@@ -130,14 +132,20 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       return;
     }
     const canvas = this.cache && this.cache.canvas ? this.cache.canvas : doc.createElement('canvas');
-    canvas.width = Math.max(Math.ceil(bounds.width), 1);
-    canvas.height = Math.max(Math.ceil(bounds.height), 1);
+    const x1 = Math.floor(bounds.x);
+    const y1 = Math.floor(bounds.y);
+    const x2 = Math.ceil(bounds.x + bounds.width);
+    const y2 = Math.ceil(bounds.y + bounds.height);
+    const pixelRatio = this.pixelRatio || 1;
+    canvas.width = Math.max(x2 - x1, 1) * pixelRatio;
+    canvas.height = Math.max(y2 - y1, 1) * pixelRatio;
 
     const ctx = canvas.getContext('2d');
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
-      ctx.translate(-bounds.x, -bounds.y);
+      ctx.scale(pixelRatio, pixelRatio);
+      ctx.translate(-x1, -y1);
       this._drawImpl(ctx);
       ctx.restore();
 
@@ -147,7 +155,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
 
   _optionsToKey(): string {
     const { options } = this;
-    return `${options.backgroundColor};${options.borderColor};${options.borderWidth}`;
+    return `${options.backgroundColor};${options.borderColor};${options.borderWidth};${this.pixelRatio}`;
   }
 
   _drawImpl(ctx: CanvasRenderingContext2D): void {
@@ -176,7 +184,11 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     }
     const bounds = this.getBounds();
     if (this.cache && this.cache.canvas) {
-      ctx.drawImage(this.cache.canvas, bounds.x, bounds.y, bounds.width, bounds.height);
+      const x1 = Math.floor(bounds.x);
+      const y1 = Math.floor(bounds.y);
+      const x2 = Math.ceil(bounds.x + bounds.width);
+      const y2 = Math.ceil(bounds.y + bounds.height);
+      ctx.drawImage(this.cache.canvas, x1, y1, x2 - x1, y2 - y1);
     } else if (Number.isFinite(bounds.x)) {
       ctx.save();
       this._drawImpl(ctx);

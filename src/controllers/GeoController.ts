@@ -106,6 +106,7 @@ export class GeoController<
         delete elem.cache;
       }
       elem.projectionScale = scale;
+      elem.pixelRatio = this.chart.currentDevicePixelRatio;
       if (mode !== 'resize') {
         const options = patchDatasetElementOptions(this.resolveDatasetElementOptions(mode));
         const properties = {

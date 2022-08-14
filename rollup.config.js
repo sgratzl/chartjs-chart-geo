@@ -57,7 +57,7 @@ export default (options) => {
       typescript(),
       resolve({
         mainFields: ['module', 'main'],
-        extensions: ['.mjs', '.js', '.jsx', '.json', '.node'],
+        extensions: ['.mjs', '.cjs', '.js', '.jsx', '.json', '.node'],
         modulesOnly: true,
       }),
       commonjs(),

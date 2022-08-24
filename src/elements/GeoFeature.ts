@@ -1,8 +1,14 @@
 import { Element, BarElement, BarOptions, VisualElement, Point } from 'chart.js';
-import { geoContains, GeoProjection } from 'd3-geo';
+import { geoContains, GeoPath, GeoProjection } from 'd3-geo';
 import type { ProjectionScale } from '../scales';
 
-export interface IGeoFeatureOptions extends BarOptions, Record<string, unknown> {
+export interface IGeoFeatureOptions extends Omit<BarOptions, 'borderWidth'>, Record<string, unknown> {
+  /**
+   * Width of the border
+   * @default 0
+   */
+  borderWidth: number;
+
   /**
    * background color for the outline
    * @default null
@@ -32,6 +38,15 @@ export interface IGeoFeatureOptions extends BarOptions, Record<string, unknown> 
 }
 
 export type Feature = any;
+
+type GeoBounds = ReturnType<GeoPath['bounds']>;
+
+function growGeoBounds(bounds: GeoBounds, amount: number): GeoBounds {
+  return [
+    [bounds[0][0] - amount, bounds[0][1] - amount],
+    [bounds[1][0] + amount, bounds[1][1] + amount],
+  ];
+}
 
 export interface IGeoFeatureProps {
   x: number;
@@ -113,7 +128,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     if (this.cache && this.cache.bounds) {
       return this.cache.bounds;
     }
-    const bb = this.projectionScale.geoPath.bounds(this.feature);
+    const bb = growGeoBounds(this.projectionScale.geoPath.bounds(this.feature), this.options.borderWidth / 2);
     const bounds = {
       x: bb[0][0],
       x2: bb[1][0],

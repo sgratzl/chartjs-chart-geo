@@ -3452,6 +3452,8 @@ __metadata:
   dependenciesMeta:
     chart.js@3.9.1:
       unplugged: true
+    d3-geo@3.0.1:
+      unplugged: true
   languageName: unknown
   linkType: soft
 

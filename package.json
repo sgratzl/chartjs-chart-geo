@@ -55,11 +55,11 @@
     "@rollup/plugin-typescript": "^8.5.0",
     "@types/jest": "^29.1.1",
     "@types/jest-image-snapshot": "^5.1.0",
-    "@types/node": "^18.8.0",
+    "@types/node": "^18.8.2",
     "@types/seedrandom": "^3.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/parser": "^5.38.1",
-    "@yarnpkg/pnpify": "^3.1.5",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
+    "@typescript-eslint/parser": "^5.39.0",
+    "@yarnpkg/pnpify": "^3.1.6",
     "@yarnpkg/sdks": "^2.6.3",
     "canvas": "^2.10.1",
     "canvas-5-polyfill": "^0.1.5",
@@ -86,12 +86,9 @@
     "ts-jest": "^29.0.3",
     "tslib": "^2.4.0",
     "typedoc": "^0.23.15",
-    "typescript": "4.8.3",
+    "typescript": "^4.8.4",
     "us-atlas": "^3.0.0",
     "world-atlas": "^2.0.2"
-  },
-  "resolutions": {
-    "d3-array": "^3.2.0"
   },
   "scripts": {
     "clean": "rimraf build docs node_modules \"*.tgz\" \"*.tsbuildinfo\"",
@@ -113,7 +110,7 @@
     "docs": "typedoc src/index.ts",
     "prepare": "yarn run build"
   },
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@3.2.4",
   "dependenciesMeta": {
     "chart.js@3.9.1": {
       "unplugged": true

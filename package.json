@@ -118,18 +118,10 @@
     "fix": "yarn run eslint:fix && yarn run prettier:write",
     "prettier:write": "prettier \"*\" \"*/**\" --write",
     "prettier": "prettier \"*\" \"*/**\" --check",
-    "eslint": "eslint src --ext .ts,.tsx",
+    "eslint": "eslint src --ext .ts,.tsx --cache",
     "eslint:fix": "yarn run eslint --fix",
     "docs": "typedoc src/index.ts",
     "prepare": "yarn run build"
   },
-  "packageManager": "yarn@3.2.4",
-  "dependenciesMeta": {
-    "chart.js@3.9.1": {
-      "unplugged": true
-    },
-    "d3-geo@3.0.1": {
-      "unplugged": true
-    }
-  }
+  "packageManager": "yarn@3.2.4"
 }

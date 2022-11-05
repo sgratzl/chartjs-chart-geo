@@ -3411,11 +3411,6 @@ __metadata:
     world-atlas: ^2.0.2
   peerDependencies:
     chart.js: ^3.9.1
-  dependenciesMeta:
-    chart.js@3.9.1:
-      unplugged: true
-    d3-geo@3.0.1:
-      unplugged: true
   languageName: unknown
   linkType: soft
 

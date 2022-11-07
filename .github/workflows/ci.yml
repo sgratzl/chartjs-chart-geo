@@ -6,25 +6,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm i -g yarn
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ./.yarn/cache
             ./.yarn/unplugged
-          key: ${{ runner.os }}-yarn2-v4-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn2-v5-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn2-v4
+            ${{ runner.os }}-yarn2-v5
       - run: yarn install
       - run: yarn build
       - run: yarn lint
-      - run: yarn test --debug --verbose
+      - run: yarn test
       - run: yarn samples
       - uses: actions/upload-artifact@v2
         if: failure()

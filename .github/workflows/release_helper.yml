@@ -17,23 +17,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: Extract version
         id: extract_version
-        run: node -pe "'::set-output name=version::' + require('./package.json').version"
+        run: |
+          node -pe "'::set-output name=version::' + require('./package.json').version"
+          node -pe "'::set-output name=npm_tag::' + (require('./package.json').version.includes('-') ? 'next' : 'latest')"
+      - name: Print version
+        run: |
+          echo "releasing ${{ steps.extract_version.outputs.version }} with tag ${{ steps.extract_version.outputs.npm_tag }}"
       - name: Create Release
         id: create_release
         uses: release-drafter/release-drafter@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
         with:
+          name: v${{ steps.extract_version.outputs.version }}
+          tag: v${{ steps.extract_version.outputs.version }}
           version: ${{ steps.extract_version.outputs.version }}
+          prerelease: ${{ needs.create_release.outputs.tag_name == 'next' }}
           publish: true
     outputs:
       version: ${{ steps.extract_version.outputs.version }}
+      npm_tag: ${{ steps.extract_version.outputs.npm_tag }}
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       tag_name: ${{ steps.create_release.outputs.tag_name }}
 
@@ -42,21 +51,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - run: npm i -g yarn
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             ./.yarn/cache
             ./.yarn/unplugged
-          key: ${{ runner.os }}-yarn2-v4-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-yarn2-v5-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-yarn2-v4
+            ${{ runner.os }}-yarn2-v5
       - run: yarn install
       - run: yarn build
       - run: yarn pack
@@ -66,19 +75,18 @@ jobs:
           files: 'package.tgz'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           release-tag: ${{ needs.create_release.outputs.tag_name }}
-      - name: Publish to NPM
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          access: public
-          check-version: true
+      - name: Pack Publish
+        run: |
+          yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+          yarn pack
+          yarn npm publish --tag "${{ needs.create_release.outputs.npm_tag }}"
 
   sync_dev:
     needs: correct_repository
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: dev
           ssh-key: ${{ secrets.PRIVATE_SSH_KEY }}

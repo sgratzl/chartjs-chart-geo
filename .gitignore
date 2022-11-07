@@ -21,6 +21,7 @@ npm-debug.log*
 /.vscode/extensions.json
 /docs
 *.tsbuildinfo
+.eslintcache
 __diff_output__
 
 /samples/type_test.js

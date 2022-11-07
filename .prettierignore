@@ -13,4 +13,5 @@
 *.png
 *.tgz
 *.tsbuildinfo
+.eslintcache
 /samples/type_test.js

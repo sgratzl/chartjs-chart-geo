@@ -77,7 +77,7 @@
     "canvas": "^2.10.2",
     "canvas-5-polyfill": "^0.1.5",
     "chart.js": "^3.9.1",
-    "eslint": "^8.26.0",
+    "eslint": "^8.27.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",

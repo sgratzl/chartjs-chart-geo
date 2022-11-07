@@ -38,7 +38,7 @@ npm install --save chart.js chartjs-chart-geo
 
 ## Usage
 
-see [Samples](https://github.com/sgratzl/chartjs-chart-geo/tree/master/samples) on Github
+see [Samples](https://github.com/sgratzl/chartjs-chart-geo/tree/main/samples) on Github
 
 CodePens
 
@@ -72,7 +72,7 @@ A data point has to have a `.feature` property containing the feature to render 
 
 - US map: https://www.npmjs.com/package/us-atlas
 - World map: https://www.npmjs.com/package/world-atlas
-- individual countries: https://github.com/markmarkoh/datamaps/tree/master/src/js/data (untested)
+- individual countries: https://github.com/markmarkoh/datamaps/tree/main/src/js/data (untested)
 - topojson collection: https://github.com/deldersveld/topojson (untested)
 
 ```js

@@ -22,7 +22,7 @@ export const geoDefaults = {
 
 export const geoOverrides = {
   scales: {
-    xy: {
+    projection: {
       type: ProjectionScale.id,
       position: 'chartArea',
       display: false,
@@ -63,18 +63,18 @@ export class GeoController<
   }
 
   getProjectionScale(): ProjectionScale {
-    return this.getScaleForId('xy') as ProjectionScale;
+    return this.getScaleForId('projection') as ProjectionScale;
   }
 
   linkScales(): void {
     const dataset = this.getGeoDataset();
     const meta = this.getMeta();
-    meta.xAxisID = 'xy';
-    dataset.xAxisID = 'xy';
-    meta.yAxisID = 'xy';
-    dataset.yAxisID = 'xy';
-    meta.xScale = this.getScaleForId('xy');
-    meta.yScale = this.getScaleForId('xy');
+    meta.xAxisID = 'projection';
+    dataset.xAxisID = 'projection';
+    meta.yAxisID = 'projection';
+    dataset.yAxisID = 'projection';
+    meta.xScale = this.getScaleForId('projection');
+    meta.yScale = this.getScaleForId('projection');
 
     this.getProjectionScale().computeBounds(this.resolveOutline());
   }

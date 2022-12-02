@@ -119,6 +119,9 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
             },
           },
         },
+        colors: {
+          enabled: false,
+        },
       },
       scales: {
         color: {

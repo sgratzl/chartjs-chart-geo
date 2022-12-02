@@ -29,7 +29,7 @@ const chart1 = new Chart(ctx, {
       },
     },
     scales: {
-      xy: {
+      projection: {
         projection: 'albersUsa',
       },
       color: {
@@ -67,7 +67,7 @@ const chart2 = new Chart(ctx, {
       },
     },
     scales: {
-      xy: {
+      projection: {
         projection: 'albersUsa',
       },
       size: {

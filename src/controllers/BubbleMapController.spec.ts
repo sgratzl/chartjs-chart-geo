@@ -1,7 +1,8 @@
-import { registry } from 'chart.js';
+import { registry, PointElement } from 'chart.js';
 import rnd from 'seedrandom';
 import { feature } from 'topojson-client';
-import states10m from 'us-atlas/states-10m.json';
+import { createRequire } from 'module';
+
 import { GeoFeature } from '../elements';
 import {
   ProjectionScale,
@@ -14,11 +15,14 @@ import createChart from '../__tests__/createChart';
 import { BubbleMapController } from './BubbleMapController';
 import data from './__tests__/data';
 
+const require = createRequire(import.meta.url); // construct the require method
+const states10m = require('us-atlas/states-10m.json');
+
 describe('bubbleMap', () => {
   beforeAll(() => {
     registry.addControllers(BubbleMapController);
     registry.addScales(ProjectionScale, SizeScale, SizeLogarithmicScale);
-    registry.addElements(GeoFeature);
+    registry.addElements(GeoFeature, PointElement);
   });
 
   test('default', async () => {
@@ -41,7 +45,7 @@ describe('bubbleMap', () => {
       },
       options: {
         scales: {
-          xy: {
+          projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
           r: {
@@ -76,7 +80,7 @@ describe('bubbleMap', () => {
       },
       options: {
         scales: {
-          xy: {
+          projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
           r: {
@@ -112,7 +116,7 @@ describe('bubbleMap', () => {
       },
       options: {
         scales: {
-          xy: {
+          projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
           r: {
@@ -148,7 +152,7 @@ describe('bubbleMap', () => {
       },
       options: {
         scales: {
-          xy: {
+          projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
           r: {

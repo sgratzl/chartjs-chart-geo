@@ -108,7 +108,7 @@ const config = {
   },
   options: {
     scales: {
-      xy: {
+      projection: {
         projection: 'albersUsa' // ... projection method
       }
     }

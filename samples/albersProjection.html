@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/chart.js@4.0.1/dist/chart.js"></script>
+    <script src="https://unpkg.com/chart.js@4.0.1"></script>
     <script src="../build/index.umd.js"></script>
   </head>
 
@@ -38,10 +38,12 @@
                 },
               },
               scales: {
-                xy: {
-                  projection: ChartGeo.geoEqualEarth,
+                projection: {
+                  axis: 'projection',
+                  projection: ChartGeo.geoEqualEarth(),
                 },
                 color: {
+                  axis: 'color',
                   interpolate: (v) => (v < 0.5 ? 'green' : 'red'),
                   legend: {
                     position: 'bottom-right',

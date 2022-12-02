@@ -1,6 +1,6 @@
 import { feature } from 'topojson-client';
-import states10m from 'us-atlas/states-10m.json';
-import countries50m from 'world-atlas/countries-50m.json';
+import states10m from 'us-atlas/states-10m.json' assert { type: 'json' };
+import countries50m from 'world-atlas/countries-50m.json' assert { type: 'json' };
 import rnd from 'seedrandom';
 import { registry } from 'chart.js';
 import createChart from '../__tests__/createChart';
@@ -44,7 +44,7 @@ describe('choropleth', () => {
       },
       options: {
         scales: {
-          xy: {
+          projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
           color: {
@@ -87,7 +87,7 @@ describe('choropleth', () => {
       },
       options: {
         scales: {
-          xy: {
+          projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
           color: {
@@ -131,7 +131,7 @@ describe('choropleth', () => {
         showOutline: true,
         showGraticule: true,
         scales: {
-          xy: {
+          projection: {
             projection: 'equalEarth',
           } as IProjectionScaleOptions,
           color: {

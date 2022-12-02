@@ -9,6 +9,8 @@ import {
   ScriptableContext,
   TooltipItem,
   PointElement,
+  PointHoverOptions,
+  Element,
   Scale,
   ScriptableAndArrayOptions,
   UpdateMode,
@@ -20,7 +22,7 @@ import { ProjectionScale, SizeScale } from '../scales';
 import { GeoController, geoDefaults, geoOverrides, IGeoChartOptions } from './GeoController';
 import patchController from './patchController';
 
-export type MyPointElement = PointElement<PointProps, PointOptions & Record<string, unknown>>;
+type MyPointElement = PointElement & Element<PointProps, PointOptions & PointHoverOptions & Record<string, unknown>>;
 
 export class BubbleMapController extends GeoController<'bubbleMap', MyPointElement> {
   initialize(): void {

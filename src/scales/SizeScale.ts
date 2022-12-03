@@ -3,6 +3,7 @@ import { merge, drawPoint } from 'chart.js/helpers';
 import { baseDefaults, ILegendScaleOptions, LegendScale, LogarithmicLegendScale } from './LegendScale';
 
 export interface ISizeScaleOptions extends ILegendScaleOptions {
+  axis: 'size' | 'x' | 'y' | 'r';
   // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
   // e.g. for tick manipulation, ...
 

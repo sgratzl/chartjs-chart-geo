@@ -47,6 +47,7 @@ Object.keys(lookup).forEach((key) => {
 });
 
 export interface IProjectionScaleOptions extends CoreScaleOptions {
+  axis: 'projection' | 'x' | 'y' | 'r';
   /**
    * projection method used
    * @default albersUsa

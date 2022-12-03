@@ -105,6 +105,7 @@ function quantize(v: number, steps: number) {
 }
 
 export interface IColorScaleOptions extends ILegendScaleOptions {
+  axis: 'color' | 'x' | 'y' | 'r';
   // support all options from linear scale -> https://www.chartjs.org/docs/latest/axes/cartesian/linear.html#linear-cartesian-axis
   // e.g. for tick manipulation, ...
 

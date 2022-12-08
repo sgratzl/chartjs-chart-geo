@@ -1,4 +1,14 @@
-import { Element, BarElement, BarOptions, VisualElement, Point } from 'chart.js';
+import {
+  Element,
+  BarElement,
+  BarOptions,
+  VisualElement,
+  Point,
+  ChartType,
+  ScriptableAndArrayOptions,
+  CommonHoverOptions,
+  ScriptableContext,
+} from 'chart.js';
 import { geoContains, GeoPath, GeoProjection } from 'd3-geo';
 import type { ProjectionScale } from '../scales';
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/chart.js@3.9.1/dist/chart.js"></script>
+    <script src="https://unpkg.com/chart.js@4.0.1"></script>
     <script src="../build/index.umd.js"></script>
   </head>
 
@@ -38,10 +38,12 @@
                 },
               },
               scales: {
-                xy: {
+                projection: {
+                  axis: 'x',
                   projection: 'albersUsa',
                 },
                 color: {
+                  axis: 'x',
                   quantize: 5,
                   legend: {
                     position: 'bottom-right',
@@ -53,14 +55,16 @@
           });
 
           setTimeout(() => {
-            chart.options.scales.xy = {
+            chart.options.scales.projection = {
+              axis: 'x',
               projection: 'equalEarth',
               projectionOffset: [100, 0],
             };
             chart.update();
 
             setTimeout(() => {
-              chart.options.scales.xy = {
+              chart.options.scales.projection = {
+                axis: 'x',
                 projection: 'albersUsa',
                 projectionOffset: [-100, 0],
               };

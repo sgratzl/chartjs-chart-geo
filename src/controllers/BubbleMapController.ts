@@ -9,6 +9,8 @@ import {
   ScriptableContext,
   TooltipItem,
   PointElement,
+  PointHoverOptions,
+  Element,
   Scale,
   ScriptableAndArrayOptions,
   UpdateMode,
@@ -20,7 +22,7 @@ import { ProjectionScale, SizeScale } from '../scales';
 import { GeoController, geoDefaults, geoOverrides, IGeoChartOptions } from './GeoController';
 import patchController from './patchController';
 
-export type MyPointElement = PointElement<PointProps, PointOptions & Record<string, unknown>>;
+type MyPointElement = PointElement & Element<PointProps, PointOptions & PointHoverOptions & Record<string, unknown>>;
 
 export class BubbleMapController extends GeoController<'bubbleMap', MyPointElement> {
   initialize(): void {
@@ -32,11 +34,11 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
     super.linkScales();
     const dataset = this.getGeoDataset();
     const meta = this.getMeta();
-    meta.vAxisID = 'r';
-    meta.rAxisID = 'r';
-    dataset.vAxisID = 'r';
-    dataset.rAxisID = 'r';
-    meta.rScale = this.getScaleForId('r');
+    meta.vAxisID = 'size';
+    meta.rAxisID = 'size';
+    dataset.vAxisID = 'size';
+    dataset.rAxisID = 'size';
+    meta.rScale = this.getScaleForId('size');
     meta.vScale = meta.rScale;
     meta.iScale = meta.xScale;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -81,10 +83,10 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
     for (let i = start; i < start + count; i += 1) {
       const elem = elems[i];
       const parsed = this.getParsed(i);
-      const xy = scale.projection([parsed.x, parsed.y]);
+      const projection = scale.projection([parsed.x, parsed.y]);
       const properties: PointProps & { options?: PointOptions; skip: boolean } = {
-        x: xy ? xy[0] : 0,
-        y: xy ? xy[1] : 0,
+        x: projection ? projection[0] : 0,
+        y: projection ? projection[1] : 0,
         skip: Number.isNaN(parsed.x) || Number.isNaN(parsed.y),
       };
       if (includeOptions) {
@@ -134,7 +136,8 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
         },
       },
       scales: {
-        r: {
+        size: {
+          axis: 'x',
           type: SizeScale.id,
         },
       },

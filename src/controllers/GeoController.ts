@@ -23,6 +23,7 @@ export const geoDefaults = {
 export const geoOverrides = {
   scales: {
     projection: {
+      axis: 'x',
       type: ProjectionScale.id,
       position: 'chartArea',
       display: false,

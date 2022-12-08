@@ -8,7 +8,6 @@ import {
 } from 'chart.js';
 
 export interface ILegendScaleOptions extends CartesianScaleOptions {
-  axis: any;
   /**
    * whether to render a color legend
    * @default true

@@ -126,6 +126,7 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
       scales: {
         color: {
           type: ColorScale.id,
+          axis: 'x',
         },
       },
       elements: {

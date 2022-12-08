@@ -137,6 +137,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
       },
       scales: {
         size: {
+          axis: 'x',
           type: SizeScale.id,
         },
       },

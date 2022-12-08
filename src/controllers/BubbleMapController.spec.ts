@@ -47,13 +47,13 @@ describe('bubbleMap', () => {
         scales: {
           projection: {
             projection: 'albersUsa',
-          } as IProjectionScaleOptions,
-          r: {
+          } as Partial<IProjectionScaleOptions>,
+          size: {
             range: [1, 20],
             ticks: {
               display: false,
             },
-          } as ISizeScaleOptions,
+          } as Partial<ISizeScaleOptions>,
         },
       },
     });
@@ -83,7 +83,7 @@ describe('bubbleMap', () => {
           projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
-          r: {
+          size: {
             range: [1, 20],
             mode: 'radius',
             ticks: {
@@ -119,7 +119,7 @@ describe('bubbleMap', () => {
           projection: {
             projection: 'albersUsa',
           } as IProjectionScaleOptions,
-          r: {
+          size: {
             range: [1, 20],
             mode: 'area',
             ticks: {

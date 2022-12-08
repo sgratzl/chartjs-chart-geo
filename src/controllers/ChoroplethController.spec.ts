@@ -46,7 +46,7 @@ describe('choropleth', () => {
         scales: {
           projection: {
             projection: 'albersUsa',
-          } as IProjectionScaleOptions,
+          } as Partial<IProjectionScaleOptions>,
           color: {
             quantize: 5,
             ticks: {
@@ -56,7 +56,7 @@ describe('choropleth', () => {
               position: 'bottom-right',
               align: 'right',
             },
-          } as IColorScaleOptions,
+          } as Partial<IColorScaleOptions>,
         },
       },
     });

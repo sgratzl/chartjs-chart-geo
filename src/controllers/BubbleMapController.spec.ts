@@ -46,9 +46,11 @@ describe('bubbleMap', () => {
       options: {
         scales: {
           projection: {
+            axis: 'x',
             projection: 'albersUsa',
           } as Partial<IProjectionScaleOptions>,
           size: {
+            axis: 'x',
             range: [1, 20],
             ticks: {
               display: false,
@@ -81,15 +83,17 @@ describe('bubbleMap', () => {
       options: {
         scales: {
           projection: {
+            axis: 'x',
             projection: 'albersUsa',
-          } as IProjectionScaleOptions,
+          } as Partial<IProjectionScaleOptions>,
           size: {
+            axis: 'x',
             range: [1, 20],
             mode: 'radius',
             ticks: {
               display: false,
             },
-          } as ISizeScaleOptions,
+          } as Partial<ISizeScaleOptions>,
         },
       },
     });
@@ -117,15 +121,17 @@ describe('bubbleMap', () => {
       options: {
         scales: {
           projection: {
+            axis: 'x',
             projection: 'albersUsa',
-          } as IProjectionScaleOptions,
+          } as Partial<IProjectionScaleOptions>,
           size: {
+            axis: 'x',
             range: [1, 20],
             mode: 'area',
             ticks: {
               display: false,
             },
-          } as ISizeScaleOptions,
+          } as Partial<ISizeScaleOptions>,
         },
       },
     });
@@ -153,9 +159,11 @@ describe('bubbleMap', () => {
       options: {
         scales: {
           projection: {
+            axis: 'x',
             projection: 'albersUsa',
-          } as IProjectionScaleOptions,
-          r: {
+          } as Partial<IProjectionScaleOptions>,
+          size: {
+            axis: 'x',
             type: SizeLogarithmicScale.id,
             range: [1, 20],
             ticks: {

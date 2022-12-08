@@ -1,6 +1,5 @@
 import { feature } from 'topojson-client';
-import states10m from 'us-atlas/states-10m.json' assert { type: 'json' };
-import countries50m from 'world-atlas/countries-50m.json' assert { type: 'json' };
+import { createRequire } from 'module';
 import rnd from 'seedrandom';
 import { registry } from 'chart.js';
 import createChart from '../__tests__/createChart';
@@ -13,6 +12,10 @@ import {
 } from '../scales';
 import { ChoroplethController } from './ChoroplethController';
 import { GeoFeature } from '../elements';
+
+const require = createRequire(import.meta.url); // construct the require method
+const states10m = require('us-atlas/states-10m.json');
+const countries50m = require('world-atlas/countries-50m.json');
 
 describe('choropleth', () => {
   beforeAll(() => {
@@ -45,9 +48,11 @@ describe('choropleth', () => {
       options: {
         scales: {
           projection: {
+            axis: 'x',
             projection: 'albersUsa',
           } as Partial<IProjectionScaleOptions>,
           color: {
+            axis: 'x',
             quantize: 5,
             ticks: {
               display: false,
@@ -88,9 +93,11 @@ describe('choropleth', () => {
       options: {
         scales: {
           projection: {
+            axis: 'x',
             projection: 'albersUsa',
-          } as IProjectionScaleOptions,
+          } as Partial<IProjectionScaleOptions>,
           color: {
+            axis: 'x',
             type: ColorLogarithmicScale.id,
             quantize: 5,
             ticks: {
@@ -132,9 +139,11 @@ describe('choropleth', () => {
         showGraticule: true,
         scales: {
           projection: {
+            axis: 'x',
             projection: 'equalEarth',
-          } as IProjectionScaleOptions,
+          } as Partial<IProjectionScaleOptions>,
           color: {
+            axis: 'x',
             ticks: {
               display: false,
             },

@@ -24,8 +24,8 @@ jobs:
       - name: Extract version
         id: extract_version
         run: |
-          node -pe "'::set-output name=version::' + require('./package.json').version"
-          node -pe "'::set-output name=npm_tag::' + (require('./package.json').version.includes('-') ? 'next' : 'latest')"
+          node -pe "'name=version::' + require('./package.json').version" >> $GITHUB_OUTPUT
+          node -pe "'name=npm_tag::' + (require('./package.json').version.includes('-') ? 'next' : 'latest')" >> $GITHUB_OUTPUT
       - name: Print version
         run: |
           echo "releasing ${{ steps.extract_version.outputs.version }} with tag ${{ steps.extract_version.outputs.npm_tag }}"
@@ -33,7 +33,7 @@ jobs:
         id: create_release
         uses: release-drafter/release-drafter@v5
         env:
-          GITHUB_TOKEN: ${{ secrets.PRIVATE_PAT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           name: v${{ steps.extract_version.outputs.version }}
           tag: v${{ steps.extract_version.outputs.version }}
@@ -70,7 +70,7 @@ jobs:
       - run: yarn build
       - run: yarn pack
       - name: Upload Release Asset
-        uses: AButler/upload-release-assets@v2
+        uses: AButler/upload-release-assets@v2.0.2
         with:
           files: 'package.tgz'
           repo-token: ${{ secrets.GITHUB_TOKEN }}

@@ -26,8 +26,8 @@ jobs:
       - name: Change version number
         id: version
         run: |
-          echo -n "::set-output name=next_tag::"
-          npm version --no-git-tag-version ${{ github.event.inputs.versionName }} --preid ${{ github.event.inputs.preid }}
+          echo -n "name=next_tag::" >> $GITHUB_OUTPUT
+          npm version --no-git-tag-version ${{ github.event.inputs.versionName }} --preid ${{ github.event.inputs.preid }} >> $GITHUB_OUTPUT
       - name: Create pull request into main
         uses: peter-evans/create-pull-request@v4
         with:

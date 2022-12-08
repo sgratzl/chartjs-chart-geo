@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/chart.js@3.9.1/dist/chart.js"></script>
+    <script src="https://unpkg.com/chart.js@4.0.1"></script>
     <script src="../build/index.umd.js"></script>
   </head>
 
@@ -48,7 +48,8 @@
               },
             },
             scales: {
-              xy: {
+              projection: {
+                axis: 'x',
                 projection: 'equalEarth',
                 padding: 10,
               },

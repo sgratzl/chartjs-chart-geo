@@ -4,7 +4,7 @@ import { ChoroplethController, GeoFeature, ColorScale, ProjectionScale, SizeScal
 // register controller in chart.js and ensure the defaults are set
 Chart.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale, SizeScale);
 
-const ctx = document.querySelector('canvas').getContext('2d');
+const ctx = document.querySelector('canvas')!.getContext('2d')!;
 
 const chart1 = new Chart(ctx, {
   type: 'choropleth',
@@ -29,7 +29,7 @@ const chart1 = new Chart(ctx, {
       },
     },
     scales: {
-      xy: {
+      projection: {
         projection: 'albersUsa',
       },
       color: {
@@ -67,7 +67,7 @@ const chart2 = new Chart(ctx, {
       },
     },
     scales: {
-      xy: {
+      projection: {
         projection: 'albersUsa',
       },
       size: {

@@ -39,11 +39,11 @@
               },
               scales: {
                 projection: {
-                  axis: 'projection',
+                  axis: 'x',
                   projection: 'albersUsa',
                 },
                 color: {
-                  axis: 'color',
+                  axis: 'x',
                   quantize: 5,
                   legend: {
                     position: 'bottom-right',
@@ -56,7 +56,7 @@
 
           setTimeout(() => {
             chart.options.scales.projection = {
-              axis: 'projection',
+              axis: 'x',
               projection: 'equalEarth',
               projectionOffset: [100, 0],
             };
@@ -64,7 +64,7 @@
 
             setTimeout(() => {
               chart.options.scales.projection = {
-                axis: 'projection',
+                axis: 'x',
                 projection: 'albersUsa',
                 projectionOffset: [-100, 0],
               };

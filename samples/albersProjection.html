@@ -39,11 +39,11 @@
               },
               scales: {
                 projection: {
-                  axis: 'projection',
+                  axis: 'x',
                   projection: ChartGeo.geoEqualEarth(),
                 },
                 color: {
-                  axis: 'color',
+                  axis: 'x',
                   interpolate: (v) => (v < 0.5 ? 'green' : 'red'),
                   legend: {
                     position: 'bottom-right',

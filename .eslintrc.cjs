@@ -20,5 +20,6 @@ module.exports = {
     // '@typescript-eslint/no-non-null-assertion': 'off',
     'max-classes-per-file': 'off',
     'no-underscore-dangle': 'off',
+    'import/extensions': 'off',
   },
 };

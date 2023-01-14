@@ -7,16 +7,16 @@
     <div id="container" style="width: 75%">
       <canvas id="canvas"></canvas>
     </div>
-    <script defer src="https://unpkg.com/es-module-shims"></script>
+    <script defer src=" https://cdn.jsdelivr.net/npm/es-module-shims"></script>
     <script type="importmap-shim">
       {
         "imports": {
-          "chart.js": "https://unpkg.com/chart.js@~4.1.1?module",
-          "chart.js/helpers": "https://unpkg.com/chart.js@~4.1.1/helpers/helpers.esm.js?module",
+          "chart.js": " https://cdn.jsdelivr.net/npm/chart.js@~4.1.1?module",
+          "chart.js/helpers": " https://cdn.jsdelivr.net/npm/chart.js@~4.1.1/helpers/helpers.esm.js?module",
           "chartjs-chart-geo": "../build/index.js",
-          "d3-geo": "https://unpkg.com/d3-geo?module",
-          "d3-scale-chromatic": "https://unpkg.com/d3-scale-chromatic?module",
-          "topojson-client": "https://unpkg.com/topojson-client?module"
+          "d3-geo": " https://cdn.jsdelivr.net/npm/d3-geo?module",
+          "d3-scale-chromatic": " https://cdn.jsdelivr.net/npm/d3-scale-chromatic?module",
+          "topojson-client": " https://cdn.jsdelivr.net/npm/topojson-client?module"
         }
       }
     </script>
@@ -24,7 +24,7 @@
       import { ChoroplethChart } from 'chartjs-chart-geo';
       import { feature } from 'topojson-client';
 
-      fetch('https://unpkg.com/us-atlas/states-10m.json')
+      fetch(' https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json')
         .then((r) => r.json())
         .then((us) => {
           const nation = feature(us, us.objects.nation).features[0];

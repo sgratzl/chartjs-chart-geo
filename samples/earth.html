@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/chart.js@~4.1.1"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/chart.js@~4.1.1"></script>
     <script src="../build/index.umd.js"></script>
   </head>
 
@@ -10,7 +10,7 @@
       <canvas id="canvas"></canvas>
     </div>
     <script>
-      fetch('https://unpkg.com/world-atlas/countries-50m.json')
+      fetch(' https://cdn.jsdelivr.net/npm/world-atlas/countries-50m.json')
         .then((r) => r.json())
         .then((data) => {
           const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;

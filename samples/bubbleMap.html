@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://unpkg.com/chart.js@~4.1.1"></script>
-    <script src="https://unpkg.com/chartjs-plugin-datalabels@next"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/chart.js@~4.1.1"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@next"></script>
     <script src="../build/index.umd.js"></script>
-    <script src="https://unpkg.com/papaparse"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/papaparse"></script>
   </head>
 
   <body>
@@ -14,7 +14,7 @@
     <script>
       Chart.register(ChartDataLabels);
       Promise.all([
-        fetch('https://unpkg.com/us-atlas/states-10m.json').then((r) => r.json()),
+        fetch(' https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json').then((r) => r.json()),
         fetch(
           'https://gist.githubusercontent.com/mbostock/9535021/raw/928a5f81f170b767162f8f52dbad05985eae9cac/us-state-capitals.csv'
         )

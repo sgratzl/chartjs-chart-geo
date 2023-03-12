@@ -76,7 +76,7 @@ A data point has to have a `.feature` property containing the feature to render 
 - topojson collection: https://github.com/deldersveld/topojson (untested)
 
 ```js
-const us = await fetch(' https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json').then((r) => r.json());
+const us = await fetch('https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json').then((r) => r.json());
 
 // whole US for the outline
 const nation = ChartGeo.topojson.feature(us, us.objects.nation).features[0];

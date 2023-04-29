@@ -162,8 +162,13 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     const x2 = Math.ceil(bounds.x + bounds.width);
     const y2 = Math.ceil(bounds.y + bounds.height);
     const pixelRatio = this.pixelRatio || 1;
-    canvas.width = Math.max(x2 - x1, 1) * pixelRatio;
-    canvas.height = Math.max(y2 - y1, 1) * pixelRatio;
+    const width = Math.ceil(Math.max(x2 - x1, 1) * pixelRatio);
+    const height = Math.ceil(Math.max(y2 - y1, 1) * pixelRatio);
+    if (width <= 0 || height <= 0) {
+      return;
+    }
+    canvas.width = width;
+    canvas.height = height;
 
     const ctx = canvas.getContext('2d');
     if (ctx) {
@@ -208,12 +213,16 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       this._drawInCache(ctx.canvas.ownerDocument);
     }
     const bounds = this.getBounds();
-    if (this.cache && this.cache.canvas) {
+    if (this.cache && this.cache.canvas && this.cache.canvas.width > 0 && this.cache.canvas.height > 0) {
       const x1 = Math.floor(bounds.x);
       const y1 = Math.floor(bounds.y);
       const x2 = Math.ceil(bounds.x + bounds.width);
       const y2 = Math.ceil(bounds.y + bounds.height);
-      ctx.drawImage(this.cache.canvas, x1, y1, x2 - x1, y2 - y1);
+      const width = x2 - x1;
+      const height = y2 - y1;
+      if (width > 0 && height > 0) {
+        ctx.drawImage(this.cache.canvas, x1, y1, x2 - x1, y2 - y1);
+      }
     } else if (Number.isFinite(bounds.x)) {
       ctx.save();
       this._drawImpl(ctx);

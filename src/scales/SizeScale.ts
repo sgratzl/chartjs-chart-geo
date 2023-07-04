@@ -43,8 +43,14 @@ const scaleDefaults = {
 };
 
 export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOptions> {
+  /**
+   * @internal
+   */
   _model: PointOptions | null = null;
 
+  /**
+   * @internal
+   */
   getSizeForValue(value: number): number {
     const v = this._getNormalizedValue(value);
     if (v == null || Number.isNaN(v)) {
@@ -53,6 +59,9 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
     return this.getSizeImpl(v);
   }
 
+  /**
+   * @internal
+   */
   getSizeImpl(normalized: number): number {
     const [r0, r1] = this.options.range;
     if (this.options.mode === 'area') {
@@ -66,6 +75,9 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
     return normalized * range + r0;
   }
 
+  /**
+   * @internal
+   */
   _drawIndicator(): void {
     /** @type {CanvasRenderingContext2D} */
     const { ctx } = this;
@@ -139,10 +151,19 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
     });
   }
 
+  /**
+   * @internal
+   */
   static readonly id = 'size';
 
+  /**
+   * @internal
+   */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 
+  /**
+   * @internal
+   */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: true,
     _indexable: (name: string): boolean => name !== 'range',
@@ -150,8 +171,14 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
 }
 
 export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptions & LogarithmicScaleOptions> {
+  /**
+   * @internal
+   */
   _model: PointOptions | null = null;
 
+  /**
+   * @internal
+   */
   getSizeForValue(value: number): number {
     const v = this._getNormalizedValue(value);
     if (v == null || Number.isNaN(v)) {
@@ -160,16 +187,28 @@ export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptio
     return this.getSizeImpl(v);
   }
 
+  /**
+   * @internal
+   */
   getSizeImpl(normalized: number): number {
     return SizeScale.prototype.getSizeImpl.call(this, normalized);
   }
 
+  /**
+   * @internal
+   */
   _drawIndicator(): void {
     SizeScale.prototype._drawIndicator.call(this);
   }
 
+  /**
+   * @internal
+   */
   static readonly id = 'sizeLogarithmic';
 
+  /**
+   * @internal
+   */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
 }
 

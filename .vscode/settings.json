@@ -13,8 +13,6 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.packageManager": "yarn",
-  "eslint.packageManager": "yarn",
   "npm.packageManager": "yarn",
   "eslint.nodePath": ".yarn/sdks",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
@@ -23,7 +21,6 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
-  "liveServer.settings.port": 5503,
   "search.exclude": {
     "**/.yarn": true,
     "**/.pnp.*": true

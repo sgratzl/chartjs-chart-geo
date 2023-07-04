@@ -146,8 +146,14 @@ function computeLegendPosition(
 }
 
 export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> extends LinearScale<O> {
+  /**
+   * @internal
+   */
   legendSize: { w: number; h: number } = { w: 0, h: 0 };
 
+  /**
+   * @internal
+   */
   init(options: O): void {
     // eslint-disable-next-line no-param-reassign
     (options as unknown as IPositionOption).position = 'chartArea';
@@ -155,6 +161,9 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     this.axis = 'r';
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   parse(raw: any, index: number): number {
     if (raw && typeof raw[this.options.property] === 'number') {
@@ -163,6 +172,9 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     return super.parse(raw, index) as number;
   }
 
+  /**
+   * @internal
+   */
   isHorizontal(): boolean {
     return this.options.legend.align === 'top' || this.options.legend.align === 'bottom';
   }
@@ -174,6 +186,9 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     return (v - (this as any)._startValue) / (this as any)._valueRange;
   }
 
+  /**
+   * @internal
+   */
   update(maxWidth: number, maxHeight: number, margins: ChartArea): void {
     const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
     const cw = Math.min(maxWidth, this.right == null ? Number.POSITIVE_INFINITY : this.right);
@@ -198,11 +213,17 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     return r;
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line class-methods-use-this
   _computeLabelArea(): void {
     return undefined;
   }
 
+  /**
+   * @internal
+   */
   draw(chartArea: ChartArea): void {
     if (!(this as any)._isVisible()) {
       return;
@@ -236,26 +257,39 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
     ctx.restore();
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line class-methods-use-this
   protected _drawIndicator(): void {
     // hook
   }
 }
 
-export class LogarithmicLegendScale<
-  O extends ILegendScaleOptions & LogarithmicScaleOptions
-> extends LogarithmicScale<O> {
+export class LogarithmicLegendScale<O extends ILegendScaleOptions & LogarithmicScaleOptions> extends LogarithmicScale<O> {
+  /**
+   * @internal
+   */
   legendSize: { w: number; h: number } = { w: 0, h: 0 };
 
+  /**
+   * @internal
+   */
   init(options: O): void {
     LegendScale.prototype.init.call(this, options);
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   parse(raw: any, index: number): number {
     return LegendScale.prototype.parse.call(this, raw, index);
   }
 
+  /**
+   * @internal
+   */
   isHorizontal(): boolean {
     return this.options.legend.align === 'top' || this.options.legend.align === 'bottom';
   }
@@ -267,15 +301,24 @@ export class LogarithmicLegendScale<
     return (Math.log10(v) - (this as any)._startValue) / (this as any)._valueRange;
   }
 
+  /**
+   * @internal
+   */
   update(maxWidth: number, maxHeight: number, margins: ChartArea): void {
     return LegendScale.prototype.update.call(this, maxWidth, maxHeight, margins);
   }
 
+  /**
+   * @internal
+   */
   // eslint-disable-next-line class-methods-use-this
   _computeLabelArea(): void {
     return undefined;
   }
 
+  /**
+   * @internal
+   */
   draw(chartArea: ChartArea): void {
     return LegendScale.prototype.draw.call(this, chartArea);
   }

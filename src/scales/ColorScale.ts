@@ -178,6 +178,9 @@ const colorScaleDefaults = {
 };
 
 export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOptions> {
+  /**
+   * @internal
+   */
   get interpolate(): (v: number) => string {
     const o = this.options as IColorScaleOptions & LinearScaleOptions;
     if (!o) {
@@ -189,6 +192,9 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
     return lookup[o.interpolate] || lookup.blues;
   }
 
+  /**
+   * @internal
+   */
   getColorForValue(value: number): string {
     const v = this._getNormalizedValue(value);
     if (v == null || Number.isNaN(v)) {
@@ -197,6 +203,9 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
     return this.getColor(v);
   }
 
+  /**
+   * @internal
+   */
   getColor(normalized: number): string {
     let v = normalized;
     if (this.options.quantize > 0) {
@@ -205,6 +214,9 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
     return this.interpolate(v);
   }
 
+  /**
+   * @internal
+   */
   _drawIndicator(): void {
     const { indicatorWidth: indicatorSize } = this.options.legend;
     const reverse = (this as any)._reversePixels;
@@ -246,10 +258,19 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
     }
   }
 
+  /**
+   * @internal
+   */
   static readonly id = 'color';
 
+  /**
+   * @internal
+   */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 
+  /**
+   * @internal
+   */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: (name: string): boolean => name !== 'interpolate',
     _indexable: false,
@@ -259,6 +280,9 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
 export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOptions & LogarithmicScaleOptions> {
   private interpolate = (v: number) => `rgb(${v},${v},${v})`;
 
+  /**
+   * @internal
+   */
   init(options: IColorScaleOptions & LinearScaleOptions): void {
     super.init(options);
     if (typeof options.interpolate === 'function') {
@@ -268,10 +292,16 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
     }
   }
 
+  /**
+   * @internal
+   */
   getColorForValue(value: number): string {
     return ColorScale.prototype.getColorForValue.call(this, value);
   }
 
+  /**
+   * @internal
+   */
   getColor(normalized: number): string {
     let v = normalized;
     if (this.options.quantize > 0) {
@@ -284,14 +314,23 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
     return ColorScale.prototype._drawIndicator.call(this);
   }
 
+  /**
+   * @internal
+   */
   static readonly id = 'colorLogarithmic';
 
+  /**
+   * @internal
+   */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [
     LogarithmicScale.defaults,
     baseDefaults,
     colorScaleDefaults,
   ]);
 
+  /**
+   * @internal
+   */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: (name: string): boolean => name !== 'interpolate',
     _indexable: false,

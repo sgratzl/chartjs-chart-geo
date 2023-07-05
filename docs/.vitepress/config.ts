@@ -29,8 +29,11 @@ export default defineConfig({
           { text: 'Bubble Map', link: '/examples/bubbleMap' },
           { text: 'Custom Color Scale', link: '/examples/custom' },
           { text: 'Legend Customization', link: '/examples/legend' },
+          { text: 'Tooltip Center', link: '/examples/center' },
+          { text: 'Projection Offset', link: '/examples/offset' },
           { text: 'Equal Earth Projection', link: '/examples/projection' },
           { text: 'World Atlas', link: '/examples/earth' },
+          { text: 'Bubble Map Area Mode', link: '/examples/area' },
         ],
       },
       {

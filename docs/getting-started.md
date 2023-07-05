@@ -18,7 +18,6 @@ Chart.js module for charting maps with legends. Adding new chart types: `choropl
 
 works great with https://github.com/chartjs/chartjs-plugin-datalabels
 
-
 ## Install
 
 ```sh
@@ -35,11 +34,12 @@ CodePens
 - [Earth Choropleth](https://codepen.io/sgratzl/pen/bGVmQKw)
 - [Bubble Map](https://codepen.io/sgratzl/pen/YzyJRvm)
 
-
 ## Configuration
 
 ### Data Structure
 
+#### Choropleth
+
+see also [Choropleth](./examples/choropleth.md)
 
 ### Styling
-

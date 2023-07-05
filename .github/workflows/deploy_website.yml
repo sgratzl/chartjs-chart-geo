@@ -1,15 +1,26 @@
-name: ci
-
-on: [push]
-
+name: Deploy Website
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+          cache: npm
       - run: npm i -g yarn
       - run: yarn config set checksumBehavior ignore
       - name: Cache Node.js modules
@@ -22,12 +33,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn2-v5
       - run: yarn install
-      - run: yarn build
-      - run: yarn lint
-      - run: yarn test
-      - uses: actions/upload-artifact@v2
-        if: failure()
-        with:
-          name: diff outputs
-          path: src/**/__diff_output__/*.png
       - run: yarn docs:build
+      - uses: actions/configure-pages@v2
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs/.vitepress/dist
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v1

@@ -4,7 +4,7 @@
     "outDir": "build",
     "declaration": true,
     "declarationMap": true,
-    "noEmit": false,
+    "noEmit": true,
     "composite": true
   }
 }

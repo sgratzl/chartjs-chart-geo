@@ -2,7 +2,10 @@
 /.yarnrc.yml
 /.yarn
 /build
-/docs
+/docs/.vitepress/cache
+/docs/.vitepress/dist
+/docs/.vitepress/config.ts.timestamp*
+/docs/api
 /coverage
 /.gitattributes
 /.gitignore
@@ -14,4 +17,4 @@
 *.tgz
 *.tsbuildinfo
 .eslintcache
-/samples/type_test.js
+.nojekyll

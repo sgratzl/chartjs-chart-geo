@@ -34,12 +34,26 @@ CodePens
 - [Earth Choropleth](https://codepen.io/sgratzl/pen/bGVmQKw)
 - [Bubble Map](https://codepen.io/sgratzl/pen/YzyJRvm)
 
-## Configuration
+## Choropleth
 
-### Data Structure
+A choropleth map is a geo visualization where the area of a geometric feature encodes a value. For example [Choropleth](./examples/choropleth.md).
 
-#### Choropleth
+::: warning
+This plugin is _not_ providing the geometric data files (like GeoJson or TopoJson) but they need to manually imported and defined.
+:::
 
-see also [Choropleth](./examples/choropleth.md)
+Each data point is an object with a feature and a corresponding value. see also [IChoroplethDataPoint](/api/interfaces/interface.IChoroplethDataPoint.html)
 
-### Styling
+### Configuration
+
+The controller has the following options [IChoroplethControllerDatasetOptions](/api/interfaces/interface.IChoroplethControllerDatasetOptions.html).
+In addition, the projection of the geometric feature to the pixel space is defined in the `projection` scale. see [IProjectionScaleOptions](/api/interfaces/interface.IProjectionScaleOptions.html) for available options. The conversion from a value to a color is performed by the `color` scale. see [IColorScaleOptions](/api/interfaces/interface.IColorScaleOptions.html) for available options.
+
+## Bubble Map
+
+A bubble is using the area / radius of a circle to encode a value at a specific latitude / longitude. For example [BubbleMap](./examples/bubbleMap.md). Therefore, a data point has to look like this [IBubbleMapDataPoint](/api/interfaces/interface.IBubbleMapDataPoint.html).
+
+### Configuration
+
+The controller has the following options [IBubbleMapControllerDatasetOptions](/api/interfaces/interface.IBubbleMapControllerDatasetOptions.html).
+In addition, the projection of the geometric feature to the pixel space is defined in the `projection` scale. see [IProjectionScaleOptions](/api/interfaces/interface.IProjectionScaleOptions.html) for available options. The conversion from a value to a radius / area is performed by the `size` scale. see [ISizeScaleOptions](/api/interfaces/interface.ISizeScaleOptions.html) for available options.

@@ -161,12 +161,16 @@ export interface IChoroplethControllerDatasetOptions
     ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'choropleth'>>,
     AnimationOptions<'choropleth'> {}
 
+export interface IChoroplethDataPoint extends IGeoDataPoint {
+  value: number;
+}
+
 declare module 'chart.js' {
   export interface ChartTypeRegistry {
     choropleth: {
       chartOptions: IGeoChartOptions;
       datasetOptions: IChoroplethControllerDatasetOptions;
-      defaultDataPoint: IGeoDataPoint & { value: number };
+      defaultDataPoint: IChoroplethDataPoint;
       scales: keyof (ProjectionScaleTypeRegistry & ColorScaleTypeRegistry);
       metaExtensions: Record<string, never>;
       parsedDataType: { r: number };

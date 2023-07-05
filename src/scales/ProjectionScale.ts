@@ -85,8 +85,14 @@ export interface IProjectionScaleOptions extends CoreScaleOptions {
 }
 
 export class ProjectionScale extends Scale<IProjectionScaleOptions> {
+  /**
+   * @internal
+   */
   readonly geoPath: GeoPath<any, GeoPermissibleObjects>;
 
+  /**
+   * @internal
+   */
   projection!: GeoProjection;
 
   private outlineBounds: {
@@ -106,6 +112,9 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     this.geoPath = geoPath();
   }
 
+  /**
+   * @internal
+   */
   init(options: IProjectionScaleOptions): void {
     // eslint-disable-next-line no-param-reassign
     (options as any).position = 'chartArea';
@@ -121,6 +130,9 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     this.oldChartBounds = null;
   }
 
+  /**
+   * @internal
+   */
   computeBounds(outline: ExtendedFeature): void;
   computeBounds(outline: ExtendedFeatureCollection): void;
   computeBounds(outline: GeoGeometryObjects): void;
@@ -142,6 +154,9 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     };
   }
 
+  /**
+   * @internal
+   */
   updateBounds(): boolean {
     const area = this.chart.chartArea;
 
@@ -186,8 +201,14 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     );
   }
 
+  /**
+   * @internal
+   */
   static readonly id = 'projection';
 
+  /**
+   * @internal
+   */
   static readonly defaults: Partial<IProjectionScaleOptions> = {
     projection: 'albersUsa',
     projectionScale: 1,
@@ -195,6 +216,9 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     padding: 0,
   };
 
+  /**
+   * @internal
+   */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: (name: keyof IProjectionScaleOptions): boolean => name !== 'projection',
     _indexable: (name: keyof IProjectionScaleOptions): boolean => name !== 'projectionOffset',

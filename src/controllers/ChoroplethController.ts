@@ -91,8 +91,14 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
     return rScale.getColorForValue(this.getParsed(index)[rScale.axis as 'r']);
   }
 
+  /**
+   * @internal
+   */
   static readonly id = 'choropleth';
 
+  /**
+   * @internal
+   */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [
     geoDefaults,
     {
@@ -101,6 +107,9 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
     },
   ]);
 
+  /**
+   * @internal
+   */
   static readonly overrides: any = /* #__PURE__ */ merge({}, [
     geoOverrides,
     {
@@ -152,12 +161,16 @@ export interface IChoroplethControllerDatasetOptions
     ScriptableAndArrayOptions<CommonHoverOptions, ScriptableContext<'choropleth'>>,
     AnimationOptions<'choropleth'> {}
 
+export interface IChoroplethDataPoint extends IGeoDataPoint {
+  value: number;
+}
+
 declare module 'chart.js' {
   export interface ChartTypeRegistry {
     choropleth: {
       chartOptions: IGeoChartOptions;
       datasetOptions: IChoroplethControllerDatasetOptions;
-      defaultDataPoint: IGeoDataPoint & { value: number };
+      defaultDataPoint: IChoroplethDataPoint;
       scales: keyof (ProjectionScaleTypeRegistry & ColorScaleTypeRegistry);
       metaExtensions: Record<string, never>;
       parsedDataType: { r: number };

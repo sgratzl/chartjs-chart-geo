@@ -104,9 +104,6 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
     return rScale.getSizeForValue(this.getParsed(index)[rScale.axis as 'r']);
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'bubbleMap';
 
   /**

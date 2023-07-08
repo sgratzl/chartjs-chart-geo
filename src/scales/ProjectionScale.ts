@@ -201,9 +201,6 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
     );
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'projection';
 
   /**

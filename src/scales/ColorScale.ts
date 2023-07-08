@@ -258,9 +258,6 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
     }
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'color';
 
   /**
@@ -314,9 +311,6 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
     return ColorScale.prototype._drawIndicator.call(this);
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'colorLogarithmic';
 
   /**

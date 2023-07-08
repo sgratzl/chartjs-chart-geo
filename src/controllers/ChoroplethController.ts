@@ -91,9 +91,6 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
     return rScale.getColorForValue(this.getParsed(index)[rScale.axis as 'r']);
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'choropleth';
 
   /**

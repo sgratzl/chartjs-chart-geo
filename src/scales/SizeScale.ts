@@ -151,9 +151,6 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
     });
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'size';
 
   /**
@@ -201,9 +198,6 @@ export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptio
     SizeScale.prototype._drawIndicator.call(this);
   }
 
-  /**
-   * @internal
-   */
   static readonly id = 'sizeLogarithmic';
 
   /**

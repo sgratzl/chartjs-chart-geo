@@ -272,9 +272,6 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     }
   }
 
-  /**
-   * @internal
-   */
   static id = 'geoFeature';
 
   /**

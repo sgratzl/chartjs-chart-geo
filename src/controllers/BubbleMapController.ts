@@ -107,7 +107,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
   static readonly id = 'bubbleMap';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [
     geoDefaults,
@@ -120,7 +120,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
   ]);
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly overrides: any = /* #__PURE__ */ merge({}, [
     geoOverrides,

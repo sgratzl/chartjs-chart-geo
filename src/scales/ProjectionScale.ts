@@ -86,12 +86,12 @@ export interface IProjectionScaleOptions extends CoreScaleOptions {
 
 export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   /**
-   * @internal
+   * @hidden
    */
   readonly geoPath: GeoPath<any, GeoPermissibleObjects>;
 
   /**
-   * @internal
+   * @hidden
    */
   projection!: GeoProjection;
 
@@ -113,7 +113,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   }
 
   /**
-   * @internal
+   * @hidden
    */
   init(options: IProjectionScaleOptions): void {
     // eslint-disable-next-line no-param-reassign
@@ -131,7 +131,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   }
 
   /**
-   * @internal
+   * @hidden
    */
   computeBounds(outline: ExtendedFeature): void;
   computeBounds(outline: ExtendedFeatureCollection): void;
@@ -155,7 +155,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   }
 
   /**
-   * @internal
+   * @hidden
    */
   updateBounds(): boolean {
     const area = this.chart.chartArea;
@@ -204,7 +204,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   static readonly id = 'projection';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: Partial<IProjectionScaleOptions> = {
     projection: 'albersUsa',
@@ -214,7 +214,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   };
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: (name: keyof IProjectionScaleOptions): boolean => name !== 'projection',

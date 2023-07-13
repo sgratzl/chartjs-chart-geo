@@ -147,12 +147,12 @@ function computeLegendPosition(
 
 export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> extends LinearScale<O> {
   /**
-   * @internal
+   * @hidden
    */
   legendSize: { w: number; h: number } = { w: 0, h: 0 };
 
   /**
-   * @internal
+   * @hidden
    */
   init(options: O): void {
     // eslint-disable-next-line no-param-reassign
@@ -162,7 +162,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   }
 
   /**
-   * @internal
+   * @hidden
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   parse(raw: any, index: number): number {
@@ -173,7 +173,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   }
 
   /**
-   * @internal
+   * @hidden
    */
   isHorizontal(): boolean {
     return this.options.legend.align === 'top' || this.options.legend.align === 'bottom';
@@ -187,7 +187,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   }
 
   /**
-   * @internal
+   * @hidden
    */
   update(maxWidth: number, maxHeight: number, margins: ChartArea): void {
     const ch = Math.min(maxHeight, this.bottom == null ? Number.POSITIVE_INFINITY : this.bottom);
@@ -214,7 +214,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   }
 
   /**
-   * @internal
+   * @hidden
    */
   // eslint-disable-next-line class-methods-use-this
   _computeLabelArea(): void {
@@ -222,7 +222,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   }
 
   /**
-   * @internal
+   * @hidden
    */
   draw(chartArea: ChartArea): void {
     if (!(this as any)._isVisible()) {
@@ -258,7 +258,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   }
 
   /**
-   * @internal
+   * @hidden
    */
   // eslint-disable-next-line class-methods-use-this
   protected _drawIndicator(): void {
@@ -270,19 +270,19 @@ export class LogarithmicLegendScale<
   O extends ILegendScaleOptions & LogarithmicScaleOptions
 > extends LogarithmicScale<O> {
   /**
-   * @internal
+   * @hidden
    */
   legendSize: { w: number; h: number } = { w: 0, h: 0 };
 
   /**
-   * @internal
+   * @hidden
    */
   init(options: O): void {
     LegendScale.prototype.init.call(this, options);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   parse(raw: any, index: number): number {
@@ -290,7 +290,7 @@ export class LogarithmicLegendScale<
   }
 
   /**
-   * @internal
+   * @hidden
    */
   isHorizontal(): boolean {
     return this.options.legend.align === 'top' || this.options.legend.align === 'bottom';
@@ -304,14 +304,14 @@ export class LogarithmicLegendScale<
   }
 
   /**
-   * @internal
+   * @hidden
    */
   update(maxWidth: number, maxHeight: number, margins: ChartArea): void {
     return LegendScale.prototype.update.call(this, maxWidth, maxHeight, margins);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   // eslint-disable-next-line class-methods-use-this
   _computeLabelArea(): void {
@@ -319,7 +319,7 @@ export class LogarithmicLegendScale<
   }
 
   /**
-   * @internal
+   * @hidden
    */
   draw(chartArea: ChartArea): void {
     return LegendScale.prototype.draw.call(this, chartArea);

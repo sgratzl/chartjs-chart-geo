@@ -44,12 +44,12 @@ const scaleDefaults = {
 
 export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOptions> {
   /**
-   * @internal
+   * @hidden
    */
   _model: PointOptions | null = null;
 
   /**
-   * @internal
+   * @hidden
    */
   getSizeForValue(value: number): number {
     const v = this._getNormalizedValue(value);
@@ -60,7 +60,7 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getSizeImpl(normalized: number): number {
     const [r0, r1] = this.options.range;
@@ -76,7 +76,7 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
   }
 
   /**
-   * @internal
+   * @hidden
    */
   _drawIndicator(): void {
     /** @type {CanvasRenderingContext2D} */
@@ -154,12 +154,12 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
   static readonly id = 'size';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, scaleDefaults]);
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: true,
@@ -169,12 +169,12 @@ export class SizeScale extends LegendScale<ISizeScaleOptions & LinearScaleOption
 
 export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptions & LogarithmicScaleOptions> {
   /**
-   * @internal
+   * @hidden
    */
   _model: PointOptions | null = null;
 
   /**
-   * @internal
+   * @hidden
    */
   getSizeForValue(value: number): number {
     const v = this._getNormalizedValue(value);
@@ -185,14 +185,14 @@ export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptio
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getSizeImpl(normalized: number): number {
     return SizeScale.prototype.getSizeImpl.call(this, normalized);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   _drawIndicator(): void {
     SizeScale.prototype._drawIndicator.call(this);
@@ -201,7 +201,7 @@ export class SizeLogarithmicScale extends LogarithmicLegendScale<ISizeScaleOptio
   static readonly id = 'sizeLogarithmic';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LogarithmicScale.defaults, baseDefaults, scaleDefaults]);
 }

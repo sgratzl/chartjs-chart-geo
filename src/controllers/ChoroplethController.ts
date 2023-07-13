@@ -94,7 +94,7 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
   static readonly id = 'choropleth';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [
     geoDefaults,
@@ -105,7 +105,7 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
   ]);
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly overrides: any = /* #__PURE__ */ merge({}, [
     geoOverrides,

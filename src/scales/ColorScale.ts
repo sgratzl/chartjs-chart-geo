@@ -179,7 +179,7 @@ const colorScaleDefaults = {
 
 export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOptions> {
   /**
-   * @internal
+   * @hidden
    */
   get interpolate(): (v: number) => string {
     const o = this.options as IColorScaleOptions & LinearScaleOptions;
@@ -193,7 +193,7 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getColorForValue(value: number): string {
     const v = this._getNormalizedValue(value);
@@ -204,7 +204,7 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getColor(normalized: number): string {
     let v = normalized;
@@ -215,7 +215,7 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   }
 
   /**
-   * @internal
+   * @hidden
    */
   _drawIndicator(): void {
     const { indicatorWidth: indicatorSize } = this.options.legend;
@@ -261,12 +261,12 @@ export class ColorScale extends LegendScale<IColorScaleOptions & LinearScaleOpti
   static readonly id = 'color';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [LinearScale.defaults, baseDefaults, colorScaleDefaults]);
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: (name: string): boolean => name !== 'interpolate',
@@ -278,7 +278,7 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
   private interpolate = (v: number) => `rgb(${v},${v},${v})`;
 
   /**
-   * @internal
+   * @hidden
    */
   init(options: IColorScaleOptions & LinearScaleOptions): void {
     super.init(options);
@@ -290,14 +290,14 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getColorForValue(value: number): string {
     return ColorScale.prototype.getColorForValue.call(this, value);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getColor(normalized: number): string {
     let v = normalized;
@@ -314,7 +314,7 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
   static readonly id = 'colorLogarithmic';
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly defaults: any = /* #__PURE__ */ merge({}, [
     LogarithmicScale.defaults,
@@ -323,7 +323,7 @@ export class ColorLogarithmicScale extends LogarithmicLegendScale<IColorScaleOpt
   ]);
 
   /**
-   * @internal
+   * @hidden
    */
   static readonly descriptors = /* #__PURE__ */ {
     _scriptable: (name: string): boolean => name !== 'interpolate',

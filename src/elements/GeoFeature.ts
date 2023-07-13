@@ -65,7 +65,7 @@ export interface IGeoFeatureProps {
 
 export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> implements VisualElement {
   /**
-   * @internal
+   * @hidden
    */
   cache?:
     | {
@@ -84,27 +84,27 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     | undefined = undefined;
 
   /**
-   * @internal
+   * @hidden
    */
   projectionScale!: ProjectionScale;
 
   /**
-   * @internal
+   * @hidden
    */
   feature!: Feature;
 
   /**
-   * @internal
+   * @hidden
    */
   center?: { longitude: number; latitude: number };
 
   /**
-   * @internal
+   * @hidden
    */
   pixelRatio?: number;
 
   /**
-   * @internal
+   * @hidden
    */
   inRange(mouseX: number, mouseY: number): boolean {
     const bb = this.getBounds();
@@ -123,21 +123,21 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   /**
-   * @internal
+   * @hidden
    */
   inXRange(mouseX: number): boolean {
     return this.inRange(mouseX, Number.NaN);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   inYRange(mouseY: number): boolean {
     return this.inRange(Number.NaN, mouseY);
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getCenterPoint(): { x: number; y: number } {
     if (this.cache && this.cache.center) {
@@ -162,7 +162,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   /**
-   * @internal
+   * @hidden
    */
   getBounds(): { x: number; y: number; x2: number; y2: number; width: number; height: number } {
     if (this.cache && this.cache.bounds) {
@@ -182,7 +182,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   /**
-   * @internal
+   * @hidden
    */
   _drawInCache(doc: Document): void {
     const bounds = this.getBounds();
@@ -217,7 +217,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   /**
-   * @internal
+   * @hidden
    */
   _optionsToKey(): string {
     const { options } = this;
@@ -225,7 +225,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   /**
-   * @internal
+   * @hidden
    */
   _drawImpl(ctx: CanvasRenderingContext2D): void {
     const { feature } = this;
@@ -244,7 +244,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   }
 
   /**
-   * @internal
+   * @hidden
    */
   draw(ctx: CanvasRenderingContext2D): void {
     const { feature } = this;
@@ -275,7 +275,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   static id = 'geoFeature';
 
   /**
-   * @internal
+   * @hidden
    */
   static defaults = /* #__PURE__ */ {
     ...BarElement.defaults,
@@ -287,7 +287,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
   };
 
   /**
-   * @internal
+   * @hidden
    */
   static defaultRoutes = /* #__PURE__ */ {
     outlineBorderColor: 'borderColor',

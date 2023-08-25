@@ -64,6 +64,17 @@ export interface IGeoFeatureProps {
 }
 
 export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> implements VisualElement {
+  // Our data source for the map contains a number of islands,
+  // which are technically parts of other countries.
+  // These islands should not have a circle around them.
+  // This list may get expanded in the future.
+  featuresWhichShouldNotBeCircledOnTheMap = [
+    'Ashmore and Cartier Is.',
+  ];
+
+  COUNTRY_COLOR_NO_DATA = '#EFF1F2';
+  SMALL_COUNTRY_CIRCLE_RADIUS = 5;
+
   /**
    * @hidden
    */
@@ -107,6 +118,14 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
    * @hidden
    */
   inRange(mouseX: number, mouseY: number): boolean {
+    if (this.feature && this.shouldBeCircledOnTheMap(this.feature.properties?.alpha2, this.feature.properties?.name)) {
+      if (window['chartGeoSmallCountriesCircleCenters'].find(center => {
+        const distanceToCircleCenter = Math.sqrt((center[0] - mouseX) ** 2 + (center[1] - mouseY) ** 2);
+        return distanceToCircleCenter < this.SMALL_COUNTRY_CIRCLE_RADIUS;
+      })) {
+        return true;
+      }
+    }
     const bb = this.getBounds();
     const r =
       (Number.isNaN(mouseX) || (mouseX >= bb.x && mouseX <= bb.x2)) &&
@@ -262,6 +281,23 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       const y2 = Math.ceil(bounds.y + bounds.height);
       const width = x2 - x1;
       const height = y2 - y1;
+      if (this.options.backgroundColor !== this.COUNTRY_COLOR_NO_DATA && this.isSmallCountry(feature.properties?.alpha2, width, height, x1 + width / 2, y1 + height / 2) && !this.featuresWhichShouldNotBeCircledOnTheMap.includes(feature.properties?.name)) {
+        // Draw circle for small countries which have data
+        ctx.fillStyle = this.options.backgroundColor;
+        // Use dark outline for light circle fill
+        // or light outline for dark circle fill
+        let circleOutlineColor = '#000000';
+        if (this.options.backgroundColor === '#042335' || this.options.backgroundColor === '#526773') {
+          circleOutlineColor = '#ffffff';
+        }
+
+        ctx.beginPath();
+        ctx.arc(x1 + width / 2, y1 + height / 2, this.SMALL_COUNTRY_CIRCLE_RADIUS, 0, 2 * Math.PI);
+        ctx.fillStyle = this.options.backgroundColor;
+        ctx.fill();
+        ctx.strokeStyle = circleOutlineColor;
+        ctx.stroke();
+      }
       if (width > 0 && height > 0) {
         ctx.drawImage(this.cache.canvas, x1, y1, x2 - x1, y2 - y1);
       }
@@ -270,6 +306,20 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
       this._drawImpl(ctx);
       ctx.restore();
     }
+  }
+
+  isSmallCountry(alpha2: string, width: number, height: number, circleCenterX: number, circleCenterY: number) {
+    const isSmallCountry = !!alpha2 && (width < 5 || height < 5);
+    
+    if (isSmallCountry && !window['chartGeoSmallCountries'].includes(alpha2)) {
+      window['chartGeoSmallCountries'].push(alpha2);
+      window['chartGeoSmallCountriesCircleCenters'].push([circleCenterX, circleCenterY]);
+    }
+    return isSmallCountry;
+  }
+
+  shouldBeCircledOnTheMap(alpha2: string, featureName: string) {
+    return window['chartGeoSmallCountries'].includes(alpha2) && !this.featuresWhichShouldNotBeCircledOnTheMap.includes(featureName);
   }
 
   static id = 'geoFeature';

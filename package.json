@@ -114,7 +114,7 @@
     "@typescript-eslint/parser": "^6.7.0"
   },
   "scripts": {
-    "clean": "rimraf --glob build docs node_modules \"*.tgz\" \"*.tsbuildinfo\"",
+    "clean": "rimraf --glob build node_modules \"*.tgz\" \"*.tsbuildinfo\"",
     "compile": "tsc -b tsconfig.c.json",
     "start": "yarn run watch",
     "watch": "rollup -c -w",

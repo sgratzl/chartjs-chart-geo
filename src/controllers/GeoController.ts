@@ -53,7 +53,7 @@ function patchDatasetElementOptions(options: any) {
 
 export class GeoController<
   TYPE extends keyof ChartTypeRegistry,
-  TElement extends Element & VisualElement
+  TElement extends Element & VisualElement,
 > extends DatasetController<TYPE, TElement, GeoFeature> {
   getGeoDataset(): ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions {
     return super.getDataset() as unknown as ChartDataset<'choropleth' | 'bubbleMap'> & IGeoControllerDatasetOptions;

@@ -230,3 +230,14 @@ yarn docs
 [github-actions-image]: https://github.com/sgratzl/chartjs-chart-geo/workflows/ci/badge.svg
 [github-actions-url]: https://github.com/sgratzl/chartjs-chart-geo/actions
 [codepen]: https://img.shields.io/badge/CodePen-open-blue?logo=codepen
+
+### Building for GitHub release
+
+```sh
+npm run build  
+tar czvf package.tgz package.json build/ 
+```
+
+1. Run `npm run build`.
+2. Create a .tgz archive with `package.json` and `build` directory.
+3. Create a new release under https://github.com/IterativeEngineering/chartjs-chart-geo/releases and attach the archive from step 2.

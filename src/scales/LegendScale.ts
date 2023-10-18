@@ -267,7 +267,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
 }
 
 export class LogarithmicLegendScale<
-  O extends ILegendScaleOptions & LogarithmicScaleOptions
+  O extends ILegendScaleOptions & LogarithmicScaleOptions,
 > extends LogarithmicScale<O> {
   /**
    * @hidden

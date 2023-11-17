@@ -38,7 +38,7 @@ npm install --save chart.js chartjs-chart-geo
 
 ## Usage
 
-see [Samples](https://github.com/sgratzl/chartjs-chart-geo/tree/main/samples) on Github
+see https://www.sgratzl.com/chartjs-chart-geo/ website
 
 CodePens
 

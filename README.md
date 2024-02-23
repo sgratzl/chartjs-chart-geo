@@ -50,7 +50,7 @@ CodePens
 
 The option can be set globally or per dataset
 
-see https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/controllers/GeoController.ts#L221
+see [https://github.com/sgratzl/chartjs-chart-geo/blob/main/src/controllers/GeoController.ts#L221](https://github.com/sgratzl/chartjs-chart-geo/blob/be3979117f8ae9a249969593c108d9b92b7e07fa/src/controllers/GeoController.ts#L225-L254)
 
 ## Choropleth
 

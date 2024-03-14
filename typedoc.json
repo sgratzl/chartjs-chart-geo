@@ -4,6 +4,11 @@
   "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
   "name": "chartjs-chart-boxplot",
   "out": "./docs/api",
+  "docsRoot": "./docs/",
+  "readme": "none",
+  "sidebar": {
+    "pretty": true
+  },
   "theme": "default",
   "excludeExternals": true,
   "excludeInternal": true,

@@ -26,8 +26,8 @@
     "noEmit": true,
     "paths": {
       "@": ["./src"],
-      "*": ["*", "node_modules/*"],
-    },
+      "*": ["*", "node_modules/*"]
+    }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "docs/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "docs/**/*.tsx"]
 }

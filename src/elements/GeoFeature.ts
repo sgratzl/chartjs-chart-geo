@@ -251,7 +251,7 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
     if (!feature) {
       return;
     }
-    if (!this.cache || this.cache.canvasKey !== this._optionsToKey()) {
+    if ((!this.cache || this.cache.canvasKey !== this._optionsToKey()) && ctx.canvas.ownerDocument != null) {
       this._drawInCache(ctx.canvas.ownerDocument);
     }
     const bounds = this.getBounds();

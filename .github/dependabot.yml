@@ -5,7 +5,15 @@ updates:
     directory: '/'
     schedule:
       interval: 'monthly'
+    target-branch: 'dev'
+    labels:
+      - 'dependencies'
+      - 'chore'
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'monthly'
+    target-branch: 'dev'
+    labels:
+      - 'dependencies'
+      - 'chore'

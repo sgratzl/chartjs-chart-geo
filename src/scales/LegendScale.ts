@@ -155,7 +155,6 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
    * @hidden
    */
   init(options: O): void {
-    // eslint-disable-next-line no-param-reassign
     (options as unknown as IPositionOption).position = 'chartArea';
     super.init(options);
     this.axis = 'r';
@@ -164,7 +163,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   /**
    * @hidden
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   parse(raw: any, index: number): number {
     if (raw && typeof raw[this.options.property] === 'number') {
       return raw[this.options.property];
@@ -216,7 +215,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   /**
    * @hidden
    */
-  // eslint-disable-next-line class-methods-use-this
+
   _computeLabelArea(): void {
     return undefined;
   }
@@ -260,7 +259,7 @@ export class LegendScale<O extends ILegendScaleOptions & LinearScaleOptions> ext
   /**
    * @hidden
    */
-  // eslint-disable-next-line class-methods-use-this
+
   protected _drawIndicator(): void {
     // hook
   }
@@ -284,7 +283,7 @@ export class LogarithmicLegendScale<
   /**
    * @hidden
    */
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   parse(raw: any, index: number): number {
     return LegendScale.prototype.parse.call(this, raw, index);
   }
@@ -313,7 +312,7 @@ export class LogarithmicLegendScale<
   /**
    * @hidden
    */
-  // eslint-disable-next-line class-methods-use-this
+
   _computeLabelArea(): void {
     return undefined;
   }
@@ -325,7 +324,6 @@ export class LogarithmicLegendScale<
     return LegendScale.prototype.draw.call(this, chartArea);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   protected _drawIndicator(): void {
     // hook
   }

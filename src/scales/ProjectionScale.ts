@@ -106,7 +106,6 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
 
   private oldChartBounds: { chartWidth: number; chartHeight: number } | null = null;
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(cfg: any) {
     super(cfg);
     this.geoPath = geoPath();
@@ -116,7 +115,6 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
    * @hidden
    */
   init(options: IProjectionScaleOptions): void {
-    // eslint-disable-next-line no-param-reassign
     (options as any).position = 'chartArea';
     super.init(options);
     if (typeof options.projection === 'function') {
@@ -137,7 +135,7 @@ export class ProjectionScale extends Scale<IProjectionScaleOptions> {
   computeBounds(outline: ExtendedFeatureCollection): void;
   computeBounds(outline: GeoGeometryObjects): void;
   computeBounds(outline: ExtendedGeometryCollection): void;
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   computeBounds(outline: any): void {
     const bb = geoPath(this.projection.fitWidth(1000, outline)).bounds(outline);
     const bHeight = Math.ceil(bb[1][1] - bb[0][1]);
@@ -228,6 +226,7 @@ declare module 'chart.js' {
       options: IProjectionScaleOptions;
     };
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   export interface ScaleTypeRegistry extends ProjectionScaleTypeRegistry {}
 }

@@ -28,7 +28,7 @@ jobs:
         run: |
           echo "next_tag=$(npm version --no-git-tag-version ${{ github.event.inputs.versionName }} --preid ${{ github.event.inputs.preid }})" >> $GITHUB_OUTPUT
       - name: Create pull request into main
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           branch: release/${{ steps.version.outputs.next_tag }}
           commit-message: 'chore: release ${{ steps.version.outputs.next_tag }}'

@@ -74,6 +74,7 @@
     "canvas": "^2.11.2",
     "canvas-5-polyfill": "^0.1.5",
     "chart.js": "^4.4.4",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "eslint": "^9.11.1",
     "eslint-plugin-prettier": "^5.2.1",
     "jest-image-snapshot": "^6.4.0",

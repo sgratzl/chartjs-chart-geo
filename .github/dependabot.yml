@@ -1,0 +1,19 @@
+version: 2
+
+updates:
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    target-branch: 'dev'
+    labels:
+      - 'dependencies'
+      - 'chore'
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
+    target-branch: 'dev'
+    labels:
+      - 'dependencies'
+      - 'chore'

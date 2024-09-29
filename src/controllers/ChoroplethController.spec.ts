@@ -12,7 +12,7 @@ import {
 } from '../scales';
 import { ChoroplethController } from './ChoroplethController';
 import { GeoFeature } from '../elements';
-
+import { describe, beforeAll, test } from 'vitest';
 const require = createRequire(import.meta.url); // construct the require method
 const states10m = require('us-atlas/states-10m.json');
 const countries50m = require('world-atlas/countries-50m.json');

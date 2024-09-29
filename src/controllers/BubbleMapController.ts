@@ -41,20 +41,18 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
     meta.rScale = this.getScaleForId('size');
     meta.vScale = meta.rScale;
     meta.iScale = meta.xScale;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     meta.iAxisID = meta.xAxisID!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     dataset.iAxisID = meta.xAxisID!;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getOtherScale(scale: Scale): Scale {
     // for strange get min max with other scale
     return scale;
   }
 
   parse(start: number, count: number): void {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rScale = this.getMeta().rScale!;
     const data = this.getDataset().data as unknown as IBubbleMapDataPoint[];
     const meta = this._cachedMeta;
@@ -71,7 +69,7 @@ export class BubbleMapController extends GeoController<'bubbleMap', MyPointEleme
   updateElements(elems: MyPointElement[], start: number, count: number, mode: UpdateMode): void {
     const reset = mode === 'reset';
     const firstOpts = this.resolveDataElementOptions(start, mode);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const sharedOptions = this.getSharedOptions(firstOpts)!;
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();

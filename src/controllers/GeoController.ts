@@ -101,7 +101,6 @@ export class GeoController<
     const dirtyCache = scale.updateBounds();
 
     if (this.showOutline()) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const elem = meta.dataset!;
       if (dirtyCache) {
         delete elem.cache;
@@ -125,7 +124,6 @@ export class GeoController<
 
     this.updateElements(meta.data, 0, meta.data.length, mode);
     if (dirtyCache) {
-      // eslint-disable-next-line no-param-reassign
       meta.data.forEach((elem) => delete (elem as any).cache);
     }
   }
@@ -189,7 +187,6 @@ export class GeoController<
     }
 
     if (this.showOutline() && this.getMeta().dataset) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       (this.getMeta().dataset!.draw.call as any)(this.getMeta().dataset!, chart.ctx, chart.chartArea);
     }
 

@@ -18,7 +18,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "jsx": "react",
     "esModuleInterop": true,
     "rootDir": "./src",
@@ -26,7 +26,9 @@
     "noEmit": true,
     "paths": {
       "@": ["./src"],
-      "*": ["*", "node_modules/*"]
+      "*": ["*", "node_modules/*"],
+      // workaround for: https://github.com/vitest-dev/vitest/issues/4567
+      "rollup/parseAst": ["./node_modules/rollup/dist/parseAst"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "docs/**/*.tsx"]

@@ -14,7 +14,7 @@ import {
 import createChart from '../__tests__/createChart';
 import { BubbleMapController } from './BubbleMapController';
 import data from './__tests__/data';
-
+import { describe, beforeAll, test } from 'vitest';
 const require = createRequire(import.meta.url); // construct the require method
 const states10m = require('us-atlas/states-10m.json');
 

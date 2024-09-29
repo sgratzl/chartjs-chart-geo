@@ -35,20 +35,18 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
     meta.rScale = this.getScaleForId('color');
     meta.vScale = meta.rScale;
     meta.iScale = meta.xScale;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     meta.iAxisID = meta.xAxisID!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     dataset.iAxisID = meta.xAxisID!;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getOtherScale(scale: Scale): Scale {
     // for strange get min max with other scale
     return scale;
   }
 
   parse(start: number, count: number): void {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const rScale = this.getMeta().rScale!;
     const { data } = this.getDataset();
     const meta = this._cachedMeta;
@@ -61,7 +59,7 @@ export class ChoroplethController extends GeoController<'choropleth', GeoFeature
 
   updateElements(elems: GeoFeature[], start: number, count: number, mode: UpdateMode): void {
     const firstOpts = this.resolveDataElementOptions(start, mode);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const sharedOptions = this.getSharedOptions(firstOpts)!;
     const includeOptions = this.includeOptions(mode, sharedOptions);
     const scale = this.getProjectionScale();

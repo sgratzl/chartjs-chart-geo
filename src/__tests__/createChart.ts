@@ -1,6 +1,6 @@
-/// <reference types="jest" />
 /// <reference types="node" />
 
+import { expect } from 'vitest';
 import { Chart, ChartConfiguration, defaults, ChartType, DefaultDataPoint } from 'chart.js';
 import { toMatchImageSnapshot, MatchImageSnapshotOptions } from 'jest-image-snapshot';
 import 'canvas-5-polyfill';
@@ -12,7 +12,7 @@ function toBuffer(canvas: HTMLCanvasElement) {
     canvas.toBlob((b) => {
       const file = new FileReader();
       file.onload = () => resolve(Buffer.from(file.result as ArrayBuffer));
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       file.readAsArrayBuffer(b!);
     });
   });
@@ -40,7 +40,7 @@ export default function createChart<
   canvas.height = height;
   Object.assign(defaults.font, { family: 'Courier New' });
   // defaults.color = 'transparent';
-  // eslint-disable-next-line no-param-reassign
+
   config.options = {
     responsive: false,
     animation: {
@@ -56,7 +56,7 @@ export default function createChart<
     },
     ...(config.options || {}),
   } as any;
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const ctx = canvas.getContext('2d')!;
 
   const t = new Chart<TYPE, DATA, LABEL>(ctx, config);

@@ -31,7 +31,7 @@ jobs:
           echo "releasing ${{ steps.extract_version.outputs.version }} with tag ${{ steps.extract_version.outputs.npm_tag }}"
       - name: Create Release
         id: create_release
-        uses: release-drafter/release-drafter@v5
+        uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
         with:
@@ -70,7 +70,7 @@ jobs:
       - run: yarn build
       - run: yarn pack
       - name: Upload Release Asset
-        uses: AButler/upload-release-assets@v2.0.2
+        uses: AButler/upload-release-assets@v3.0
         with:
           files: 'package.tgz'
           repo-token: ${{ secrets.GITHUB_TOKEN }}

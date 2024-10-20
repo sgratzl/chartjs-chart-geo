@@ -38,8 +38,7 @@
       "require": "./build/index.cjs",
       "scripts": "./build/index.umd.min.js",
       "types": "./build/index.d.ts"
-    },
-    "./.pnp.cjs": "./.pnp.cjs"
+    }
   },
   "sideEffects": false,
   "files": [

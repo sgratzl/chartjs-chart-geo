@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script src="../build/index.umd.js"></script>
+  </head>
+
+  <body>
+    <div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      fetch('https://cdn.jsdelivr.net/npm/us-atlas/states-10m.json')
+        .then((r) => r.json())
+        .then((states10m) => {
+          const nation = ChartGeo.topojson.feature(states10m, states10m.objects.nation).features[0];
+          const states = ChartGeo.topojson.feature(states10m, states10m.objects.states).features;
+          const chart = new Chart(document.getElementById('canvas').getContext('2d'), {
+            type: 'choropleth',
+            data: {
+              labels: states.map((d) => d.properties.name),
+              datasets: [
+                {
+                  label: 'States',
+                  outline: nation,
+                  data: states.map((d) => ({
+                    feature: d,
+                    value: Math.random() * 11,
+                  })),
+                },
+              ],
+            },
+            options: {
+              lscales: {
+                projection: {
+                  axis: 'x',
+                  projection: 'albersUsa',
+                },
+                color: {
+                  axis: 'x',
+                  quantize: 5,
+                  legend: {
+                    position: 'bottom-right',
+                    align: 'right',
+                  },
+                },
+              },
+            },
+          });
+        });
+    </script>
+  </body>
+</html>

@@ -5731,11 +5731,11 @@ __metadata:
   linkType: hard
 
 "typedoc-plugin-markdown@npm:^4.2.10":
-  version: 4.2.10
-  resolution: "typedoc-plugin-markdown@npm:4.2.10"
+  version: 4.3.0
+  resolution: "typedoc-plugin-markdown@npm:4.3.0"
   peerDependencies:
-    typedoc: 0.26.x
-  checksum: 10c0/5771602a2d673824e1a01841f81eb0fe45fe2d6b61070c278903e2c14e5aab4eafd7c37831b7297aaef27185b4eb2b638111add22fc2a0e26b6165b3c54d0bd1
+    typedoc: 0.27.x
+  checksum: 10c0/2db27e6508fc0047b9608edc084b6c43bbe88e03dbdc288b33a77ecba75d1c5561236b5e5df2153b50ff781d79684a90d6b2b1c099f20839310275cb4e142eb7
   languageName: node
   linkType: hard
 

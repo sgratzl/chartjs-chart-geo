@@ -8,6 +8,7 @@ import {
   ScriptableAndArrayOptions,
   CommonHoverOptions,
   ScriptableContext,
+  UpdateMode,
 } from 'chart.js';
 import { geoContains, GeoPath, GeoProjection } from 'd3-geo';
 import type { ProjectionScale } from '../scales';
@@ -102,6 +103,37 @@ export class GeoFeature extends Element<IGeoFeatureProps, IGeoFeatureOptions> im
    * @hidden
    */
   pixelRatio?: number;
+
+  updateExtras({
+    scale,
+    feature,
+    center,
+    pixelRatio,
+    mode,
+  }: {
+    scale: ProjectionScale;
+    feature: Feature;
+    center?: { longitude: number; latitude: number };
+    pixelRatio: number;
+    mode: UpdateMode;
+  }): Point {
+    const changed =
+      mode === 'resize' ||
+      mode === 'reset' ||
+      this.projectionScale !== scale ||
+      this.feature !== feature ||
+      this.center?.longitude !== center?.longitude ||
+      this.center?.latitude !== center?.latitude ||
+      this.pixelRatio !== pixelRatio;
+    this.projectionScale = scale;
+    this.feature = feature;
+    this.center = center;
+    this.pixelRatio = pixelRatio;
+    if (changed) {
+      this.cache = undefined;
+    }
+    return this.getCenterPoint();
+  }
 
   /**
    * @hidden

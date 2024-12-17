@@ -98,7 +98,7 @@ export class GeoController<
     const meta = this.getMeta();
 
     const scale = this.getProjectionScale();
-    const dirtyCache = scale.updateBounds();
+    const dirtyCache = scale.updateBounds() || mode === 'resize' || mode === 'reset';
 
     if (this.showOutline()) {
       const elem = meta.dataset!;
@@ -122,10 +122,10 @@ export class GeoController<
       (meta as any).graticule = patchDatasetElementOptions(this.resolveDatasetElementOptions(mode));
     }
 
-    this.updateElements(meta.data, 0, meta.data.length, mode);
     if (dirtyCache) {
       meta.data.forEach((elem) => delete (elem as any).cache);
     }
+    this.updateElements(meta.data, 0, meta.data.length, mode);
   }
 
   resolveOutline(): any {

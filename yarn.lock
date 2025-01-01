@@ -6011,11 +6011,11 @@ __metadata:
   linkType: hard
 
 "typedoc-plugin-markdown@npm:^4.3.3":
-  version: 4.3.3
-  resolution: "typedoc-plugin-markdown@npm:4.3.3"
+  version: 4.4.0
+  resolution: "typedoc-plugin-markdown@npm:4.4.0"
   peerDependencies:
     typedoc: 0.27.x
-  checksum: 10c0/91a1281ed4921f9278bf6dc1a551a8720eed4abd44f5e4a2a3bfa0423cc7b2d38ecde150598468f23f2af8eab81225967c0db99bc2e4e30db03b7d0045e314da
+  checksum: 10c0/0ebd3daae597ea3b7d86fbce4cb2e283d819ab8c796d975c9a4a1648e97be69b9c4a8a428d9977c95b104677251844e6c3b32e08f763ec304094556dad19e97d
   languageName: node
   linkType: hard
 

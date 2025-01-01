@@ -2348,14 +2348,14 @@ __metadata:
   linkType: hard
 
 "canvas@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "canvas@npm:3.0.0"
+  version: 3.0.1
+  resolution: "canvas@npm:3.0.1"
   dependencies:
     node-addon-api: "npm:^7.0.0"
     node-gyp: "npm:latest"
     prebuild-install: "npm:^7.1.1"
     simple-get: "npm:^3.0.3"
-  checksum: 10c0/bec6c96e608a6e9077c4a7fb1264cf33f6a8e38f602b9f478a1bed0c76d99b033006efa2af7c5ea23a04a19ad2047f4c3eb937efb3aeafc061612307a8714b8d
+  checksum: 10c0/467e801cd7a7fa172ba4cc45a61bb62cd16e145772a895e7fc4ffb9e643246a64461aa21f85450bf08abbf99d92994485fbdadaa6c2c11942da838362c2d6cfb
   languageName: node
   linkType: hard
 

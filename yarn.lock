@@ -2348,14 +2348,13 @@ __metadata:
   linkType: hard
 
 "canvas@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "canvas@npm:3.0.0"
+  version: 3.1.0
+  resolution: "canvas@npm:3.1.0"
   dependencies:
     node-addon-api: "npm:^7.0.0"
     node-gyp: "npm:latest"
     prebuild-install: "npm:^7.1.1"
-    simple-get: "npm:^3.0.3"
-  checksum: 10c0/bec6c96e608a6e9077c4a7fb1264cf33f6a8e38f602b9f478a1bed0c76d99b033006efa2af7c5ea23a04a19ad2047f4c3eb937efb3aeafc061612307a8714b8d
+  checksum: 10c0/28da5184c1d7e97049ba6a24f10690b9ed4b303bbd25517d95c892fa3a6331417791657a3a7467068e40af0dda2dcc9120d062f7426a3d796131e69a30e3cbf1
   languageName: node
   linkType: hard
 
@@ -2727,15 +2726,6 @@ __metadata:
   version: 10.4.3
   resolution: "decimal.js@npm:10.4.3"
   checksum: 10c0/6d60206689ff0911f0ce968d40f163304a6c1bc739927758e6efc7921cfa630130388966f16bf6ef6b838cb33679fbe8e7a78a2f3c478afce841fd55ac8fb8ee
-  languageName: node
-  linkType: hard
-
-"decompress-response@npm:^4.2.0":
-  version: 4.2.1
-  resolution: "decompress-response@npm:4.2.1"
-  dependencies:
-    mimic-response: "npm:^2.0.0"
-  checksum: 10c0/5e4821be332e80e3639acee2441c41d245fc07ac3ee85a6f28893c10c079d66d9bf09e8d84bffeae5656a4625e09e9b93fb4a5705adbe6b07202eea64fae1c8d
   languageName: node
   linkType: hard
 
@@ -4419,13 +4409,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mimic-response@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "mimic-response@npm:2.1.0"
-  checksum: 10c0/717475c840f20deca87a16cb2f7561f9115f5de225ea2377739e09890c81aec72f43c81fd4984650c4044e66be5a846fa7a517ac7908f01009e1e624e19864d5
-  languageName: node
-  linkType: hard
-
 "mimic-response@npm:^3.1.0":
   version: 3.1.0
   resolution: "mimic-response@npm:3.1.0"
@@ -5457,17 +5440,6 @@ __metadata:
   version: 1.0.1
   resolution: "simple-concat@npm:1.0.1"
   checksum: 10c0/62f7508e674414008910b5397c1811941d457dfa0db4fd5aa7fa0409eb02c3609608dfcd7508cace75b3a0bf67a2a77990711e32cd213d2c76f4fd12ee86d776
-  languageName: node
-  linkType: hard
-
-"simple-get@npm:^3.0.3":
-  version: 3.1.1
-  resolution: "simple-get@npm:3.1.1"
-  dependencies:
-    decompress-response: "npm:^4.2.0"
-    once: "npm:^1.3.1"
-    simple-concat: "npm:^1.0.0"
-  checksum: 10c0/438c78844ea1b1e7268d13ee0b3a39c7d644183367aec916aed3b676b45d3037a61d9f975c200a49b42eb851f29f03745118af1e13c01e60a7b4044f2fd60be7
   languageName: node
   linkType: hard
 
